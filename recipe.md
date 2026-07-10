@@ -7,16 +7,20 @@ JSON file conforming to `schema/edition.schema.json`, then render and publish it
 
 ## Trigger
 
-The morning dispatch has been rung — it is **publication morning**. Report the
-**prior day's completed slate** (boxscore.email/mlb shows the previous day's
-games). The edition is **dated by its publication day (today)** and frames the
-games it reports as having been played the day before.
+The morning dispatch has been rung — it is **publication morning**. Fetch
+boxscore.email/mlb's **current edition** directly and report it. **The rule:
+every edition reports "yesterday's games." Never browse or search for a date.**
+boxscore.email is itself a morning digest, so its current edition always holds
+the previous day's completed slate — you simply take whatever its latest edition
+shows. The Herald edition is **dated by its publication day (today)**; the games
+it reports were played the day before.
 
 ## Sources of truth
 
 - **boxscore.email/mlb** is authoritative for scores, stats, standings, and
-  leaderboards. When any number or name conflicts across sources, the box score
-  wins.
+  leaderboards. Fetch its **current/latest edition** — plain `boxscore.email/mlb`,
+  no date in the URL — which is, by definition, the prior day's completed games.
+  When any number or name conflicts across sources, the box score wins.
 - ESPN and similar outlets may be consulted for headline color and narrative
   detail after interesting events (dramatic finishes, debuts, milestones).
 - Cross-reference player names against **baseball-reference.com** to confirm
