@@ -66,9 +66,9 @@ presentation.
             │ push
             ▼
 ┌─────────────────────────┐  auto-deploy  ┌──────────────────────┐
-│ GitHub repo             │──────────────▶│ Static host           │
-│ (recipe, renderer,      │               │ (Cloudflare Pages,    │
-│  edition data + HTML)   │               │  free tier)           │
+│ GitHub repo (dmyeager)  │──────────────▶│ GitHub Pages          │
+│ (recipe, renderer,      │               │ (free static host)    │
+│  edition data + HTML)   │               │                       │
 └─────────────────────────┘               └──────────┬───────────┘
                                                       │ DNS (dnsimple)
                                                       ▼
@@ -189,11 +189,13 @@ consistently.
   subscription that runs the routine (see Scheduling & account below).
   Publishing (GitHub + static host + dnsimple) is entirely on personal accounts;
   only the agent-execution subscription is currently the work account.
-- A **static host** (Cloudflare Pages, free tier) is connected to the repo and
-  auto-deploys on every push. No build step — the committed HTML is served
-  as-is. (GitHub Pages is an equally viable host for the same committed-HTML
-  model; final host choice is recorded in Open Items.)
-- **dnsimple** points the apex domain `isitspringtrainingyet.com` at the host.
+- **GitHub Pages** (free) serves the repo and redeploys on every push. No build
+  step — the committed HTML is served as-is. A `.nojekyll` file disables Jekyll
+  so the static files are published untouched. Pages lives on the same personal
+  `dmyeager` account as the repo, so no third service is involved.
+- **dnsimple** points the apex domain `isitspringtrainingyet.com` at GitHub
+  Pages via ALIAS/A records (to GitHub's Pages IPs), with the custom domain set
+  in the repo's Pages settings; HTTPS is provisioned automatically.
 
 **Self-healing failure mode:** publishing is "commit on success only." A failed
 run, a source outage, or edition data that fails schema validation produces no
@@ -293,8 +295,8 @@ Content generation is not unit-testable in the usual sense; verification is:
 
 ## Open Items (for implementation planning)
 
-- **Final static-host choice** (Cloudflare Pages vs. GitHub Pages) and the exact
-  repo↔host connection steps and dnsimple record values for the apex domain.
+- Exact GitHub Pages setup steps (custom domain in Pages settings, `.nojekyll`)
+  and the specific dnsimple ALIAS/A record values for the apex domain.
 - The renderer's implementation language (a zero-dependency script; candidate:
   Python stdlib or Node with no external packages) and the inline-emphasis
   convention it supports.
