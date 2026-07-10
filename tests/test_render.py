@@ -33,5 +33,43 @@ class TestProse(unittest.TestCase):
         self.assertEqual(render.render_body("Only one.\n\n   \n"), "<p>Only one.</p>")
 
 
+class TestValidate(unittest.TestCase):
+    SCHEMA = {
+        "type": "object",
+        "required": ["meta", "count"],
+        "properties": {
+            "meta": {
+                "type": "object",
+                "required": ["mode"],
+                "properties": {"mode": {"type": "string", "enum": ["in_season", "hot_stove"]}},
+            },
+            "count": {"type": "integer"},
+            "note": {"type": ["object", "null"]},
+        },
+    }
+
+    def test_valid_passes(self):
+        render.validate({"meta": {"mode": "in_season"}, "count": 3, "note": None}, self.SCHEMA)
+
+    def test_missing_required_key_raises(self):
+        with self.assertRaises(ValueError):
+            render.validate({"meta": {"mode": "in_season"}}, self.SCHEMA)
+
+    def test_wrong_type_raises(self):
+        with self.assertRaises(ValueError):
+            render.validate({"meta": {"mode": "in_season"}, "count": "three"}, self.SCHEMA)
+
+    def test_bad_enum_raises(self):
+        with self.assertRaises(ValueError):
+            render.validate({"meta": {"mode": "spring"}, "count": 1}, self.SCHEMA)
+
+    def test_bool_is_not_integer(self):
+        with self.assertRaises(ValueError):
+            render.validate({"meta": {"mode": "in_season"}, "count": True}, self.SCHEMA)
+
+    def test_nullable_object_accepts_null(self):
+        render.validate({"meta": {"mode": "hot_stove"}, "count": 0, "note": None}, self.SCHEMA)
+
+
 if __name__ == "__main__":
     unittest.main()
