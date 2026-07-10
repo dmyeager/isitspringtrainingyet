@@ -1,0 +1,90 @@
+{
+  "meta": {
+    "date": "2026-07-09",
+    "date_display": "the Ninth of July, Two Thousand and Twenty-Six",
+    "weekday": "Thursday",
+    "volume": "Volume I",
+    "edition_number": 1,
+    "mode": "in_season",
+    "contests_reported": 15
+  },
+  "game_of_the_day": {
+    "headline": "CROW-ARMSTRONG SCALES OLYMPUS AS CUBS OUTSLUG ORIOLES, NINE TO SEVEN",
+    "subtitle": "In Which a Young Chicagoan Joins the Twenty-and-Twenty Immortals, and Five Baltimore Blows Avail Them Naught",
+    "body": "Upon the sward at Baltimore there unfolded a *cannonade* the like of which the horsehide chroniclers shall not soon forget, and when the smoke had at last drifted from the field the men of Chicago stood triumphant by the count of **nine to seven**. Yet the tale is told not in the runs alone but in the deeds of one Pete Crow-Armstrong, who twice drove the sphere clean beyond the pale and, in the doing, became the *first man of the whole season* to gather twenty round-trippers and twenty purloined bases both — a feat that plants him among the Cubs immortals beside the sainted Sandberg and the mighty Sosa, and he alone with Sosa to have wrought it in seasons back to back.\n\nThe Baltimores were no meek offering. Twice-blessed Tyler O'Neill launched a brace of his own, the burly Alonso struck a two-run blow, and young Mayo added his eleventh, so that the Orioles battered out four-and-ten safeties and yet — *cruel arithmetic!* — came up two runs shy. When Alonso's two-run poke had staked the home nine to a three-to-one advantage, Chicago answered as the Furies do: Conforto and Kelly hammered the first two offerings of the fifth over the wall, back to back, and the score stood even in the blink of an eye. Seiya Suzuki's three-run smite in the seventh proved the dagger.\n\nColin Rea (now **seven-and-five**) weathered five-and-a-third to earn the verdict; the luckless Dean Kremer (one-and-two) surrendered but six hits, though four of them soared into the seats. With the victory the Cubs stand **two-and-fifty against forty**, riders of an eight-in-ten hot streak and hard upon the heels of the runaway Brewers in the Central, while the Orioles slump on at the foot of the Eastern ledger."
+  },
+  "news": [
+    {
+      "subhead": "A New Man Enters the Twenty-Twenty Lodge",
+      "body": "Word from the leaderboards confirms the marvel of the evening: Chicago's Pete Crow-Armstrong now carries *one-and-twenty* home runs and three-and-twenty stolen bases, the first ballist of the campaign to breach the twenty mark in both departments. He also sits second among all National League base-thieves, a stride behind Washington's Nuñez and his three-and-thirty."
+    },
+    {
+      "subhead": "The Sluggers' Ledger, As It Now Stands",
+      "body": "In the senior circuit, Philadelphia's Kyle Schwarber holds the home-run scepter with two-and-thirty, adding his thirty-second in a losing cause at Cincinnati. Miami's Lopez keeps the loftiest average at a gaudy **.345**. In the junior loop, Houston's Alvarez commands the batting crown (.310), the home-run count (nine-and-twenty), and the runs-batted-in tally (seven-and-sixty) all at once — a rare and kingly hoarding of laurels."
+    },
+    {
+      "subhead": "The Hill's Reigning Aces",
+      "body": "Among the pitching fraternity, New York's Schlittler owns the American League's stingiest earned-run mark at *two-and-one-hundredth of a run* (2.01), while Milwaukee's fearsome Misiorowski lords over the National League with a 1.62 and a whopping seven-and-sixty-and-one-hundred strikeouts. The Brewers' Ashby leads all senior-circuit hurlers with a round dozen victories."
+    }
+  ],
+  "rest_of_the_card": [
+    {
+      "headline": "Blue Jays Blank Giants, Ten to Naught",
+      "body": "Toronto put eleven safeties to good use and left San Francisco *utterly runless*, the final reading **ten to nothing**. Dylan Cease (six-and-four) painted the shutout portrait, while the hapless Webb (five-and-seven) wore the loss. Okamoto drove home four and Guerrero Jr., Springer, and Okamoto each cleared the fence; the Giants managed a lone hit and committed three miscues in the field."
+    },
+    {
+      "headline": "Athletics Fall at Detroit, One to Six",
+      "body": "The Tigers prevailed **six to one** behind Melton (five-and-one), Detroit's Torkelson driving in a trio and Rogers and he both going deep. Springs (three-and-nine) took the defeat for the visiting Athletics, who slump on with but one victory in their last ten."
+    },
+    {
+      "headline": "Braves Silence Pirates, Three to Nothing",
+      "body": "At Pittsburgh the league-leading Atlanta nine fashioned a **three-to-nil** whitewash. Dodd (one-and-nil) claimed his first, Iglesias nailed down his eighteenth save, and Santana (two-and-four) was charged with the loss. The Braves sit atop the National League East at three-and-fifty against eight-and-thirty."
+    },
+    {
+      "headline": "Rays Turn Back Yankees, Three to Naught",
+      "body": "Tampa Bay held New York *scoreless* to win **three to nothing**, Shane McClanahan (eight-and-five) spinning the gem and Baker recording his five-and-twentieth save. Cole (three-and-four) suffered for the pinstripes. Aranda drove home all three Rays runs, and Tampa Bay keeps the American League's finest mark at four-and-fifty against six-and-thirty."
+    },
+    {
+      "headline": "Marlins Best Mariners, Two to Nothing",
+      "body": "Miami edged Seattle **two to nil**, Phillips (two-and-three) earning the verdict and Fairbanks (thirteenth save) slamming the door. Kirby (seven-and-eight) took the hard-luck loss. Stowers supplied the lone long ball, and the surging Marlins ride a five-game winning streak."
+    },
+    {
+      "headline": "Nationals Rout Astros, Eight to Two",
+      "body": "Washington thumped Houston **eight to two**, García Jr. and Abrams each depositing a ball in the seats and García driving in a trio. Griffin (ten-and-two) took the win; Arrighetti (seven-and-five) bore the loss for the visiting Astros."
+    },
+    {
+      "headline": "Mets Down Royals, Six to Two",
+      "body": "New York's National Leaguers dispatched Kansas City **six to two**, Raley (four-and-three) collecting the decision. Lange (nil-and-five) absorbed the loss. Ewing homered and Baty drove home a pair for the victorious Mets."
+    },
+    {
+      "headline": "Reds Outslug Phillies, Eleven to Five",
+      "body": "Cincinnati staged a *long-ball festival* to topple Philadelphia **eleven to five**, De La Cruz, Bleday, Marte, and a two-homer Stewart all clearing the wall; Marte alone drove in four. Burns (eleven-and-one) took the win, Rangel (nil-and-two) the loss. Schwarber's thirty-second homer for the Phillies could not stem the tide."
+    },
+    {
+      "headline": "Red Sox Whitewash White Sox, Five to Naught",
+      "body": "Boston blanked Chicago's American Leaguers **five to nothing** behind Bennett (four-and-three), the White Sox' Martin (nine-and-four) taking the loss. The Sox from Boston, winners of five straight, plated ten hits and yielded but four in a tidy afternoon's work."
+    },
+    {
+      "headline": "Twins Nip Guardians, Six to Five",
+      "body": "Minnesota edged Cleveland **six to five** in a taut affair, Gómez (one-and-nil) earning his first and Festa (two-and-two) the loser. Rocchio drove in three for the Guardians and Hoskins homered, but the Twins prevailed to run their recent form to seven wins in ten."
+    },
+    {
+      "headline": "Cardinals Handle Brewers, Five to One",
+      "body": "St. Louis brought the runaway Brewers to heel **five to one**, McGreevy (four-and-seven) besting Milwaukee's Harrison (eight-and-four). Burleson clubbed a homer and drove in three, Fermín added a long ball, and the loss trimmed nothing from Milwaukee's commanding lead — the Brewers yet stand a lofty eight-and-fifty against four-and-thirty, the best mark in all the land."
+    },
+    {
+      "headline": "Angels Storm Texas, Thirteen to One",
+      "body": "Los Angeles' Angels *ran riot* at Arlington, laying **thirteen to one** upon the Rangers with a fifteen-hit barrage. The immortal Mike Trout homered, and Jo Adell struck two blows and drove home five; Grissom chipped in four runs batted in. Natera Jr. (one-and-nil) claimed his first, while Gore (five-and-eight) was routed."
+    },
+    {
+      "headline": "Padres Overpower Diamondbacks, Ten to Four",
+      "body": "San Diego prevailed **ten to four** over Arizona, thirteen safeties propelling the home nine. Andujar and Merrill each drove in a pair, Tatis Jr. swiped two bags, and Campusano homered. King (six-and-seven) earned the win; Cabrera (nil-and-two) took the loss."
+    },
+    {
+      "headline": "Dodgers Edge Rockies, Four to Three",
+      "body": "The peerless Dodgers, mightiest club in the National League at one-and-sixty against three-and-thirty, held off Colorado **four to three**. Henriquez (four-and-nil) took the verdict and Scott recorded his thirteenth save; Colorado's Senzatela (eight-and-one) suffered a rare defeat. Karros and Julien homered for Los Angeles, Betts and Tucker drove home the balance, and Higashioka answered with a Rockies blast."
+    }
+  ],
+  "desk_note": "And so the ledger for the Eighth of July is set down entire, five-and-ten contests faithfully rendered, no run left unrecorded nor deed unsung. We tip our derby to young Crow-Armstrong, who this night joined the rarest company. Until the morrow's dispatch, keep your scorecards near and your enthusiasms nearer.",
+  "countdown": null
+}
