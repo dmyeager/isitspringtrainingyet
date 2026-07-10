@@ -7,34 +7,42 @@
 ## Overview
 
 A daily, automatically generated baseball digest — "The Morning Horsehide
-Herald" — published each morning at isitspringtrainingyet.com. A scheduled Claude
-cloud agent runs the existing editorial "recipe" at 5:00 AM ET, writes the
-edition as static HTML in a mock-heroic deadball-era voice, and publishes it by
-committing to a GitHub repo that a static host auto-deploys.
+Herald" — published each morning at isitspringtrainingyet.com. A scheduled
+Claude cloud agent runs the existing editorial "recipe" at 5:00 AM ET, writes
+the edition as **structured content (data)** in a mock-heroic deadball-era
+voice, renders that data to static HTML via a small deterministic renderer, and
+publishes by committing to a GitHub repo that a static host auto-deploys.
 
 The goal is to automate a workflow the user currently runs by hand (prompting an
 agent with "morning dispatch") at minimal ongoing cost, while preserving the
-editorial recipe exactly.
+editorial recipe exactly and keeping content cleanly separated from
+presentation.
 
 ## Goals
 
 - Publish a new edition automatically every morning at ~5:00 AM ET.
 - Preserve the existing editorial recipe verbatim (voice, structure, sources of
   truth, consistency checks).
+- **Separate content from presentation:** the agent emits edition *data*; a
+  renderer produces *HTML* from that data plus a shared template and one
+  stylesheet. The agent never writes markup or CSS.
+- Keep an archive that can be **re-rendered wholesale** after any design change,
+  so every past edition stays visually consistent.
 - Keep hosting cost at effectively $0 (static free tier) and generation cost
   covered by an existing Claude subscription.
-- Maintain a browsable archive of every past edition (a "faithful daily
-  chronicle").
 - Handle the offseason and no-game days (including the All-Star break) with
   hot-stove coverage plus a countdown to spring training / Opening Day.
-- Never serve a broken page: a failed run leaves the previous edition live.
-- Make the account/subscription that runs the routine a single, documented point
+- Never serve a broken page: a failed or malformed run leaves the previous
+  edition live.
+- Make the Claude subscription that runs the routine a single, documented point
   of change.
 
 ## Non-Goals
 
 - No dynamic backend, database, or user accounts — the site is static HTML.
-- No build step or framework — plain HTML + one CSS file.
+- No host-side build step and no web framework — a small zero-dependency
+  renderer runs at generation time (inside the agent's run); the host serves the
+  committed static HTML + one CSS file as-is.
 - No comments, analytics, or interactivity beyond navigating editions.
 - No reader-facing configuration; the recipe is the only editorial control
   surface.
@@ -51,15 +59,16 @@ editorial recipe exactly.
 │                         │            └──────────────────┘
 │ 1. Check prior day's slate (boxscore.email/mlb)
 │ 2. Games? → full edition. No games? → hot-stove + countdown
-│ 3. Write edition HTML in the Herald voice
-│ 4. Update homepage (index.html) + archive index
-│ 5. git commit && push
+│ 3. Write edition as structured data (JSON) in the Herald voice
+│ 4. Run renderer → edition HTML + regenerated homepage + archive
+│ 5. git commit (data + HTML) && push
 └───────────┬─────────────┘
             │ push
             ▼
 ┌─────────────────────────┐  auto-deploy  ┌──────────────────────┐
-│ GitHub repo             │──────────────▶│ Cloudflare Pages      │
-│ (editions + site source)│               │ (free static host)    │
+│ GitHub repo             │──────────────▶│ Static host           │
+│ (recipe, renderer,      │               │ (Cloudflare Pages,    │
+│  edition data + HTML)   │               │  free tier)           │
 └─────────────────────────┘               └──────────┬───────────┘
                                                       │ DNS (dnsimple)
                                                       ▼
@@ -73,7 +82,8 @@ editorial recipe exactly.
 The editorial source of truth, stored in the repo. It is the user's existing
 spec carried in verbatim, and it is the only file that needs editing to change
 how the paper reads. The agent's daily prompt is short and simply instructs it
-to read `recipe.md` and produce today's edition.
+to read `recipe.md` and produce today's edition **as structured data** (see §3),
+not as HTML.
 
 The recipe defines:
 
@@ -111,52 +121,98 @@ The recipe defines:
   ("five-and-sixty," "three-and-twentieth"), gods-and-heroes flourishes, but the
   facts underneath stay strictly accurate.
 
+The recipe also tells the agent how the structure above maps onto the edition
+data schema in §3, so the editorial spec and the machine contract stay aligned.
+
 ### 2. In-season vs. offseason logic
 
 The agent determines the mode by checking whether the prior day's slate had
 completed games:
 
-- **Games played →** the full edition as specified above.
-- **No games (offseason, or an in-season gap such as the All-Star break) →** the
-  "hot stove" edition: offseason/roster news written in the same voice, plus a
-  countdown to the next milestone (pitchers & catchers report → spring training →
-  Opening Day). The masthead's "contests reported" note adapts accordingly
-  (e.g., "no contests this day; the hot stove burns bright").
+- **Games played →** `mode: "in_season"`, the full edition as specified above.
+- **No games (offseason, or an in-season gap such as the All-Star break) →**
+  `mode: "hot_stove"`: offseason/roster news written in the same voice, plus a
+  countdown to the next milestone (pitchers & catchers report → spring training
+  → Opening Day). The masthead's "contests reported" note adapts accordingly.
 
 This logic lives in `recipe.md` so both modes stay in the editorial control
-surface. It correctly covers the All-Star break as well as the winter offseason,
-since both simply present as "no completed games yesterday."
+surface. It covers the All-Star break as well as the winter offseason, since
+both simply present as "no completed games yesterday."
 
-### 3. Publishing & hosting
+### 3. Content schema & renderer
 
-- The agent commits generated HTML to a GitHub repo. The repo lives under the
-  user's **personal `dmyeager` GitHub account** — this is independent of the
-  Claude subscription that runs the routine (see §6). Publishing (GitHub +
-  Cloudflare + dnsimple) is entirely on personal accounts; only the
-  agent-execution subscription is currently the work account.
-- **Cloudflare Pages** (free tier) is connected to the repo and auto-deploys on
-  every push. No build step — the site is static HTML, served as-is.
-- **dnsimple** points the apex domain `isitspringtrainingyet.com` at Cloudflare
-  Pages via a CNAME/ALIAS record to the project's `.pages.dev` hostname
-  (dnsimple supports ALIAS at the apex).
-- GitHub Pages is a viable alternative (A/ALIAS records to GitHub's IPs); Pages
-  is chosen for simpler apex handling and speed, but the design does not depend
-  on the specific host.
+This is the content/presentation boundary. The agent produces content *data*; a
+renderer produces *HTML*. Markup and CSS class names exist **only** in the
+template and stylesheet — never in the agent's output.
 
-**Self-healing failure mode:** because publishing is "commit on success only," a
-failed or partial run produces no commit, so the previous edition stays live.
-The site never shows a broken or half-written page.
+**Edition data — `editions/YYYY/MM/DD.json`**, conforming to a documented schema
+(`schema/edition.schema.json`):
 
-### 4. Repo layout & routing
+- `meta`: `{ date, weekday, volume, edition_number, mode, contests_reported }`
+  where `mode` is `"in_season"` or `"hot_stove"`.
+- `game_of_the_day`: `{ headline, subtitle, body }` (null in `hot_stove` mode).
+- `news`: `[ { subhead, body } ]` — themed News-Around-the-League subsections.
+- `rest_of_the_card`: `[ { headline, body } ]` — every remaining game (empty in
+  `hot_stove` mode).
+- `countdown`: `{ milestone, target_date, days_remaining }` (present in
+  `hot_stove` mode).
+- `desk_note`: the closing "word from the desk" flourish.
+
+Prose fields hold plain text with a small inline-emphasis convention (Markdown
+`*em*` / `**strong**`) that the renderer converts; the agent writes no HTML.
+
+**Renderer — `render.*`**, a small zero-dependency script, deterministic:
+`render(editionData) → HTML`, using `templates/edition.html` +
+`assets/herald.css`. It:
+
+- Validates the data against `schema/edition.schema.json` and **fails loudly**
+  on any violation (no HTML produced, no commit).
+- Emits the per-edition page `editions/YYYY/MM/DD.html`.
+- Regenerates `index.html` (homepage = most recent edition).
+- Regenerates `archive.html` (a derived view over all edition data files,
+  newest first).
+- Applies the inline-emphasis convention and escapes prose so content can never
+  break the markup.
+
+**Rendering runs at generation time**, inside the agent's session: the agent
+writes the JSON, runs the renderer, and commits **both** the data and the
+rendered HTML. The host therefore needs no build step and serves committed HTML
+as-is. A redesign (editing `herald.css` or the template) is applied to the whole
+archive by running the renderer over every edition's JSON once
+(`render --all`) — because content is stored as data, every past page updates
+consistently.
+
+### 4. Publishing & hosting
+
+- The agent commits generated files to a GitHub repo. The repo lives under the
+  user's **personal `dmyeager` GitHub account** — independent of the Claude
+  subscription that runs the routine (see Scheduling & account below).
+  Publishing (GitHub + static host + dnsimple) is entirely on personal accounts;
+  only the agent-execution subscription is currently the work account.
+- A **static host** (Cloudflare Pages, free tier) is connected to the repo and
+  auto-deploys on every push. No build step — the committed HTML is served
+  as-is. (GitHub Pages is an equally viable host for the same committed-HTML
+  model; final host choice is recorded in Open Items.)
+- **dnsimple** points the apex domain `isitspringtrainingyet.com` at the host.
+
+**Self-healing failure mode:** publishing is "commit on success only." A failed
+run, a source outage, or edition data that fails schema validation produces no
+commit, so the previous edition stays live. The site never shows a broken or
+half-written page.
+
+### 5. Repo layout & routing
 
 ```
-recipe.md                    ← editorial spec (edit this to change the paper)
-assets/herald.css            ← shared deadball-era newspaper styling
-templates/edition.html       ← masthead + page shell the agent fills in
-index.html                   ← homepage: always the latest edition
-archive.html                 ← index of all past editions, newest first
-editions/YYYY/MM/DD.html      ← dated permalink for each edition
-docs/superpowers/specs/       ← design specs (this file)
+recipe.md                     ← editorial spec (edit this to change the paper)
+schema/edition.schema.json    ← the edition data contract
+render.*                      ← deterministic renderer (zero dependencies)
+templates/edition.html        ← masthead + page shell
+assets/herald.css             ← shared deadball-era newspaper styling
+index.html                    ← homepage: latest edition   (GENERATED)
+archive.html                  ← archive index, newest first (GENERATED)
+editions/YYYY/MM/DD.json       ← edition content, agent-authored (SOURCE OF TRUTH)
+editions/YYYY/MM/DD.html       ← rendered edition            (GENERATED)
+docs/superpowers/specs/        ← design specs (this file)
 ```
 
 Routing:
@@ -165,25 +221,26 @@ Routing:
 - `/editions/YYYY/MM/DD.html` is the permanent link for a given day.
 - `/archive.html` lists every edition, newest first.
 
-Each morning the agent (a) writes the dated edition file, (b) updates
-`index.html` to today's edition, and (c) prepends the new entry to
-`archive.html`.
+`index.html`, `archive.html`, and each `editions/**/*.html` are renderer output;
+the `editions/**/*.json` files are the authored source of truth. A rebuild
+(`render --all`) can regenerate all HTML from the JSON at any time.
 
-### 5. Look & feel
+### 6. Look & feel
 
 A single hand-tuned stylesheet (`assets/herald.css`) evoking an early-1900s
 newspaper: cream/off-white stock, serif display headlines, column rules, and the
-masthead flying on every edition. The exact visual treatment will be produced as
-an approved mockup before going live. `templates/edition.html` holds the shared
-page shell (masthead + structural sections) that the agent fills with each day's
-content, so styling and structure stay consistent across editions.
+masthead flying on every edition. `templates/edition.html` holds the shared page
+shell (masthead + section scaffolding) that the renderer fills with each day's
+data. Because all markup and classes live here — never in the agent's output — a
+single design change re-renders across the whole archive (`render --all`). The
+exact visual treatment will be produced as an approved mockup before going live.
 
-### 6. Scheduling & account (single point of change)
+### 7. Scheduling & account (single point of change)
 
 - The daily run is a **scheduled Claude cloud agent (routine)** on a **cron of
   5:00 AM ET**, with correct handling of Eastern daylight/standard time.
 - It runs against the user's **work Claude subscription** for now. This is
-  distinct from the publishing side: the **GitHub repo, Cloudflare Pages, and
+  distinct from the publishing side: the **GitHub repo, static host, and
   dnsimple domain are all on the user's personal accounts** (GitHub =
   `dmyeager`). Only the Claude subscription that executes the routine is
   currently the work account.
@@ -192,7 +249,7 @@ content, so styling and structure stay consistent across editions.
   Claude account is configured, so switching it to a personal subscription later
   is a config swap (re-create/transfer the routine under the new account and
   re-attach the same personal GitHub credentials), not a rebuild. Nothing about
-  the account is hardcoded into the site or recipe.
+  the account is hardcoded into the site, recipe, or renderer.
 - The routine authenticates to the personal `dmyeager` GitHub repo with a
   fine-grained PAT (contents:read/write) or equivalent so it can commit and
   push — this credential is independent of which Claude subscription runs the
@@ -201,6 +258,8 @@ content, so styling and structure stay consistent across editions.
 ## Error Handling
 
 - **Run failure / source outage:** no commit → previous edition remains live.
+- **Malformed edition data:** the renderer's schema validation fails the run
+  before any HTML is written → no commit → previous edition remains live.
 - **Partial data (some sources down):** the recipe instructs the agent to prefer
   boxscore.email as authoritative and to proceed with what is verifiable rather
   than fabricate; consistency checks remain in force.
@@ -212,30 +271,36 @@ content, so styling and structure stay consistent across editions.
 
 Content generation is not unit-testable in the usual sense; verification is:
 
-1. **Pre-launch manual run:** trigger the agent once by hand, confirm the
+1. **Renderer tests:** the renderer is deterministic and pure, so it is
+   unit-testable directly — feed sample edition JSON (in-season and hot-stove
+   fixtures), assert the produced HTML and the schema-validation failure path.
+2. **Pre-launch manual run:** trigger the agent once by hand, confirm the
    generated edition renders correctly and reads in the Herald voice.
-2. **Publish path:** confirm the push deploys via Cloudflare Pages and the page
-   is served at isitspringtrainingyet.com (DNS resolves, TLS valid).
-3. **Offseason/no-game path:** verify the hot-stove + countdown edition renders
+3. **Publish path:** confirm the push deploys and the page is served at
+   isitspringtrainingyet.com (DNS resolves, TLS valid).
+4. **Offseason/no-game path:** verify the hot-stove + countdown edition renders
    when the prior day had no games (testable immediately around the All-Star
    break).
-4. **Ongoing editorial integrity:** the recipe's internal-consistency checks
+5. **Ongoing editorial integrity:** the recipe's internal-consistency checks
    (boxscore.email tiebreaker, bbref affiliation cross-ref) run every edition.
 
 ## Cost
 
-- **Hosting:** $0 (Cloudflare Pages free tier; domain already owned).
+- **Hosting:** $0 (static host free tier; domain already owned).
 - **Generation:** covered by the existing Claude subscription; a single daily
   run is negligible against plan limits. If ever moved to metered API instead,
   approximately $15–60/month depending on model (Sonnet ~$15, Opus ~$60).
 
 ## Open Items (for implementation planning)
 
-- Exact Cloudflare Pages ↔ GitHub connection steps and the dnsimple record
-  values.
+- **Final static-host choice** (Cloudflare Pages vs. GitHub Pages) and the exact
+  repo↔host connection steps and dnsimple record values for the apex domain.
+- The renderer's implementation language (a zero-dependency script; candidate:
+  Python stdlib or Node with no external packages) and the inline-emphasis
+  convention it supports.
 - The precise cron expression and timezone/DST configuration for 5:00 AM ET.
 - Where and how the routine's owning Claude account is recorded (the documented
   single point of change) and where the personal `dmyeager` GitHub PAT is stored
   for the routine to use.
 - Final visual design of `herald.css` (approved mockup).
-- Initial `archive.html` / `index.html` bootstrap content before the first run.
+- Bootstrap content for `index.html` / `archive.html` before the first run.
