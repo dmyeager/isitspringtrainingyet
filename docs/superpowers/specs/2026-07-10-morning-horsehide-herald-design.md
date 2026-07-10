@@ -2,12 +2,12 @@
 
 **Date:** 2026-07-10
 **Status:** Approved design, ready for implementation planning
-**Domain:** isitspringtraining.com (registered via dnsimple)
+**Domain:** isitspringtrainingyet.com (registered via dnsimple)
 
 ## Overview
 
 A daily, automatically generated baseball digest — "The Morning Horsehide
-Herald" — published each morning at isitspringtraining.com. A scheduled Claude
+Herald" — published each morning at isitspringtrainingyet.com. A scheduled Claude
 cloud agent runs the existing editorial "recipe" at 5:00 AM ET, writes the
 edition as static HTML in a mock-heroic deadball-era voice, and publishes it by
 committing to a GitHub repo that a static host auto-deploys.
@@ -63,7 +63,7 @@ editorial recipe exactly.
 └─────────────────────────┘               └──────────┬───────────┘
                                                       │ DNS (dnsimple)
                                                       ▼
-                                           isitspringtraining.com
+                                           isitspringtrainingyet.com
 ```
 
 ## Components
@@ -129,10 +129,14 @@ since both simply present as "no completed games yesterday."
 
 ### 3. Publishing & hosting
 
-- The agent commits generated HTML to a GitHub repo.
+- The agent commits generated HTML to a GitHub repo. The repo lives under the
+  user's **personal `dmyeager` GitHub account** — this is independent of the
+  Claude subscription that runs the routine (see §6). Publishing (GitHub +
+  Cloudflare + dnsimple) is entirely on personal accounts; only the
+  agent-execution subscription is currently the work account.
 - **Cloudflare Pages** (free tier) is connected to the repo and auto-deploys on
   every push. No build step — the site is static HTML, served as-is.
-- **dnsimple** points the apex domain `isitspringtraining.com` at Cloudflare
+- **dnsimple** points the apex domain `isitspringtrainingyet.com` at Cloudflare
   Pages via a CNAME/ALIAS record to the project's `.pages.dev` hostname
   (dnsimple supports ALIAS at the apex).
 - GitHub Pages is a viable alternative (A/ALIAS records to GitHub's IPs); Pages
@@ -178,15 +182,21 @@ content, so styling and structure stay consistent across editions.
 
 - The daily run is a **scheduled Claude cloud agent (routine)** on a **cron of
   5:00 AM ET**, with correct handling of Eastern daylight/standard time.
-- It runs against the user's **work Claude subscription** for now.
-- **The account/subscription used is a documented single point of change.** The
-  spec and repo will record exactly where the routine's owning account and
-  GitHub credentials are configured, so switching to a personal subscription
-  later is a config swap (re-create/transfer the routine under the new account
-  and re-attach credentials), not a rebuild. Nothing about the account is
-  hardcoded into the site or recipe.
-- The routine has the GitHub repo attached and credentials (a fine-grained PAT
-  with contents:read/write, or equivalent) available so it can commit and push.
+- It runs against the user's **work Claude subscription** for now. This is
+  distinct from the publishing side: the **GitHub repo, Cloudflare Pages, and
+  dnsimple domain are all on the user's personal accounts** (GitHub =
+  `dmyeager`). Only the Claude subscription that executes the routine is
+  currently the work account.
+- **The Claude subscription used to run the routine is a documented single point
+  of change.** The spec and repo will record exactly where the routine's owning
+  Claude account is configured, so switching it to a personal subscription later
+  is a config swap (re-create/transfer the routine under the new account and
+  re-attach the same personal GitHub credentials), not a rebuild. Nothing about
+  the account is hardcoded into the site or recipe.
+- The routine authenticates to the personal `dmyeager` GitHub repo with a
+  fine-grained PAT (contents:read/write) or equivalent so it can commit and
+  push — this credential is independent of which Claude subscription runs the
+  routine.
 
 ## Error Handling
 
@@ -205,7 +215,7 @@ Content generation is not unit-testable in the usual sense; verification is:
 1. **Pre-launch manual run:** trigger the agent once by hand, confirm the
    generated edition renders correctly and reads in the Herald voice.
 2. **Publish path:** confirm the push deploys via Cloudflare Pages and the page
-   is served at isitspringtraining.com (DNS resolves, TLS valid).
+   is served at isitspringtrainingyet.com (DNS resolves, TLS valid).
 3. **Offseason/no-game path:** verify the hot-stove + countdown edition renders
    when the prior day had no games (testable immediately around the All-Star
    break).
@@ -224,7 +234,8 @@ Content generation is not unit-testable in the usual sense; verification is:
 - Exact Cloudflare Pages ↔ GitHub connection steps and the dnsimple record
   values.
 - The precise cron expression and timezone/DST configuration for 5:00 AM ET.
-- Where and how the routine's owning account + GitHub credentials are recorded
-  (the documented single point of change).
+- Where and how the routine's owning Claude account is recorded (the documented
+  single point of change) and where the personal `dmyeager` GitHub PAT is stored
+  for the routine to use.
 - Final visual design of `herald.css` (approved mockup).
 - Initial `archive.html` / `index.html` bootstrap content before the first run.
