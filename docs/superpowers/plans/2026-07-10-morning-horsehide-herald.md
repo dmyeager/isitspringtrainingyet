@@ -594,7 +594,7 @@ class TestEditionBody(unittest.TestCase):
 
     def test_render_edition_wraps_body_in_page(self):
         out = render.render_edition(_load("in_season.json"), "<t>$title</t><b>$body</b>")
-        self.assertTrue(out.startswith("<t>The Morning Horsehide Herald &mdash; "))
+        self.assertTrue(out.startswith("<t>The Morning Horsehide Herald — "))
         self.assertIn("MUDVILLE THUNDERS", out)
 ```
 
