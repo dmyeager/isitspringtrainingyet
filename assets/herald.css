@@ -1,0 +1,91 @@
+:root {
+  --stock: #f4f1e8;
+  --ink: #1c1a15;
+  --rule: #6f6857;
+  --accent: #7a2e1d;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--stock);
+  color: var(--ink);
+  font-family: var(--serif);
+  line-height: 1.5;
+}
+
+.sheet {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+}
+
+.masthead {
+  text-align: center;
+  border-bottom: 3px double var(--ink);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.masthead__title {
+  font-size: clamp(1.6rem, 6vw, 2.6rem);
+  letter-spacing: 0.04em;
+  margin: 0 0 0.25rem;
+}
+
+.masthead__motto { font-style: italic; margin: 0.1rem 0; }
+.masthead__subtitle { font-variant: small-caps; letter-spacing: 0.06em; margin: 0.1rem 0; }
+.masthead__line { margin: 0.5rem 0 0; font-variant: small-caps; }
+.masthead__note { margin: 0.2rem 0 0; font-style: italic; color: var(--rule); }
+.masthead--mini .masthead__title { font-size: clamp(1.3rem, 5vw, 2rem); }
+
+.section__label {
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.2rem;
+  margin: 2rem 0 0.75rem;
+}
+
+.gotd__headline, .card__headline {
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.15rem;
+}
+.gotd__subtitle { font-style: italic; color: var(--rule); margin: 0 0 0.5rem; }
+
+.news__item, .card__game { margin-bottom: 1rem; }
+.news__subhead { font-variant: small-caps; letter-spacing: 0.05em; margin: 0 0 0.2rem; color: var(--accent); }
+
+.countdown__line {
+  text-align: center;
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--rule);
+  padding: 0.5rem;
+}
+
+.desk-note { margin-top: 2rem; font-style: italic; }
+.signoff { text-align: center; font-variant: small-caps; letter-spacing: 0.2em; margin-top: 1rem; }
+
+.archive__list { list-style: none; padding: 0; }
+.archive__item { padding: 0.35rem 0; border-bottom: 1px dotted var(--rule); }
+.archive__item a { color: var(--accent); text-decoration: none; }
+.archive__item a:hover { text-decoration: underline; }
+
+.placeholder { text-align: center; font-style: italic; margin-top: 3rem; }
+
+.colophon {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 2rem;
+  text-align: center;
+  font-variant: small-caps;
+  border-top: 1px solid var(--rule);
+}
+.colophon a { color: var(--accent); text-decoration: none; }
+
+p { margin: 0 0 0.75rem; }
