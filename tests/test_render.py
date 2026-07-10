@@ -1,3 +1,5 @@
+import json
+import pathlib
 import unittest
 
 import render
@@ -104,6 +106,37 @@ class TestPageAndMasthead(unittest.TestCase):
             "mode": "in_season", "contests_reported": 1,
         }
         self.assertIn("Reporting 1 contest ", render.render_masthead(meta))
+
+
+FIXTURES = pathlib.Path(__file__).parent / "fixtures"
+
+
+def _load(name):
+    return json.loads((FIXTURES / name).read_text(encoding="utf-8"))
+
+
+class TestEditionBody(unittest.TestCase):
+    def test_in_season_has_all_sections(self):
+        body = render.render_edition_body(_load("in_season.json"))
+        self.assertIn("The Game of the Day", body)
+        self.assertIn("MUDVILLE THUNDERS", body)
+        self.assertIn("<strong>seven runs to six</strong>", body)
+        self.assertIn("News Around the League", body)
+        self.assertIn("The Rest of the Card", body)
+        self.assertIn("~ THE HERALD ~", body)
+        self.assertNotIn("countdown__line", body)
+
+    def test_hot_stove_omits_game_and_card_shows_countdown(self):
+        body = render.render_edition_body(_load("hot_stove.json"))
+        self.assertNotIn("The Game of the Day", body)
+        self.assertNotIn("The Rest of the Card", body)
+        self.assertIn("60 days until", body)
+        self.assertIn("Pitchers and Catchers report", body)
+
+    def test_render_edition_wraps_body_in_page(self):
+        out = render.render_edition(_load("in_season.json"), "<t>$title</t><b>$body</b>")
+        self.assertTrue(out.startswith("<t>The Morning Horsehide Herald — "))
+        self.assertIn("MUDVILLE THUNDERS", out)
 
 
 if __name__ == "__main__":

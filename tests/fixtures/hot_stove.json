@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "date": "2026-12-20",
+    "date_display": "the Twentieth of December",
+    "weekday": "Sunday",
+    "volume": "Volume I",
+    "edition_number": 164,
+    "mode": "hot_stove",
+    "contests_reported": 0
+  },
+  "game_of_the_day": null,
+  "news": [
+    {
+      "subhead": "The Stove Roars",
+      "body": "A slugger of great repute has affixed his name to a contract most **handsome**, and the winter grows warm with talk."
+    }
+  ],
+  "rest_of_the_card": [],
+  "countdown": {
+    "milestone": "Pitchers and Catchers report",
+    "target_date": "the Eighteenth of February",
+    "days_remaining": 60
+  },
+  "desk_note": "Patience, faithful reader; the crocus of the diamond shall bloom in its season."
+}

@@ -94,3 +94,65 @@ def render_masthead(meta):
         + '<p class="masthead__note">' + note + '</p>'
         + '</header>'
     )
+
+
+def render_edition_body(data):
+    meta = data["meta"]
+    parts = [render_masthead(meta)]
+
+    gotd = data.get("game_of_the_day")
+    if gotd:
+        parts.append(
+            '<section class="game-of-the-day">'
+            '<h2 class="section__label">⭐ The Game of the Day</h2>'
+            '<h3 class="gotd__headline">' + render_inline(gotd["headline"]) + '</h3>'
+            '<p class="gotd__subtitle">' + render_inline(gotd["subtitle"]) + '</p>'
+            + render_body(gotd["body"])
+            + '</section>'
+        )
+
+    countdown = data.get("countdown")
+    if countdown:
+        parts.append(
+            '<section class="countdown"><p class="countdown__line">'
+            + "{} days until ".format(countdown["days_remaining"])
+            + render_inline(countdown["milestone"])
+            + " (" + render_inline(countdown["target_date"]) + ")."
+            + '</p></section>'
+        )
+
+    news = data.get("news") or []
+    if news:
+        items = "".join(
+            '<div class="news__item"><h3 class="news__subhead">'
+            + render_inline(n["subhead"]) + '</h3>' + render_body(n["body"]) + '</div>'
+            for n in news
+        )
+        parts.append(
+            '<section class="news"><h2 class="section__label">'
+            '\U0001f4dc News Around the League</h2>' + items + '</section>'
+        )
+
+    card = data.get("rest_of_the_card") or []
+    if card:
+        items = "".join(
+            '<div class="card__game"><h3 class="card__headline">'
+            + render_inline(g["headline"]) + '</h3>' + render_body(g["body"]) + '</div>'
+            for g in card
+        )
+        parts.append(
+            '<section class="rest-of-the-card"><h2 class="section__label">'
+            '\U0001f4cb The Rest of the Card</h2>' + items + '</section>'
+        )
+
+    parts.append(
+        '<section class="desk-note">'
+        + render_body(data["desk_note"])
+        + '<p class="signoff">~ THE HERALD ~</p></section>'
+    )
+    return "".join(parts)
+
+
+def render_edition(data, base_template):
+    title = "The Morning Horsehide Herald — " + data["meta"]["date_display"]
+    return render_page(title, render_edition_body(data), base_template)

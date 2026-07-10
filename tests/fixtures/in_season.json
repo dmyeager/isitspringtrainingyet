@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "date": "2026-07-09",
+    "date_display": "the Ninth of July, Two Thousand and Twenty-Six",
+    "weekday": "Thursday",
+    "volume": "Volume I",
+    "edition_number": 1,
+    "mode": "in_season",
+    "contests_reported": 2
+  },
+  "game_of_the_day": {
+    "headline": "MUDVILLE THUNDERS PAST THE ROBINS IN THE ELEVENTH",
+    "subtitle": "In which a mighty blow settles a duel of five-and-forty outs",
+    "body": "Under a copper sky the Thunders did prevail, **seven runs to six**, when the great Callahan smote the horsehide o'er the distant fence.\n\nThe standings tighten, and the faithful roar."
+  },
+  "news": [
+    {
+      "subhead": "Of Trades and Whispers",
+      "body": "The wires hum with rumor that a *southpaw of renown* may yet change his colors before the deadline."
+    }
+  ],
+  "rest_of_the_card": [
+    {
+      "headline": "THE CINCINNATI NINE SUBDUE THE COLTS, THREE TO ONE",
+      "body": "A crisp affair decided by timely leather and a lone errant throw."
+    }
+  ],
+  "desk_note": "And so the presses rest until the morrow, when fresh deeds await their chronicler."
+}
