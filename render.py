@@ -7,8 +7,8 @@ import string
 import sys
 from pathlib import Path
 
-_STRONG = re.compile(r"\*\*(.+?)\*\*")
-_EM = re.compile(r"\*(.+?)\*")
+_STRONG = re.compile(r"\*\*(?!\s)(.+?)(?<!\s)\*\*")
+_EM = re.compile(r"\*(?!\s)(.+?)(?<!\s)\*")
 
 
 def render_inline(text):
@@ -51,6 +51,9 @@ def _validate_node(value, schema, path):
         return
     if "enum" in schema and value not in schema["enum"]:
         raise ValueError("{}: {!r} not in {}".format(path, value, schema["enum"]))
+    if "pattern" in schema and isinstance(value, str):
+        if re.fullmatch(schema["pattern"], value) is None:
+            raise ValueError("{}: {!r} does not match pattern {}".format(path, value, schema["pattern"]))
     if isinstance(value, dict):
         for key in schema.get("required", []):
             if key not in value:
@@ -194,7 +197,7 @@ def build_archive_entries(editions):
 
 def render_archive(entries, base_template):
     items = "".join(
-        '<li class="archive__item"><a href="' + e["url"] + '">'
+        '<li class="archive__item"><a href="' + html.escape(e["url"], quote=True) + '">'
         + render_inline(e["date_display"]) + '</a> &mdash; '
         + render_inline(e["label"]) + '</li>'
         for e in entries

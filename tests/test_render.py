@@ -36,6 +36,12 @@ class TestProse(unittest.TestCase):
     def test_body_ignores_trailing_whitespace_blocks(self):
         self.assertEqual(render.render_body("Only one.\n\n   \n"), "<p>Only one.</p>")
 
+    def test_inline_ignores_space_padded_asterisks(self):
+        self.assertEqual(render.render_inline("3 * 4 and 5 * 6"), "3 * 4 and 5 * 6")
+
+    def test_inline_single_word_em_still_works(self):
+        self.assertEqual(render.render_inline("*soft*"), "<em>soft</em>")
+
 
 class TestValidate(unittest.TestCase):
     SCHEMA = {
@@ -73,6 +79,13 @@ class TestValidate(unittest.TestCase):
 
     def test_nullable_object_accepts_null(self):
         render.validate({"meta": {"mode": "hot_stove"}, "count": 0, "note": None}, self.SCHEMA)
+
+    def test_pattern_rejects_nonmatching_string(self):
+        schema = {"type": "object", "required": ["d"],
+                  "properties": {"d": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"}}}
+        render.validate({"d": "2026-07-09"}, schema)  # valid, no raise
+        with self.assertRaises(ValueError):
+            render.validate({"d": '2026-07-09"><x>'}, schema)
 
 
 class TestPageAndMasthead(unittest.TestCase):
