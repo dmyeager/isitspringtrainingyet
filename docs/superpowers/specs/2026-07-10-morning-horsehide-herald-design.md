@@ -8,7 +8,7 @@
 
 A daily, automatically generated baseball digest — "The Morning Horsehide
 Herald" — published each morning at isitspringtrainingyet.com. A scheduled
-Claude cloud agent runs the existing editorial "recipe" at 5:00 AM ET, writes
+Claude cloud agent runs the existing editorial "recipe" at 6:00 AM ET, writes
 the edition as **structured content (data)** in a mock-heroic deadball-era
 voice, renders that data to static HTML via a small deterministic renderer, and
 publishes by committing to a GitHub repo that a static host auto-deploys.
@@ -20,7 +20,7 @@ presentation.
 
 ## Goals
 
-- Publish a new edition automatically every morning at ~5:00 AM ET.
+- Publish a new edition automatically every morning at ~6:00 AM ET.
 - Preserve the existing editorial recipe verbatim (voice, structure, sources of
   truth, consistency checks).
 - **Separate content from presentation:** the agent emits edition *data*; a
@@ -50,7 +50,7 @@ presentation.
 ## Architecture
 
 ```
-  5:00 AM ET daily (cron)
+  6:00 AM ET daily (cron)
        │
        ▼
 ┌─────────────────────────┐   reads    ┌──────────────────┐
@@ -240,7 +240,10 @@ exact visual treatment will be produced as an approved mockup before going live.
 ### 7. Scheduling & account (single point of change)
 
 - The daily run is a **scheduled Claude cloud agent (routine)** on a **cron of
-  5:00 AM ET**, with correct handling of Eastern daylight/standard time.
+  6:00 AM ET**, with correct handling of Eastern daylight/standard time. 6 AM
+  is chosen because boxscore.email publishes its morning edition well before
+  then, so the routine's fetch of the current edition always has the prior day's
+  completed slate.
 - It runs against the user's **work Claude subscription** for now. This is
   distinct from the publishing side: the **GitHub repo, static host, and
   dnsimple domain are all on the user's personal accounts** (GitHub =
@@ -300,7 +303,7 @@ Content generation is not unit-testable in the usual sense; verification is:
 - The renderer's implementation language (a zero-dependency script; candidate:
   Python stdlib or Node with no external packages) and the inline-emphasis
   convention it supports.
-- The precise cron expression and timezone/DST configuration for 5:00 AM ET.
+- The precise cron expression and timezone/DST configuration for 6:00 AM ET.
 - Where and how the routine's owning Claude account is recorded (the documented
   single point of change) and where the personal `dmyeager` GitHub PAT is stored
   for the routine to use.

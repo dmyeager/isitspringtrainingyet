@@ -4,7 +4,7 @@
 
 **Goal:** Build a static site that publishes a daily, auto-generated baseball digest ("The Morning Horsehide Herald") at isitspringtrainingyet.com, produced each morning by a scheduled Claude agent that writes structured edition data and renders it to HTML.
 
-**Architecture:** The agent emits schema-validated JSON per edition; a deterministic zero-dependency Python renderer turns that JSON into static HTML (edition pages + homepage + archive) at generation time. Both data and HTML are committed to a personal GitHub repo that GitHub Pages serves as-is. A scheduled Claude routine runs the editorial recipe at 5 AM ET, commits on success only, and pushes.
+**Architecture:** The agent emits schema-validated JSON per edition; a deterministic zero-dependency Python renderer turns that JSON into static HTML (edition pages + homepage + archive) at generation time. Both data and HTML are committed to a personal GitHub repo that GitHub Pages serves as-is. A scheduled Claude routine runs the editorial recipe at 6 AM ET, commits on success only, and pushes.
 
 **Tech Stack:** Python 3 standard library only (`json`, `re`, `html`, `string`, `pathlib`, `sys`, `unittest`) for the renderer and its tests; plain static HTML + one CSS file; GitHub Pages (host); dnsimple (DNS); a Claude scheduled cloud agent (routine) for daily generation.
 
@@ -1336,7 +1336,8 @@ git add agent/dispatch-prompt.md && git commit -m "docs: routine runtime notes (
 
 Using the scheduled cloud agent / routine mechanism (the `schedule` skill), on
 the **work Claude subscription**, create a routine that:
-- Runs on cron `0 5 * * *` in timezone **America/New_York** (5:00 AM ET, DST-aware).
+- Runs on cron `0 6 * * *` in timezone **America/New_York** (6:00 AM ET, DST-aware;
+  boxscore.email publishes before then, so the current edition is always available).
 - Has the `dmyeager/isitspringtrainingyet` repo attached, with the PAT from
   Step 1 for push access.
 - Uses the contents of `agent/dispatch-prompt.md` as its prompt.
@@ -1425,7 +1426,7 @@ Three tests were added (`test_inline_ignores_space_padded_asterisks`, `test_inli
 
 ## Date-model correction (applied)
 
-An edition is dated by its **publication morning**, not the day the games were played. The 5 AM ET run on day *D* reports day *D−1*'s completed slate (boxscore.email/mlb shows the previous day's games); `meta.date` / `weekday` / `date_display` describe day *D*, and the masthead's "Reporting N contests from the day prior" frames the games as yesterday's. `recipe.md` and `agent/dispatch-prompt.md` were corrected accordingly (the Task 9 / Task 10 text above predates this). The inaugural edition is filed at `editions/2026/07/10.json` — published Friday, 10 July, reporting the Thursday, 9 July slate.
+An edition is dated by its **publication morning**, not the day the games were played. The 6 AM ET run on day *D* reports day *D−1*'s completed slate (boxscore.email/mlb shows the previous day's games); `meta.date` / `weekday` / `date_display` describe day *D*, and the masthead's "Reporting N contests from the day prior" frames the games as yesterday's. `recipe.md` and `agent/dispatch-prompt.md` were corrected accordingly (the Task 9 / Task 10 text above predates this). The inaugural edition is filed at `editions/2026/07/10.json` — published Friday, 10 July, reporting the Thursday, 9 July slate.
 
 ## Design (applied)
 
