@@ -1,5 +1,7 @@
 import json
 import pathlib
+import shutil
+import tempfile
 import unittest
 
 import render
@@ -162,6 +164,42 @@ class TestHomeAndArchive(unittest.TestCase):
         out = render.render_archive(entries, "<t>$title</t><b>$body</b>")
         self.assertIn('href="/editions/2026/07/09.html"', out)
         self.assertIn("The Archive", out)
+
+
+class TestPipeline(unittest.TestCase):
+    def setUp(self):
+        self.root = pathlib.Path(tempfile.mkdtemp())
+        (self.root / "templates").mkdir()
+        (self.root / "schema").mkdir()
+        # Real template and schema from the repo, so the test exercises them.
+        repo = pathlib.Path(__file__).resolve().parent.parent
+        shutil.copy(repo / "templates" / "base.html", self.root / "templates" / "base.html")
+        shutil.copy(repo / "schema" / "edition.schema.json", self.root / "schema" / "edition.schema.json")
+        for name, date in [("in_season.json", "2026-07-09"), ("hot_stove.json", "2026-12-20")]:
+            y, m, d = date.split("-")
+            dst = self.root / "editions" / y / m
+            dst.mkdir(parents=True, exist_ok=True)
+            shutil.copy(FIXTURES / name, dst / (d + ".json"))
+
+    def tearDown(self):
+        shutil.rmtree(self.root)
+
+    def test_render_all_writes_editions_index_and_archive(self):
+        render.render_all(self.root)
+        self.assertTrue((self.root / "editions" / "2026" / "07" / "09.html").exists())
+        self.assertTrue((self.root / "editions" / "2026" / "12" / "20.html").exists())
+        index = (self.root / "index.html").read_text(encoding="utf-8")
+        self.assertIn("hot stove burns bright", index)  # latest edition is the Dec one
+        archive = (self.root / "archive.html").read_text(encoding="utf-8")
+        self.assertIn('href="/editions/2026/07/09.html"', archive)
+
+    def test_render_one_validates_before_writing(self):
+        bad = self.root / "editions" / "2026" / "07" / "10.json"
+        bad.write_text('{"meta": {"mode": "in_season"}}', encoding="utf-8")
+        with self.assertRaises(ValueError):
+            render.render_one(self.root, bad)
+        # A failed render must not have produced the bad edition's HTML.
+        self.assertFalse((self.root / "editions" / "2026" / "07" / "10.html").exists())
 
 
 if __name__ == "__main__":

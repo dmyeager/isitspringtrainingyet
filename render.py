@@ -1,8 +1,11 @@
 """The Morning Horsehide Herald renderer: edition JSON -> static HTML."""
 
 import html
+import json
 import re
 import string
+import sys
+from pathlib import Path
 
 _STRONG = re.compile(r"\*\*(.+?)\*\*")
 _EM = re.compile(r"\*(.+?)\*")
@@ -202,3 +205,56 @@ def render_archive(entries, base_template):
         '<ul class="archive__list">' + items + '</ul></section>'
     )
     return render_page("The Archive — The Morning Horsehide Herald", body, base_template)
+
+
+def discover_editions(root):
+    files = sorted(Path(root).glob("editions/*/*/*.json"))
+    return [json.loads(p.read_text(encoding="utf-8")) for p in files]
+
+
+def _load_template(root):
+    return (Path(root) / "templates" / "base.html").read_text(encoding="utf-8")
+
+
+def _load_schema(root):
+    return json.loads((Path(root) / "schema" / "edition.schema.json").read_text(encoding="utf-8"))
+
+
+def render_all(root):
+    root = Path(root)
+    template = _load_template(root)
+    schema = _load_schema(root)
+    editions = discover_editions(root)
+    for data in editions:               # validate everything before writing anything
+        validate(data, schema)
+    for data in editions:
+        out = root / edition_url(data["meta"]["date"]).lstrip("/")
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(render_edition(data, template), encoding="utf-8")
+    latest = max(editions, key=lambda d: d["meta"]["date"]) if editions else None
+    (root / "index.html").write_text(render_homepage(latest, template), encoding="utf-8")
+    entries = build_archive_entries(editions)
+    (root / "archive.html").write_text(render_archive(entries, template), encoding="utf-8")
+
+
+def render_one(root, json_path):
+    root = Path(root)
+    data = json.loads(Path(json_path).read_text(encoding="utf-8"))
+    validate(data, _load_schema(root))  # fail loudly on the new edition first
+    render_all(root)                     # regenerate everything from disk
+
+
+def main(argv):
+    root = Path(__file__).resolve().parent
+    if len(argv) == 2 and argv[1] == "--all":
+        render_all(root)
+    elif len(argv) == 2:
+        render_one(root, argv[1])
+    else:
+        print("usage: render.py <edition.json> | --all", file=sys.stderr)
+        return 2
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv))
