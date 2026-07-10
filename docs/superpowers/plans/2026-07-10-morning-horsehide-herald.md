@@ -1412,4 +1412,14 @@ git add recipe.md && git commit -m "docs: sharpen no-games mode detection in rec
 `render_one`, `main`. Schema keys (`meta.date`, `meta.date_display`,
 `game_of_the_day`, `rest_of_the_card`, `countdown`, `desk_note`) match between
 the schema (Task 1), fixtures (Task 5), renderer (Tasks 5–6), and recipe (Task 9).
+
+## Post-review hardening (applied)
+
+After Tasks 1–7 passed spec review, the code-quality review surfaced two issues, fixed in commit `3da34ea`. The inline code blocks in Tasks 2, 3, and 6 predate these — apply them if re-running the plan from scratch:
+
+- **Emphasis regex** (Task 2): guard against space-padded asterisks so prose like "3 * 4" is not italicized — `_STRONG = re.compile(r"\*\*(?!\s)(.+?)(?<!\s)\*\*")` and `_EM = re.compile(r"\*(?!\s)(.+?)(?<!\s)\*")`.
+- **Date pattern** (Tasks 1 & 3): `_validate_node` gained `pattern` support (after the enum check: `if "pattern" in schema and isinstance(value, str): re.fullmatch(...) else ValueError`), and `meta.date` is constrained to `"^\\d{4}-\\d{2}-\\d{2}$"`. Only `meta.date` — `date_display` and `countdown.target_date` remain free-form display strings.
+- **Archive href** (Task 6): `render_archive` escapes the URL with `html.escape(e["url"], quote=True)` as defense-in-depth.
+
+Three tests were added (`test_inline_ignores_space_padded_asterisks`, `test_inline_single_word_em_still_works`, `test_pattern_rejects_nonmatching_string`); the suite is 28 tests, all passing.
 ```
