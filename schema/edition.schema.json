@@ -1,0 +1,60 @@
+{
+  "type": "object",
+  "required": ["meta", "news", "rest_of_the_card", "desk_note"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["date", "date_display", "weekday", "volume", "edition_number", "mode", "contests_reported"],
+      "properties": {
+        "date": { "type": "string" },
+        "date_display": { "type": "string" },
+        "weekday": { "type": "string" },
+        "volume": { "type": "string" },
+        "edition_number": { "type": "integer" },
+        "mode": { "type": "string", "enum": ["in_season", "hot_stove"] },
+        "contests_reported": { "type": "integer" }
+      }
+    },
+    "game_of_the_day": {
+      "type": ["object", "null"],
+      "required": ["headline", "subtitle", "body"],
+      "properties": {
+        "headline": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "body": { "type": "string" }
+      }
+    },
+    "news": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["subhead", "body"],
+        "properties": {
+          "subhead": { "type": "string" },
+          "body": { "type": "string" }
+        }
+      }
+    },
+    "rest_of_the_card": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["headline", "body"],
+        "properties": {
+          "headline": { "type": "string" },
+          "body": { "type": "string" }
+        }
+      }
+    },
+    "countdown": {
+      "type": ["object", "null"],
+      "required": ["milestone", "target_date", "days_remaining"],
+      "properties": {
+        "milestone": { "type": "string" },
+        "target_date": { "type": "string" },
+        "days_remaining": { "type": "integer" }
+      }
+    },
+    "desk_note": { "type": "string" }
+  }
+}
