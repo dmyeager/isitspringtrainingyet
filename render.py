@@ -69,7 +69,7 @@ def _validate_node(value, schema, path):
 
 
 _MASTHEAD_HEAD = (
-    '<h1 class="masthead__title">⚾ THE MORNING HORSEHIDE HERALD ⚾</h1>'
+    '<h1 class="masthead__title">THE MORNING HORSEHIDE HERALD</h1>'
     '<p class="masthead__motto">"Every Score Set Down, No Deed Unsung"</p>'
     '<p class="masthead__subtitle">~ Being a Faithful Daily Chronicle of the National Pastime ~</p>'
 )
@@ -110,7 +110,7 @@ def render_edition_body(data):
     if gotd:
         parts.append(
             '<section class="game-of-the-day">'
-            '<h2 class="section__label">⭐ The Game of the Day</h2>'
+            '<h2 class="section__label">The Game of the Day</h2>'
             '<h3 class="gotd__headline">' + render_inline(gotd["headline"]) + '</h3>'
             '<p class="gotd__subtitle">' + render_inline(gotd["subtitle"]) + '</p>'
             + render_body(gotd["body"])
@@ -136,7 +136,7 @@ def render_edition_body(data):
         )
         parts.append(
             '<section class="news"><h2 class="section__label">'
-            '\U0001f4dc News Around the League</h2>' + items + '</section>'
+            'News Around the League</h2>' + items + '</section>'
         )
 
     card = data.get("rest_of_the_card") or []
@@ -148,7 +148,7 @@ def render_edition_body(data):
         )
         parts.append(
             '<section class="rest-of-the-card"><h2 class="section__label">'
-            '\U0001f4cb The Rest of the Card</h2>' + items + '</section>'
+            'The Rest of the Card</h2>' + items + '</section>'
         )
 
     parts.append(
