@@ -2,6 +2,7 @@
 
 import html
 import re
+import string
 
 _STRONG = re.compile(r"\*\*(.+?)\*\*")
 _EM = re.compile(r"\*(.+?)\*")
@@ -59,3 +60,37 @@ def _validate_node(value, schema, path):
         if item_schema is not None:
             for i, item in enumerate(value):
                 _validate_node(item, item_schema, "{}[{}]".format(path, i))
+
+
+_MASTHEAD_HEAD = (
+    '<h1 class="masthead__title">⚾ THE MORNING HORSEHIDE HERALD ⚾</h1>'
+    '<p class="masthead__motto">"Every Score Set Down, No Deed Unsung"</p>'
+    '<p class="masthead__subtitle">~ Being a Faithful Daily Chronicle of the National Pastime ~</p>'
+)
+
+
+def render_page(title, body_html, base_template):
+    return string.Template(base_template).safe_substitute(
+        title=html.escape(title, quote=False), body=body_html
+    )
+
+
+def render_masthead(meta):
+    if meta["mode"] == "in_season":
+        n = meta["contests_reported"]
+        note = "Reporting {} contest{} from the day prior.".format(n, "" if n == 1 else "s")
+    else:
+        note = "No contests this day; the hot stove burns bright."
+    line = "{} &middot; No. {} &middot; {}, {}".format(
+        render_inline(meta["volume"]),
+        meta["edition_number"],
+        render_inline(meta["weekday"]),
+        render_inline(meta["date_display"]),
+    )
+    return (
+        '<header class="masthead">'
+        + _MASTHEAD_HEAD
+        + '<p class="masthead__line">' + line + '</p>'
+        + '<p class="masthead__note">' + note + '</p>'
+        + '</header>'
+    )

@@ -71,5 +71,40 @@ class TestValidate(unittest.TestCase):
         render.validate({"meta": {"mode": "hot_stove"}, "count": 0, "note": None}, self.SCHEMA)
 
 
+class TestPageAndMasthead(unittest.TestCase):
+    TEMPLATE = "<t>$title</t><b>$body</b>"
+
+    def test_render_page_substitutes_and_escapes_title(self):
+        out = render.render_page("A & B", "<p>hi</p>", self.TEMPLATE)
+        self.assertEqual(out, "<t>A &amp; B</t><b><p>hi</p></b>")
+
+    def test_masthead_in_season_note(self):
+        meta = {
+            "date": "2026-07-09", "date_display": "the Ninth of July",
+            "weekday": "Thursday", "volume": "Vol. I", "edition_number": 1,
+            "mode": "in_season", "contests_reported": 15,
+        }
+        html_out = render.render_masthead(meta)
+        self.assertIn("THE MORNING HORSEHIDE HERALD", html_out)
+        self.assertIn("Reporting 15 contests", html_out)
+        self.assertIn("the Ninth of July", html_out)
+
+    def test_masthead_hot_stove_note(self):
+        meta = {
+            "date": "2026-12-20", "date_display": "the Twentieth of December",
+            "weekday": "Sunday", "volume": "Vol. I", "edition_number": 99,
+            "mode": "hot_stove", "contests_reported": 0,
+        }
+        self.assertIn("hot stove burns bright", render.render_masthead(meta))
+
+    def test_masthead_singular_contest(self):
+        meta = {
+            "date": "2026-04-01", "date_display": "Opening Day",
+            "weekday": "Wednesday", "volume": "Vol. I", "edition_number": 1,
+            "mode": "in_season", "contests_reported": 1,
+        }
+        self.assertIn("Reporting 1 contest ", render.render_masthead(meta))
+
+
 if __name__ == "__main__":
     unittest.main()
