@@ -139,5 +139,30 @@ class TestEditionBody(unittest.TestCase):
         self.assertIn("MUDVILLE THUNDERS", out)
 
 
+class TestHomeAndArchive(unittest.TestCase):
+    def test_edition_url_from_date(self):
+        self.assertEqual(render.edition_url("2026-07-09"), "/editions/2026/07/09.html")
+
+    def test_homepage_none_shows_placeholder(self):
+        out = render.render_homepage(None, "<t>$title</t><b>$body</b>")
+        self.assertIn("presses are warming up", out)
+
+    def test_homepage_latest_is_the_edition(self):
+        out = render.render_homepage(_load("in_season.json"), "<t>$title</t><b>$body</b>")
+        self.assertIn("MUDVILLE THUNDERS", out)
+
+    def test_archive_entries_sorted_desc_with_labels(self):
+        entries = render.build_archive_entries([_load("in_season.json"), _load("hot_stove.json")])
+        self.assertEqual([e["date"] for e in entries], ["2026-12-20", "2026-07-09"])
+        self.assertEqual(entries[0]["label"], "Hot Stove Edition")
+        self.assertEqual(entries[1]["label"], "MUDVILLE THUNDERS PAST THE ROBINS IN THE ELEVENTH")
+
+    def test_render_archive_lists_links(self):
+        entries = render.build_archive_entries([_load("in_season.json")])
+        out = render.render_archive(entries, "<t>$title</t><b>$body</b>")
+        self.assertIn('href="/editions/2026/07/09.html"', out)
+        self.assertIn("The Archive", out)
+
+
 if __name__ == "__main__":
     unittest.main()

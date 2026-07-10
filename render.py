@@ -156,3 +156,49 @@ def render_edition_body(data):
 def render_edition(data, base_template):
     title = "The Morning Horsehide Herald — " + data["meta"]["date_display"]
     return render_page(title, render_edition_body(data), base_template)
+
+
+def edition_url(date):
+    year, month, day = date.split("-")
+    return "/editions/{}/{}/{}.html".format(year, month, day)
+
+
+def render_homepage(latest, base_template):
+    if latest is None:
+        body = (
+            '<header class="masthead">' + _MASTHEAD_HEAD + '</header>'
+            '<section class="placeholder"><p>The presses are warming up. '
+            'The first edition goes to press at dawn.</p></section>'
+        )
+        return render_page("The Morning Horsehide Herald", body, base_template)
+    return render_edition(latest, base_template)
+
+
+def build_archive_entries(editions):
+    entries = []
+    for data in editions:
+        meta = data["meta"]
+        gotd = data.get("game_of_the_day")
+        entries.append({
+            "date": meta["date"],
+            "date_display": meta["date_display"],
+            "url": edition_url(meta["date"]),
+            "label": gotd["headline"] if gotd else "Hot Stove Edition",
+        })
+    entries.sort(key=lambda e: e["date"], reverse=True)
+    return entries
+
+
+def render_archive(entries, base_template):
+    items = "".join(
+        '<li class="archive__item"><a href="' + e["url"] + '">'
+        + render_inline(e["date_display"]) + '</a> &mdash; '
+        + render_inline(e["label"]) + '</li>'
+        for e in entries
+    )
+    body = (
+        '<header class="masthead masthead--mini">' + _MASTHEAD_HEAD + '</header>'
+        '<section class="archive"><h2 class="section__label">The Archive</h2>'
+        '<ul class="archive__list">' + items + '</ul></section>'
+    )
+    return render_page("The Archive — The Morning Horsehide Herald", body, base_template)
