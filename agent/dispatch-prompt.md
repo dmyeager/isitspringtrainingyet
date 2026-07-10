@@ -8,7 +8,9 @@ edition (covering the prior day's slate). Concretely:
    affiliations on baseball-reference.com).
 2. Decide the mode (in_season vs hot_stove) per the recipe.
 3. Write the edition as JSON conforming to `schema/edition.schema.json` at
-   `editions/YYYY/MM/DD.json` for the prior day's date.
+   `editions/YYYY/MM/DD.json`, dated by **today** (the publication morning):
+   `meta.date` is today's date, and the games you report were played the day
+   before.
 4. Run `python3 render.py editions/YYYY/MM/DD.json`.
 5. If the render reports a validation error, fix the JSON and re-run. Do not
    commit invalid output.

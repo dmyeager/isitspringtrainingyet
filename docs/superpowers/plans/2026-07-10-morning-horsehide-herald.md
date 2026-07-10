@@ -1422,4 +1422,12 @@ After Tasks 1–7 passed spec review, the code-quality review surfaced two issue
 - **Archive href** (Task 6): `render_archive` escapes the URL with `html.escape(e["url"], quote=True)` as defense-in-depth.
 
 Three tests were added (`test_inline_ignores_space_padded_asterisks`, `test_inline_single_word_em_still_works`, `test_pattern_rejects_nonmatching_string`); the suite is 28 tests, all passing.
+
+## Date-model correction (applied)
+
+An edition is dated by its **publication morning**, not the day the games were played. The 5 AM ET run on day *D* reports day *D−1*'s completed slate (boxscore.email/mlb shows the previous day's games); `meta.date` / `weekday` / `date_display` describe day *D*, and the masthead's "Reporting N contests from the day prior" frames the games as yesterday's. `recipe.md` and `agent/dispatch-prompt.md` were corrected accordingly (the Task 9 / Task 10 text above predates this). The inaugural edition is filed at `editions/2026/07/10.json` — published Friday, 10 July, reporting the Thursday, 9 July slate.
+
+## Design (applied)
+
+The first-cut `herald.css` was reworked into a period broadsheet: aged-newsprint ground (`#efe7d5`), a Didone nameplate/headline face over an oldstyle body, section heads as centered small-caps flanked by hairlines, a drop cap on the Game-of-the-Day lead, and a two-column "Rest of the Card" on wide screens. The anachronistic emoji were dropped from the four label strings in `render.py` (the tests assert the label text, not the emoji, so they stayed green).
 ```

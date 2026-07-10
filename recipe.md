@@ -7,8 +7,10 @@ JSON file conforming to `schema/edition.schema.json`, then render and publish it
 
 ## Trigger
 
-The morning dispatch has been rung. Pull the **prior day's completed slate** and
-run the edition for that day.
+The morning dispatch has been rung — it is **publication morning**. Report the
+**prior day's completed slate** (boxscore.email/mlb shows the previous day's
+games). The edition is **dated by its publication day (today)** and frames the
+games it reports as having been played the day before.
 
 ## Sources of truth
 
@@ -32,18 +34,21 @@ Check whether the prior day had **completed games**:
   break) **→** `meta.mode = "hot_stove"`. Produce the hot-stove edition:
   offseason/roster news in the same voice, plus a countdown to the next
   milestone (pitchers & catchers report → spring training → Opening Day). Look
-  up the next milestone's date; compute `days_remaining` from the edition date.
+  up the next milestone's date; compute `days_remaining` from today (the
+  publication date).
 
 ## Masthead (flies on every edition)
 
-> ⚾ THE MORNING HORSEHIDE HERALD ⚾
+> THE MORNING HORSEHIDE HERALD
 > *"Every Score Set Down, No Deed Unsung"*
 > ~ Being a Faithful Daily Chronicle of the National Pastime ~
 
 The masthead's fixed lines are rendered automatically. You supply the metadata:
 `volume`, `edition_number`, `weekday`, `date_display` (the flowery date), and
-`contests_reported`. The date-line and contest note are assembled by the
-renderer.
+`contests_reported`. **`meta.date`, `weekday`, and `date_display` all describe
+the publication day (today) — not the day the games were played.** The renderer's
+"Reporting N contests from the day prior" note frames those games as yesterday's.
+The date-line and contest note are assembled by the renderer.
 
 ## Structure → schema mapping
 
@@ -81,8 +86,11 @@ asterisk, not emphasis.
 
 ## Producing and publishing an edition
 
-1. Determine the prior day's date; set `meta.date` to `YYYY-MM-DD`.
-2. Write the edition JSON to `editions/YYYY/MM/DD.json` (matching `meta.date`).
+1. Set `meta.date` to **today's date** — the publication morning — as
+   `YYYY-MM-DD`. The games you report were played the day before; do not date the
+   edition by the game day.
+2. Write the edition JSON to `editions/YYYY/MM/DD.json` (matching `meta.date`,
+   the publication date).
 3. Run `python3 render.py editions/YYYY/MM/DD.json`. This validates the JSON
    against the schema and regenerates the edition page, the homepage, and the
    archive.
