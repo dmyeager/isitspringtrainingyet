@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "date": "2026-07-11",
+    "date_display": "the Eleventh of July, Two Thousand and Twenty-Six",
+    "weekday": "Saturday",
+    "volume": "Volume I",
+    "edition_number": 3,
+    "mode": "in_season",
+    "contests_reported": 14
+  },
+  "game_of_the_day": {
+    "headline": "DESERT MARAUDERS SACK THE PALACE AT CHAVEZ RAVINE, NINE TO THREE, AS TAWA PLUNDERS FOUR",
+    "subtitle": "In Which Arizona's Middling Nine Storm the Citadel of the Mightiest Club in All the Land, and the Great Ohtani's Long Blow Avails His Dodgers Nothing",
+    "body": "There is no fortress so grand that it cannot be stormed, and on this evening it was the *journeymen of the desert* who scaled the walls at Chavez Ravine and put the lordly Dodgers — proprietors of the finest record in all the land at one-and-sixty against four-and-thirty — to the sword by a count of **nine to three**. Arizona, a club of but even fortunes, feared not the reputation of their hosts.\n\nThe visitors struck at once, plating a pair in the first when Gabriel Moreno's single, abetted by an errant heave from right fielder Kyle Tucker, sent Ketel Marte and Corbin Carroll scampering home. The Dodgers answered in kind, the *incomparable* Shohei Ohtani launching his one-and-twentieth round-tripper and Andy Pages his seventeenth to knot the affair. But there the home nine's fortunes were spent.\n\nThe man of the hour was one Tim Tawa, a name little sung in the great ledgers, who on this night went three-for-four and drove in **four** — a fourth-inning blast (his second of the season, Nolan Arenado aboard) opening the floodgates, and a brace of run-scoring singles thereafter twisting the knife. Eduardo Rodriguez toiled six sturdy innings for the verdict, his fifth-and-thirtieth of a fine campaign now standing at eight-and-three with an earned-run mark of but two-and-twenty-nine hundredths, third-best in the senior circuit. The Dodgers keep their perch atop the National League West and the whole of the game, yet on this night the desert men climbed to an even five-and-forty against five-and-forty, and departed the great ballpark with their derbies held high."
+  },
+  "news": [
+    {
+      "subhead": "A Contest Washed From the Slate",
+      "body": "At Pittsburgh the heavens intervened, and the appointed meeting of the runaway Milwaukee nine and the host Buccaneers was *postponed* ere a pitch of consequence could be thrown. The two clubs are set to make good the debt with a doubled bill upon the morrow, that no game go forever unplayed. The Herald records the postponement and no score, there being none to record."
+    },
+    {
+      "subhead": "The Pennant Races, As They Now Stand",
+      "body": "In the senior circuit the Dodgers reign supreme over all creation at one-and-sixty against four-and-thirty, though the *runaway* Brewers press hard behind atop the National League Central at nine-and-fifty against four-and-thirty, the loftiest run-differential in the land. Atlanta holds the East by a slender three games over both Philadelphia and the surging Miami. In the junior loop, Tampa Bay commands the East at five-and-fifty against seven-and-thirty; the West remains a *scrum*, Texas clinging to the summit by a game and a half over Seattle; and in the Central the White Sox and Guardians stand deadlocked, with Detroit — winners of six straight and nine of their last ten — stealing up from the rear like a thief in the night."
+    },
+    {
+      "subhead": "The Leaders' Ledger",
+      "body": "In the American League, Houston's Yordan Alvarez this very night reached the milestone of **thirty** home runs, tops in his circuit, and holds the runs-batted-in lead besides at eight-and-sixty; Tampa Bay's Díaz keeps the batting crown at a gaudy **.321**, Kansas City's Bobby Witt Jr. paces the base-thieves with thirty, Boston's Sonny Gray leads all winners at one-and-ten, and New York's Schlittler owns the stingiest earned-run mark at *two-and-one-hundredth* (2.01). In the senior circuit, Philadelphia's Kyle Schwarber holds the home-run scepter with two-and-thirty, St. Louis's Jordan Walker the runs-batted-in lead with four-and-seventy, Miami's Otto Lopez the loftiest average at a dazzling **.341**, and Milwaukee's Misiorowski the twin crowns of earned-run average (1.62) and strikeouts (seven-and-sixty-one-hundred)."
+    }
+  ],
+  "rest_of_the_card": [
+    {
+      "headline": "Tigers Maul Phillies, Ten to Two, Riding a Long-Ball Barrage",
+      "body": "The red-hot Detroit nine, now winners of six in a row, *battered* Philadelphia **ten to two** on the strength of three round-trippers — a two-run shot from Spencer Torkelson (his sixteenth), and solo blasts by Kevin McGonigle and Colt Keith — with James Outman's triple adding to the misery. Jack Flaherty (three-and-eight) claimed the verdict; Tim Mayza (two-and-three) wore the loss. Derek Hill's home run accounted for both Philadelphia tallies, but it was as a pebble against an avalanche."
+    },
+    {
+      "headline": "Yankees Best Nationals, Five to Three, in a Rain of Home Runs",
+      "body": "New York's Americans clubbed four home runs to down Washington **five to three**, Ben Rice launching his nine-and-twentieth — second in all the junior loop — while Jasson Domínguez, Jazz Chisholm Jr., and Austin Wells each added a blow of their own. David Bednar (three-and-three) took the win. The Nationals were not without thunder of their own, James Wood cracking his six-and-twentieth and Keibert Ruiz a seventh, but three would not answer five."
+    },
+    {
+      "headline": "Orioles Nip Royals, Five to Three",
+      "body": "Baltimore turned back Kansas City **five to three**, the young Samuel Basallo driving in a pair with his fifteenth home run and Blaze Alexander adding a fourth, while Gunnar Henderson and Jackson Holliday chipped in run-scoring knocks. Garcia (four-and-one) earned the decision and Robert Kittredge nailed down his third save. Jac Caglianone's home run was the chief flourish for the visiting Royals, who could not overcome the deficit."
+    },
+    {
+      "headline": "Reds Blank Cubs, Four to Nothing",
+      "body": "Cincinnati *whitewashed* Chicago's Cubs **four to nothing** behind a masterly turn from Hunter Greene (one-and-one), the electric Elly De La Cruz supplying a home run and a triple and JJ Bleday a two-run blast to furnish all the runs a shutout could ever require. Shota Imanaga (five-and-eight) suffered the loss, and the Cubs managed but a lone Seiya Suzuki double against the Cincinnati staff."
+    },
+    {
+      "headline": "Guardians Edge Marlins, Three to Two",
+      "body": "Cleveland slipped past Miami **three to two**, Chase DeLauter's tenth home run driving in a pair and proving the difference. Messick (eight-and-five) took the win and the peerless Cade Smith recorded his eight-and-twentieth save, still tops among American League firemen. Heriberto Hernández and Leo Jiménez homered for the Fish, and Sandy Alcantara (ten-and-five) took a hard-luck defeat."
+    },
+    {
+      "headline": "Rays Down Mariners, Seven to Two, on a Four-Homer Salvo",
+      "body": "Tampa Bay, the class of the American League East, *pummeled* Seattle **seven to two** with a quartet of home runs — Junior Caminero's eight-and-twentieth (two runs batted in), plus blows from Cedric Mullins, Victor Mesa Jr., and Richie Palacios. Martinez (eight-and-two) breezed to the verdict. Cole Young's home run was the Mariners' lone answer of note, and Luis Castillo (three-and-eight) bore the loss."
+    },
+    {
+      "headline": "Red Sox Handle Mets, Six to Two, as Gray Runs to Eleven-and-One",
+      "body": "Boston, hotter than a griddle with seven straight now in the ledger, defeated the Mets **six to two** behind the league's winningest arm, Sonny Gray, whose record swells to a glittering *eleven-and-one*. Wilyer Abreu (a home run and a double, two driven in) and Anthony Seigler (a home run, two driven in) led the assault, with Masataka Yoshida adding a pair of doubles. Brett Baty's home run answered feebly for New York, and McLean (six-and-six) took the loss."
+    },
+    {
+      "headline": "White Sox Rout Athletics, Fourteen to One",
+      "body": "Chicago's Pale Hose *ran riot* over the Athletics **fourteen to one** in a merciless afternoon of hitting. Tristan Peters authored a home run, a triple, and a double while driving in four; Andrew Benintendi struck two doubles and drove in four besides; and Miguel Vargas contributed a home run, two doubles, and three runs batted in. Burke (six-and-four) claimed the easy verdict. Tyler Soderstrom's home run spared the visitors, sunk to a woeful one-and-nine over their last ten, the ignominy of a shutout."
+    },
+    {
+      "headline": "Rangers Turn Back Astros, Seven to Three, as Alvarez Reaches Thirty",
+      "body": "Texas, atop the American League West, downed Houston **seven to three** on a trio of home runs — a two-run stroke from Jake Burger (four driven in on the day), and solo shots by Joc Pederson and Wyatt Langford. Winn (five-and-two) earned the win. The evening's grandest individual feat belonged to the vanquished, however, as Houston's Yordan Alvarez launched his *thirtieth* home run to seize sole possession of the junior circuit's long-ball lead, with Yainer Diaz adding a two-run blast in the losing cause."
+    },
+    {
+      "headline": "Angels Nip Twins, Four to Three",
+      "body": "Los Angeles's Halos edged Minnesota **four to three**, Vaughn Grissom's home run driving in a pair and Nolan Schanuel adding a run-scoring knock. Rodriguez (three-and-two) took the win and Kirby Yates slammed the door for his third save. The Twins mustered a flurry of two-baggers — a pair each from Trevor Larnach, Josh Bell, and Brooks Lee — but could not push across the run that would have knotted the score."
+    },
+    {
+      "headline": "Cardinals Edge Braves, Two to One, in a Taut Duel",
+      "body": "St. Louis bested Atlanta **two to one** in a crisp affair of pitching, Jimmy Crooks's home run and a Jordan Walker run-scoring single (his league-leading four-and-seventieth driven in) furnishing all the Cardinals required. Romero (one-and-two) claimed the win and Riley O'Brien recorded his three-and-twentieth save. Austin Riley's run-scoring single, plating Mike Yastrzemski, was the whole of the Atlanta offense."
+    },
+    {
+      "headline": "Blue Jays Best Padres, Five to Three",
+      "body": "Toronto defeated San Diego **five to three**, the mighty Kazuma Okamoto crushing a three-run home run — his two-and-twentieth — to carry the day, with Vladimir Guerrero Jr. and Alejandro Kirk also driving in runs. Fluharty (four-and-nil) took the verdict and Varland notched his nineteenth save. Xander Bogaerts homered and drove in a pair for the Padres, and J.P. Sears (two-and-two) suffered the defeat."
+    },
+    {
+      "headline": "Rockies Surprise Giants, Four to Three, on the Road",
+      "body": "Colorado, so often the doormat, *stole* one at San Francisco by a **four to three** count, Kyle Karros driving in a pair and Jake McCarthy and Cole Carrigg each contributing a run batted in. Antonio Senzatela ran his record to a sterling nine-and-one for the win, and Mejia recorded his fourth save. Rafael Devers accounted for all three Giant tallies with a home run and three driven in, but it was not enough to spare the home nine."
+    }
+  ],
+  "desk_note": "And so the ledger for the Tenth of July is set down entire — four-and-ten contests faithfully rendered, with one lone meeting at Pittsburgh washed from the slate by the heavens and held over for the morrow. We tip our derby to Tim Tawa of the desert, whose four runs batted in laid low the mightiest club in the land, and we salute Houston's Yordan Alvarez, who this night reached the storied plateau of thirty home runs. Until the next dispatch, keep your scorecards near and your enthusiasms nearer.",
+  "countdown": null
+}
