@@ -21,7 +21,7 @@ Handles marked *(hist.)* are genuine historical names — safe and flavorful.
 - Baltimore Orioles — the Orioles, the O's, the Birds, the Baltimores
 - Boston Red Sox — the Red Sox, the Crimson Hose, the Hub nine, the Bostons, the Fenway men
 - New York Yankees — the Yankees, the Americans, the Bronx Bombers, the Pinstripes, the Highlanders *(hist.)*
-- Tampa Bay Rays — the Rays, the Bay nine, the Tampa men, the Gulf Coast club, the Sunshine nine
+- Tampa Bay Rays — the Rays, the Tampa men, the Gulf Coast club, the Sunshine nine
 - Toronto Blue Jays — the Blue Jays, the Jays, the Torontos, the Maple Leaf nine, the Canadians
 
 **Central**
@@ -29,7 +29,7 @@ Handles marked *(hist.)* are genuine historical names — safe and flavorful.
 - Cleveland Guardians — the Guardians, the Cleveland nine, the Lake Erie men, the Forest City nine *(hist.)*, the Naps *(hist.)*
 - Detroit Tigers — the Tigers, the Bengals, the Motor City nine, the Detroits
 - Kansas City Royals — the Royals, the Kansas City nine, the Royal blues, the Missourians
-- Minnesota Twins — the Twins, the Twin Cities nine, the Minnesotans, the Millers *(hist.)*
+- Minnesota Twins — the Twins, the Twin Cities nine, the Minnesotans, the North Stars
 
 **West**
 - Houston Astros — the Astros, the 'Stros, the Houston nine, the Colt .45s *(hist.)*, the Texans
