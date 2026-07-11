@@ -247,14 +247,43 @@ def render_one(root, json_path):
     render_all(root)                     # regenerate everything from disk
 
 
+def inline_preview_assets(page_html, root):
+    """Make a rendered page self-contained: inline the stylesheet and neutralize
+    absolute nav links so it renders correctly opened directly from disk."""
+    css = (Path(root) / "assets" / "herald.css").read_text(encoding="utf-8")
+    page_html = page_html.replace(
+        '<link rel="stylesheet" href="/assets/herald.css">',
+        "<style>\n" + css + "\n</style>",
+    )
+    page_html = page_html.replace('href="/archive.html"', 'href="#"')
+    page_html = page_html.replace('href="/"', 'href="#"')
+    return page_html
+
+
+def render_preview(root, json_path, out_path):
+    """Render a single edition JSON to a self-contained HTML file at out_path.
+    Validates first; writes nothing but out_path; never regenerates the site."""
+    root = Path(root)
+    data = json.loads(Path(json_path).read_text(encoding="utf-8"))
+    validate(data, _load_schema(root))            # fail loudly before writing anything
+    page = render_edition(data, _load_template(root))
+    page = inline_preview_assets(page, root)
+    out = Path(out_path)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(page, encoding="utf-8")
+
+
 def main(argv):
     root = Path(__file__).resolve().parent
-    if len(argv) == 2 and argv[1] == "--all":
+    if len(argv) == 4 and argv[1] == "--preview":
+        render_preview(root, argv[2], argv[3])
+    elif len(argv) == 2 and argv[1] == "--all":
         render_all(root)
     elif len(argv) == 2:
         render_one(root, argv[1])
     else:
-        print("usage: render.py <edition.json> | --all", file=sys.stderr)
+        print("usage: render.py <edition.json> | --all | --preview <edition.json> <out.html>",
+              file=sys.stderr)
         return 2
     return 0
 

@@ -68,7 +68,12 @@ The date-line and contest note are assembled by the renderer.
    score goes unreported.** Sprinkle standings/leaders where they fit. (Empty in
    hot-stove mode.)
 4. Closing **word from the desk** → `desk_note` (a string). The renderer adds the
-   ~ THE HERALD ~ sign-off after it.
+   ~ THE HERALD ~ sign-off after it. The desk-note's body varies each day, but it
+   **always closes with the Herald's fixed signature sentence** — a lead-in of
+   your choosing ("Until the morrow's dispatch," / "Until the next dispatch,")
+   followed by the invariant words *"keep your scorecards near and your
+   enthusiasms nearer."* This closing is a signature, like the masthead motto; it
+   is **exempt** from the Variety rule below — never reword it.
 
 In hot-stove mode, also supply `countdown: {milestone, target_date,
 days_remaining}`.
@@ -79,6 +84,25 @@ Mock-heroic deadball-era purple prose — Grantland Rice by way of a slightly
 overwrought telegraph operator. Numbers spelled out in the old style
 ("five-and-sixty," "three-and-twentieth"), gods-and-heroes flourishes — but the
 facts underneath stay strictly accurate.
+
+## Variety
+
+The Herald runs every day; guard against staleness so a run of editions never
+feels like a template.
+
+- **Consult the epithet palette.** `nicknames.md` holds period-authentic handles
+  for all thirty clubs. Draw from it, vary it, or coin a fresh epithet in the
+  same deadball spirit grounded in the day's real story (a trait, a streak, a
+  ballpark, a feat). It is a floor for variety, not a lookup table — never feel
+  boxed into it, and never fabricate a fact to justify a nickname.
+- **Don't repeat yesterday.** Before writing, glance at the most recent existing
+  edition under `editions/`. For clubs that appear in both, avoid reusing **its
+  team epithets** and avoid reusing **its Game-of-the-Day opening gambit** (the
+  first-sentence flourish). Reach for a different handle or a different way in.
+- **A light touch.** Variety is a seasoning, not a mandate to be maximally
+  different. Don't contort the prose or strain for novelty — just don't lean on
+  the same well two mornings running. The fixed sign-off (see the desk-note item
+  above) is the one deliberate exception: it stays the same on purpose.
 
 ## Formatting of prose fields
 

@@ -215,5 +215,51 @@ class TestPipeline(unittest.TestCase):
         self.assertFalse((self.root / "editions" / "2026" / "07" / "10.html").exists())
 
 
+class TestPreview(unittest.TestCase):
+    def setUp(self):
+        self.root = pathlib.Path(tempfile.mkdtemp())
+        repo = pathlib.Path(__file__).resolve().parent.parent
+        for sub in ("templates", "schema", "assets"):
+            (self.root / sub).mkdir()
+        shutil.copy(repo / "templates" / "base.html", self.root / "templates" / "base.html")
+        shutil.copy(repo / "schema" / "edition.schema.json", self.root / "schema" / "edition.schema.json")
+        shutil.copy(repo / "assets" / "herald.css", self.root / "assets" / "herald.css")
+        # A valid edition JSON to preview.
+        y, m, d = "2026", "07", "09"
+        src = self.root / "editions" / y / m
+        src.mkdir(parents=True, exist_ok=True)
+        self.edition = src / (d + ".json")
+        shutil.copy(FIXTURES / "in_season.json", self.edition)
+
+    def tearDown(self):
+        shutil.rmtree(self.root)
+
+    def test_preview_is_self_contained_and_styled(self):
+        out = self.root / "preview" / "index.html"
+        render.render_preview(self.root, self.edition, out)
+        page = out.read_text(encoding="utf-8")
+        self.assertIn("MUDVILLE THUNDERS", page)                 # the edition rendered
+        self.assertIn("<style>", page)                            # CSS inlined
+        self.assertIn("period broadsheet stylesheet", page)       # actual herald.css content present
+        self.assertNotIn('<link rel="stylesheet"', page)          # no external stylesheet link
+        self.assertNotIn('href="/"', page)                        # absolute nav links neutralized
+        self.assertNotIn('href="/archive.html"', page)
+
+    def test_preview_writes_nothing_but_the_output(self):
+        out = self.root / "preview" / "index.html"
+        render.render_preview(self.root, self.edition, out)
+        self.assertFalse((self.root / "index.html").exists())     # no homepage
+        self.assertFalse((self.root / "archive.html").exists())   # no archive
+        self.assertFalse((self.root / "editions" / "2026" / "07" / "09.html").exists())  # no edition page
+
+    def test_preview_validates_and_refuses_bad_json(self):
+        bad = self.root / "editions" / "2026" / "07" / "10.json"
+        bad.write_text('{"meta": {"mode": "in_season"}}', encoding="utf-8")
+        out = self.root / "preview" / "bad.html"
+        with self.assertRaises(ValueError):
+            render.render_preview(self.root, bad, out)
+        self.assertFalse(out.exists())                            # nothing written on failure
+
+
 if __name__ == "__main__":
     unittest.main()
