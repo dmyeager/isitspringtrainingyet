@@ -17,16 +17,20 @@ The edition is **dated by its publication morning (today)** and reports **yester
 
 1. Read `recipe.md`; follow it for voice, sources of truth, structure, and the mode decision.
 2. Fetch boxscore.email/mlb's **current** edition (if WebFetch is blocked, `curl` with a normal browser User-Agent). Cross-check team affiliations on baseball-reference.com. **Never fabricate**; omit anything unverifiable.
-3. Build the edition per `schema/edition.schema.json`:
+3. **Variety pass.** Read the most recent existing edition under `editions/`
+   (read-only). Per `recipe.md`'s Variety section, don't reuse its team epithets
+   or its Game-of-the-Day opening gambit; consult `nicknames.md` for alternative
+   handles. (The desk-note's fixed signature sign-off is exempt — keep it.)
+4. Build the edition per `schema/edition.schema.json`:
    - `meta.date` = **today** (US Eastern), `YYYY-MM-DD` — the *publication* date, NOT the game date. On a normal morning run this equals the dateline of boxscore.email's current edition; **never advance to a future date.** If `editions/YYYY/MM/DD.json` for today already exists, today's edition is already published — stop (don't overwrite or future-date unless the user explicitly asks to regenerate it).
    - `meta.weekday` + a flowery `meta.date_display` for today.
    - `meta.edition_number` = one greater than the highest existing `edition_number` under `editions/`.
    - Mode: games played → `in_season` (Game of the Day + News + **every** remaining game, no score unreported); none → `hot_stove` + a `countdown`.
    - Prose fields: plain text, `*italic*` / `**bold**` (markers hug the word), blank line between paragraphs, **no HTML**.
-4. Write it to `editions/YYYY/MM/DD.json` (today's date).
-5. Render (from the repo root): `python3 render.py editions/YYYY/MM/DD.json`. On a validation error, fix the JSON and re-run until it exits 0.
-6. (Optional) open `index.html` to eyeball it.
-7. Commit the JSON + regenerated `index.html`, `archive.html`, and the edition page — `git commit -m "edition: YYYY-MM-DD"` — then `git push`. Pages redeploys in ~a minute.
+5. Write it to `editions/YYYY/MM/DD.json` (today's date).
+6. Render (from the repo root): `python3 render.py editions/YYYY/MM/DD.json`. On a validation error, fix the JSON and re-run until it exits 0.
+7. (Optional) open `index.html` to eyeball it.
+8. Commit the JSON + regenerated `index.html`, `archive.html`, and the edition page — `git commit -m "edition: YYYY-MM-DD"` — then `git push`. Pages redeploys in ~a minute.
 
 ## Fail-safe
 
@@ -41,3 +45,4 @@ A failed or incomplete run must produce **no commit** — the previous edition s
 | `git commit` before `render.py` passes | Publishes broken/unvalidated output | Render first; commit only on exit 0 |
 | Writing HTML in prose fields | Double-escaped / broken markup | Plain text + `*em*`/`**strong**`; the renderer converts |
 | Advancing to a future/next-empty date because today's edition exists | Publishes a date whose games aren't out yet (off-by-one, reprise) | One run = today's date. If today already exists, it's published — stop |
+| Reusing yesterday's epithets/opening gambit | Editions feel like a template | Do the Variety pass: read yesterday, vary handles (see `nicknames.md`), find a fresh way in |
