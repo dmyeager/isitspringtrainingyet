@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Baseball in the Herald's palette: aged newsprint, letterpress ink, oxblood stitching -->
+  <circle cx="32" cy="32" r="27" fill="#efe7d5" stroke="#201b14" stroke-width="3"/>
+  <path d="M15 12 C 29 24 29 40 15 52" fill="none" stroke="#6e241c" stroke-width="3" stroke-linecap="round"/>
+  <path d="M49 12 C 35 24 35 40 49 52" fill="none" stroke="#6e241c" stroke-width="3" stroke-linecap="round"/>
+</svg>
