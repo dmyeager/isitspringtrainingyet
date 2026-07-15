@@ -21,13 +21,57 @@ it reports were played the day before.
   leaderboards. Fetch its **current/latest edition** — plain `boxscore.email/mlb`,
   no date in the URL — which is, by definition, the prior day's completed games.
   When any number or name conflicts across sources, the box score wins.
-- ESPN and similar outlets may be consulted for headline color and narrative
-  detail after interesting events (dramatic finishes, debuts, milestones).
+- **mlb.com/news** and **espn.com/mlb's "Top Headlines"** are the wire desks
+  for league-wide news — skim both every morning as candidate items for News
+  Around the League (trades, labor matters, milestones, injuries of note). On
+  no-game days they are the **primary news well**. They never override
+  boxscore.email on scores, stats, or standings; ESPN may also be consulted for
+  headline color after interesting events (dramatic finishes, debuts,
+  milestones).
+- **baseball-reference.com's homepage "Upcoming Schedule" section** is
+  canonical for the coming days' slate (dated matchups with game times; its
+  "Upcoming Dates" section covers milestones). **Any forward-looking claim —
+  "games resume tomorrow," countdown framing, playoff or offseason
+  scheduling — must be checked against it before it is written.** A
+  forward-looking claim is **not only an explicit date**: a *soft* gesture at
+  the future — "resumes anon," "soon," "within days," "shortly," "before
+  long" — counts every bit as much, and is the easiest way to smuggle an
+  unverified schedule past this rule. Either name the verified date or matchup,
+  or cut the forward reference entirely; **never hedge around a schedule you have
+  not checked.** If it cannot be verified, write around it. The widget shows
+  matchups and times but not probable pitchers; for pitching matchups (playoff
+  previews and the like), supplement with **mlb.com/probable-pitchers**.
 - Cross-reference player names against **baseball-reference.com** to confirm
   exact club affiliation before attributing anyone to a team.
 - Internal consistency: when a name or stat appears in both the news section and
   a game summary, the two must agree, with boxscore.email as the tiebreaker.
 - Never fabricate. If a fact cannot be verified, omit it rather than invent it.
+
+## Pre-flight — consult every source before a word is written
+
+Fetch **all** of these sources, **in this order**, on **every** edition alike —
+in-season, hot-stove, or an in-season break — *before* composing any prose. This
+is a gate, not a suggestion: do not begin writing until all have been consulted.
+Each has a distinct, non-overlapping role; know which source owns which fact.
+
+1. **boxscore.email/mlb** (current edition, no date in the URL) — **the spine and
+   the source of truth for games played and their outcomes**: every score, line,
+   stat, and standing. When any number conflicts across sources, this wins.
+2. **baseball-reference.com** — the source of truth for two things: (a) the
+   homepage **"Upcoming Schedule"** is canonical for the **forward ledger** —
+   what is played next, and when — fetched **always**, even when you are certain
+   nothing lies ahead (a break, the offseason); it governs every forward-looking
+   word you write (see the forward-claim rule under Sources of truth). (b) It is
+   also the authority for **player–team affiliation** — confirm any player you
+   attribute to a club against b-ref before you write the attribution.
+3. **mlb.com/news** and **espn.com/mlb's "Top Headlines"** — the wire desks and
+   the source for **league news** (trades, injuries, roster moves, milestones)
+   feeding News Around the League. They never override boxscore.email on
+   scores/stats/standings.
+
+Skipping step 2 because "there are obviously no games for a while" is the exact
+mistake this gate exists to prevent — the schedule after a break or within the
+offseason is precisely the thing you must look up rather than assume.
 
 ## Determine the mode
 
@@ -39,7 +83,9 @@ Check whether the prior day had **completed games**:
   offseason/roster news in the same voice, plus a countdown to the next
   milestone (pitchers & catchers report → spring training → Opening Day). Look
   up the next milestone's date; compute `days_remaining` from today (the
-  publication date).
+  publication date). During an in-season gap, the milestone is the resumption
+  of play — take its date from baseball-reference's Upcoming Schedule (see
+  Sources of truth), never from assumption.
 
 ## Masthead (flies on every edition)
 
