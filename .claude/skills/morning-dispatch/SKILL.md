@@ -16,7 +16,9 @@ The edition is **dated by its publication morning (today)** and reports **yester
 ## Procedure
 
 1. Read `recipe.md`; follow it for voice, sources of truth, structure, and the mode decision.
-2. Fetch boxscore.email/mlb's **current** edition (if WebFetch is blocked, `curl` with a normal browser User-Agent). Cross-check team affiliations on baseball-reference.com. **Never fabricate**; omit anything unverifiable.
+2. Fetch boxscore.email/mlb's **current** edition (if WebFetch is blocked, `curl` with a normal browser User-Agent). Also skim the wire desks — **mlb.com/news** and **espn.com/mlb's "Top Headlines"** — for candidate News Around the League items (they never override boxscore.email on scores/stats). Cross-check team affiliations on baseball-reference.com. **Never fabricate**; omit anything unverifiable.
+   - Per `recipe.md`'s **Pre-flight** gate, baseball-reference.com's homepage **"Upcoming Schedule"** is fetched on **every** run — including hot-stove and break mornings — *before* a word is written, not only when you expect to make a forward claim. b-ref 403s WebFetch — use `curl` with a browser User-Agent, same as boxscore.email. For probable pitchers, supplement with mlb.com/probable-pitchers.
+   - **A forward-looking claim includes soft hedges.** "Resumes anon," "soon," "within days," "shortly," "before long" all count and are the easiest way to smuggle an unverified schedule through. Either name the b-ref-verified date/matchup or cut the forward reference — **never hedge around a schedule you haven't checked.**
 3. **Variety pass.** Read the most recent existing edition under `editions/`
    (read-only). Per `recipe.md`'s Variety section, don't reuse its team epithets
    or its Game-of-the-Day opening gambit; consult `nicknames.md` for alternative
@@ -46,3 +48,4 @@ A failed or incomplete run must produce **no commit** — the previous edition s
 | Writing HTML in prose fields | Double-escaped / broken markup | Plain text + `*em*`/`**strong**`; the renderer converts |
 | Advancing to a future/next-empty date because today's edition exists | Publishes a date whose games aren't out yet (off-by-one, reprise) | One run = today's date. If today already exists, it's published — stop |
 | Reusing yesterday's epithets/opening gambit | Editions feel like a template | Do the Variety pass: read yesterday, vary handles (see `nicknames.md`), find a fresh way in |
+| Guessing when play resumes / what's on tomorrow's card, or hedging with "resumes anon" / "within days" | Wrong forward-looking claims (e.g., implying games during the All-Star break); soft hedges dodge the check while still asserting a schedule | Fetch b-ref's homepage "Upcoming Schedule" (curl + browser UA) **every** run before writing; name the verified date/matchup or cut the forward reference |
