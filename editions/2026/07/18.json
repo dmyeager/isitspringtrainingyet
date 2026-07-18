@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "date": "2026-07-18",
+    "date_display": "the Eighteenth of July, Two Thousand and Twenty-Six",
+    "weekday": "Saturday",
+    "volume": "Volume I",
+    "edition_number": 10,
+    "mode": "in_season",
+    "contests_reported": 14
+  },
+  "game_of_the_day": {
+    "headline": "THREE-AND-TWENTY RUNS RAIN DOWN UPON SACRAMENTO; CHAPARRO DRIVES IN EIGHT AS THE CAPITAL NINE BURY THE WHITE ELEPHANTS, 23 TO 4",
+    "subtitle": "Andrés Chaparro, a .220 journeyman by the morning's reckoning, plays Vulcan at the forge with a brace of home runs and eight runs batted in; Washington hangs a crooked number in six separate frames while the men in Sacramento exile drop their tenth in unbroken succession",
+    "body": "There are defeats, and then there are *inundations* — and what befell the *White Elephants* beneath the Sacramento sun on Friday eve belongs wholly to the latter, blacker ledger. The *Capital nine* of Washington, a club scarcely a fortnight removed from mediocrity, fell upon their hosts with a fury the record books shall not soon forget: three-and-twenty runs upon one-and-twenty hits, a torrent that began with a three-spot in the third and never once relented, cresting in a six-run sixth that emptied the yard of all suspense long before the ninth.\n\nAt the black heart of the massacre stood *Andrés Chaparro*, who had entered the evening a .220 journeyman and left it a demigod: four hits in five trips, four runs crossed, a pair of home runs, and *eight* — count them, eight — runs driven across the plate, a single man's harvest greater than whole lineups gather in a fortnight. *Curtis Mead* was scarcely less merciless, rapping four hits with three two-baggers among them and scoring four times of his own; young *Harry Ford* christened his first home run of the summer with three runs batted in, and *Daylen Lile* added a fourth blast and four more ribbies for good measure. Behind them the right-hander *Cade Cavalli* was permitted the leisure of a laugher, rising to six-and-four on the season.\n\nFor the *White Elephants*, marooned this year in their borrowed Sacramento lodging, it was the tenth straight sorrow — a losing skein that has plunged them to one-and-forty against six-and-fifty and a mark of ten defeats in their last ten. The *Washingtons*, meanwhile, clawed all the way back to the level line of nine-and-forty apiece, a .500 club once more and but eight lengths shy of the *Dixie nine* of Atlanta atop the senior East. Some ballgames are won; this one was merely *survived* by the men who suffered it."
+  },
+  "news": [
+    {
+      "subhead": "The Deadline Bears Down, and the Wires Hum With Whispers",
+      "body": "With the trading Deadline now looming large upon the calendar, the telegraph clatters without cease. The *Metropolitans* of New York, sixteen lengths adrift in the senior East, are counted firm sellers, their veterans hawked from Flushing to the four winds. The market's most coveted prize is said to be Detroit's ace *Tarik Skubal*, upon whom more than one flush contender — the pennant-bound *Angelenos* of Los Angeles among the rumored suitors — casts a longing eye. Elsewhere the whispers turn upon Cleveland's *Francisco Lindor*, the thinness of Cincinnati's rotation, and a Philadelphia bullpen in want of reinforcement. Nothing is yet done; all is yet rumored."
+    },
+    {
+      "subhead": "Sale Nears the Twenty-Seven-Hundredth, in the Company of the Big Unit",
+      "body": "Amid Atlanta's fifteen-to-one drubbing of the *Lone Star nine*, the veteran left-hander *Chris Sale* spun seven innings of shutout ball — six struck out, none walked — and in so doing advanced his career strikeout ledger toward the twenty-seven-hundredth mark, rare and rarefied air last breathed thereabouts by the towering *Randy Johnson* himself. The victory, his tenth of the campaign, keeps the *Dixie nine* deadlocked atop the National East. Behind him *Drake Baldwin* did the batting labor, three hits and five runs driven home."
+    },
+    {
+      "subhead": "Tidings From the Surgeon's Tent",
+      "body": "The injury wire clattered on. In the Bronx, fresh imaging of *Aaron Judge*'s aggrieved elbow is said to show healing, though not enough yet to loose him upon baseball activities. Out west, *Shohei Ohtani* has had a lubricant injected into a troublesome knee — no draining required — and the Dodger camp lets it be known he is ticketed to take the hill again in the coming week. Atlanta's *Ronald Acuña Jr.* is reported nearing his return upon the present homestand, and Boston's *Garrett Crochet* is said to have made drastic gains, though no timetable yet attends his throwing."
+    },
+    {
+      "subhead": "A Contest Lost to Smoke; a Twin Bill Ordained",
+      "body": "Not every quarrel was joined. The meeting of the *Buccaneers* of Pittsburgh and the *Cleveland nine* was postponed on account of foul and smoke-laden air hanging heavy over the Erie shore — a rare surrender not to rain but to haze. The two clubs are ordered to settle the matter in a doubleheader this very day."
+    },
+    {
+      "subhead": "The Herald Lowers Its Colors: Ron Hunt, 1941-2026",
+      "body": "Word reaches the desk of the passing of *Ron Hunt*, the pugnacious infielder who wore the plunk of the pitched ball as a badge of honor and set marks for being struck by it that stood for generations. He was five-and-eighty years old. The Herald lowers its colors to a man who understood, better than most, that a base is a base however it is earned."
+    }
+  ],
+  "rest_of_the_card": [
+    {
+      "headline": "THE FENWAY MEN MAKE IT ELEVEN, SWEEPING A TWIN BILL AND TOUCHING THE LEVEL LINE AT LAST",
+      "body": "The hottest club in the land grew hotter still. Boston seized both halves of a doubleheader from the *Gulf Coast club* of Tampa Bay — a 10-to-nothing rout in the opener behind *Jake Bennett*, then a 5-to-3 decision in the nightcap sealed by the ancient arm of *Aroldis Chapman* for his twentieth save — to run their winning streak to a staggering *eleven* in a row, a torrent unmatched in these parts in a decade. The reward: an even ledger of eight-and-forty apiece, the first sight of .500 the Bostons have enjoyed in many a moon, and a firm grip upon a wild-card rung."
+    },
+    {
+      "headline": "A WORLD SERIES REMATCH GOES TO THE ANGELENOS BY THE THINNEST OF MARGINS, 2 TO 1",
+      "body": "In a rematch of the last October classic, the *Trolley Dodgers* bested the *Pinstripes* in the Bronx by a lone tally. *Roki Sasaki* was the best version of himself across five-and-two-thirds scoreless frames, and *Max Muncy*'s two-run blast — his eighteenth — proved the whole of the difference. *Gerrit Cole*, having talked his skipper out of the hook, promptly surrendered that decisive shot; *Tanner Scott* nailed down the fourteenth save. Los Angeles bestrides all creation yet at two-and-sixty against six-and-thirty."
+    },
+    {
+      "headline": "THE DIXIE NINE BATTER THE LONE STAR MEN INTO SUBMISSION, 15 TO 1",
+      "body": "Atlanta needed but a single inning's mischief and then piled on without mercy, routing Texas by fourteen. *Chris Sale*'s seven shutout innings (see the wire above) anchored it, while *Drake Baldwin*'s three hits and five runs batted in led a nineteen-hit assault. The *Atlantas* hold firm atop the National East at six-and-fifty against forty."
+    },
+    {
+      "headline": "THE PALE HOSE PICK UP WHERE THEY LEFT OFF, DOWNING THE MAPLE LEAF NINE, 12 TO 4",
+      "body": "Chicago's *South Siders* wasted no time resuming their surprising summer, thumping Toronto by eight behind *Tyler Schweitzer*'s first big-league triumph. The White Sox cling to the top of the American Central at one-and-fifty against five-and-forty, a scant half-length before the onrushing Guardians."
+    },
+    {
+      "headline": "THE BREW CREW WALK IT OFF IN THE TENTH; MIAMI FALLS BY A WHISKER, 2 TO 1",
+      "body": "The *Cream City nine* of Milwaukee, owners of the finest record in the senior circuit's Central, needed extra innings to subdue the *Fish* of Miami, but subdue them they did, pushing across the winning run in the tenth for a 2-to-1 verdict, *Craig Yoho* the fortunate victor. The Brewers stand at sixty-and-seven-and-thirty, a mountain of a mark."
+    },
+    {
+      "headline": "THE TWIN CITIES NINE STAY HOT, CLIPPING THE NORTH SIDERS, 5 TO 2",
+      "body": "Minnesota kept its second-half fires burning, downing the Chicago *Cubbies* by three as *Bailey Ober* went to seven-and-three and *Yoendrys Gómez* shut the door for his twelfth save. The *North Stars* reached the even mark of nine-and-forty apiece and cling to the wild-card chase."
+    },
+    {
+      "headline": "THE BIRDS EDGE THE 'STROS BY A SOLITARY RUN, 3 TO 2",
+      "body": "Baltimore's *O's* nipped Houston by the narrowest of counts, *Cam Sanders* earning his first win and *Tyler Wells* the save. It was a fifth straight for the Birds, who at seven-and-forty against one-and-fifty have quietly become the warmest club in a cold division's second half."
+    },
+    {
+      "headline": "THE ROYAL BLUES WIN IT IN THE TENTH; SAN DIEGO UNDONE, 7 TO 6",
+      "body": "Kansas City and the *Friars* of San Diego traded blows into extra innings before the *Royal blues* landed the last of them, young *Carter Jensen* delivering the walk-off stroke for a 7-to-6 decision, *Lucas Erceg* the man of record. A rare and sweet triumph for the cellar-bound Missourians."
+    },
+    {
+      "headline": "THE REDLEGS PUT THE MILE HIGH NINE TO THE SWORD, 7 TO 2",
+      "body": "Cincinnati handled Colorado with dispatch, *Spencer Steer* clubbing a pair of home runs and *Brady Singer* going the requisite distance for the victory. The *Redlegs* left the thin mountain air with a comfortable five-run cushion and a 7-to-2 win in hand."
+    },
+    {
+      "headline": "DOWN TO THEIR LAST OUT, THE BENGALS STEAL ONE FROM THE HALOS, 2 TO 1",
+      "body": "Detroit was a single out from defeat when the bat of *Hao-Yu Lee* cracked a double to author a wild, improbable comeback, felling the *Halos* of Anaheim by a 2-to-1 count. The luckless *Kirby Yates* wore the loss, his fifth against no wins in a snakebit season."
+    },
+    {
+      "headline": "THE REDBIRDS HOLD OFF THE DESERT NINE, 5 TO 4",
+      "body": "St. Louis clung to a one-run margin against Arizona's *Snakes*, *Riley O'Brien* slamming the door for his twenty-fifth save to preserve the 5-to-4 win. The *Mound City nine* keep pace in the crowded senior wild-card scrum."
+    },
+    {
+      "headline": "THE JINTS WHITEWASH THE MARINERS, 7 TO NOTHING",
+      "body": "San Francisco blanked Seattle without a whisper of a run, *Landen Roupp* leading a seven-to-nothing shutout. The *Orange and Black* have quietly won three in a row; the *mariners of the Sound* were held without a single tally on the day."
+    }
+  ],
+  "desk_note": "And so the loop returns in earnest to its full and clamorous self — fourteen contests set down in these columns, from an eleven-game Boston blaze to a three-and-twenty-run deluge upon poor Sacramento. Only the smoke over Lake Erie stayed a ballgame, and that quarrel between the Buccaneers and the Cleveland nine shall be doubly joined this very day. The Deadline hovers now like a hawk above the field, and every whisper of Skubal or Lindor will grow to a roar before month's end. Until the next dispatch, keep your scorecards near and your enthusiasms nearer."
+}
