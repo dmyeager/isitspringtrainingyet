@@ -108,7 +108,15 @@ The date-line and contest note are assembled by the renderer.
    leaderboard implications. (Null in hot-stove mode.)
 2. 📜 **News Around the League** → `news: [{subhead, body}]`. Trades and rumors,
    injuries/roster moves, suspensions, All-Star and draft happenings, grouped
-   under small themed sub-headlines.
+   under small themed sub-headlines. **Aim for breadth**: on a full-slate day,
+   roughly four to five items — rumors and dealings, the infirmary ward,
+   milestones *approaching* (not only reached), signings and extensions, and
+   almanac notes (schedule releases, anniversaries). A thin news section
+   undershoots even when every line sings; sweep both wire desks fully before
+   deciding there are only two stories. Breadth never overrides the
+   verification rule — omit what cannot be confirmed. Deaths in the baseball
+   family get their own item under the standing rubric **"The Herald Lowers
+   Its Colors"**, closing with a line of genuine tribute.
 3. 📋 **The Rest of the Card** → `rest_of_the_card: [{headline, body}]`. Every
    remaining game, each with its own headline and a couple of sentences. **No
    score goes unreported.** Sprinkle standings/leaders where they fit. (Empty in
