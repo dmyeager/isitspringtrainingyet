@@ -205,6 +205,9 @@ class TestPipeline(unittest.TestCase):
         self.assertIn("hot stove burns bright", index)  # latest edition is the Dec one
         archive = (self.root / "archive.html").read_text(encoding="utf-8")
         self.assertIn('href="/editions/2026/07/09.html"', archive)
+        july = (self.root / "editions" / "2026" / "07" / "09.html").read_text(encoding="utf-8")
+        self.assertIn("The Herald Acknowledges Its Debts", july)
+        self.assertIn('href="https://www.mlb.com/news/mudville-rally"', july)
 
     def test_render_one_validates_before_writing(self):
         bad = self.root / "editions" / "2026" / "07" / "10.json"
@@ -244,6 +247,7 @@ class TestPreview(unittest.TestCase):
         self.assertNotIn('<link rel="stylesheet"', page)          # no external stylesheet link
         self.assertNotIn('href="/"', page)                        # absolute nav links neutralized
         self.assertNotIn('href="/archive.html"', page)
+        self.assertIn("The Herald Acknowledges Its Debts", page)  # sources render in previews
 
     def test_preview_writes_nothing_but_the_output(self):
         out = self.root / "preview" / "index.html"
@@ -315,7 +319,9 @@ class TestSourcesSection(unittest.TestCase):
         self.assertIn("P&lt;Q&gt;", body)
 
     def test_absent_null_and_empty_sources_render_no_section(self):
-        for data in (_load("in_season.json"),
+        absent = _load("in_season.json")
+        absent.pop("sources", None)  # the fixture gains sources in Task 3
+        for data in (absent,
                      self._edition_with(None),
                      self._edition_with([])):
             body = render.render_edition_body(data)
