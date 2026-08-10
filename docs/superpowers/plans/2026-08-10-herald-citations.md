@@ -186,7 +186,9 @@ class TestSourcesSection(unittest.TestCase):
         self.assertIn("P&lt;Q&gt;", body)
 
     def test_absent_null_and_empty_sources_render_no_section(self):
-        for data in (_load("in_season.json"),
+        absent = _load("in_season.json")
+        absent.pop("sources", None)  # the fixture gains sources in Task 3
+        for data in (absent,
                      self._edition_with(None),
                      self._edition_with([])):
             body = render.render_edition_body(data)
@@ -290,7 +292,7 @@ Add to `TestPreview.test_preview_is_self_contained_and_styled`, after the existi
 - [ ] **Step 3: Run tests to verify they pass**
 
 Run: `python3 -m unittest tests.test_render -v`
-Expected: all tests PASS (fixture already validates: Task 1 made `sources` legal; Task 2 renders it).
+Expected: all tests PASS (fixture already validates: Task 1 made `sources` legal; Task 2 renders it). If `TestSourcesSection.test_absent_null_and_empty_sources_render_no_section` fails because the fixture now carries `sources`, amend that test's absent case to pop the key first (`absent = _load("in_season.json"); absent.pop("sources", None)`) — this edit to `TestSourcesSection` is in scope for this task.
 
 - [ ] **Step 4: Style the colophon**
 
