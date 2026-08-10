@@ -166,16 +166,42 @@ body with a blank line. Emphasis markers must hug the word (`*like this*`,
 `**like this**`); a space-padded asterisk such as "3 * 4" is left as a literal
 asterisk, not emphasis.
 
+## The credits desk — cite what you used
+
+Every edition ends with a citations colophon, "The Herald Acknowledges Its
+Debts," built from the optional top-level `sources` array. Credit where it is
+due:
+
+- **Record as you write.** While composing, keep a running list of every page
+  whose content contributes a printed fact — a story, a score, a schedule
+  check that produced a printed claim. That list becomes `sources`.
+- **Contributing means in print.** A page consulted but not used (a pre-flight
+  check that yielded nothing printed) is NOT listed.
+- **Entry shape:** `{"url", "title", "publication", "author"}` — `author` only
+  when the page displays a byline. **Never invent or guess a byline**; omit
+  `author` if you did not see one. Multiple bylines join naturally
+  ("A. Writer and B. Scribe").
+- **The boxscore.email entry cites the dated permalink.** You *fetch* the
+  undated current edition (that rule is unchanged), but the undated URL shows
+  a different edition tomorrow. Cite the dated permalink for the edition you
+  used, after verifying it resolves (a `curl -s -o /dev/null -w "%{http_code}"`
+  check with a browser User-Agent). If no working permalink exists, cite
+  `https://boxscore.email/mlb` and put the edition's dateline in the title
+  ("Morning digest for the games of <date>").
+- Typical publications: "Boxscore", "MLB.com", "ESPN", "Baseball-Reference".
+
 ## Producing and publishing an edition
 
 1. Set `meta.date` to **today's date** — the publication morning — as
    `YYYY-MM-DD`. The games you report were played the day before; do not date the
    edition by the game day.
-2. Write the edition JSON to `editions/YYYY/MM/DD.json` (matching `meta.date`,
+2. Compile the `sources` array from the credits desk's running list (see "The
+   credits desk" above) and include it in the edition JSON.
+3. Write the edition JSON to `editions/YYYY/MM/DD.json` (matching `meta.date`,
    the publication date).
-3. Run `python3 render.py editions/YYYY/MM/DD.json`. This validates the JSON
+4. Run `python3 render.py editions/YYYY/MM/DD.json`. This validates the JSON
    against the schema and regenerates the edition page, the homepage, and the
    archive.
-4. **If validation fails, fix the JSON and re-run. Never commit invalid output.**
-5. On success, commit the JSON and all generated HTML, then push. A failed run
+5. **If validation fails, fix the JSON and re-run. Never commit invalid output.**
+6. On success, commit the JSON and all generated HTML, then push. A failed run
    produces no commit, so the previous edition stays live.

@@ -23,16 +23,24 @@ The edition is **dated by its publication morning (today)** and reports **yester
    (read-only). Per `recipe.md`'s Variety section, don't reuse its team epithets
    or its Game-of-the-Day opening gambit; consult `nicknames.md` for alternative
    handles. (The desk-note's fixed signature sign-off is exempt — keep it.)
-4. Build the edition per `schema/edition.schema.json`:
+4. **Credits.** Per `recipe.md`'s "The credits desk": compile the `sources`
+   array — every page that contributed a printed fact, with `url`, `title`,
+   `publication`, and `author` only where a byline is shown. Cite
+   boxscore.email by its **dated permalink** (verify it resolves with `curl`);
+   never cite the undated current-edition URL.
+5. Build the edition per `schema/edition.schema.json`:
    - `meta.date` = **today** (US Eastern), `YYYY-MM-DD` — the *publication* date, NOT the game date. On a normal morning run this equals the dateline of boxscore.email's current edition; **never advance to a future date.** If `editions/YYYY/MM/DD.json` for today already exists, today's edition is already published — stop (don't overwrite or future-date unless the user explicitly asks to regenerate it).
    - `meta.weekday` + a flowery `meta.date_display` for today.
    - `meta.edition_number` = one greater than the highest existing `edition_number` under `editions/`.
    - Mode: games played → `in_season` (Game of the Day + News + **every** remaining game, no score unreported); none → `hot_stove` + a `countdown`.
    - Prose fields: plain text, `*italic*` / `**bold**` (markers hug the word), blank line between paragraphs, **no HTML**.
-5. Write it to `editions/YYYY/MM/DD.json` (today's date).
-6. Render (from the repo root): `python3 render.py editions/YYYY/MM/DD.json`. On a validation error, fix the JSON and re-run until it exits 0.
-7. (Optional) open `index.html` to eyeball it.
-8. Commit the JSON + regenerated `index.html`, `archive.html`, and the edition page — `git commit -m "edition: YYYY-MM-DD"` — then `git push`. Pages redeploys in ~a minute.
+   - `sources` = the credits-desk list (see step 4). Omit only if genuinely
+     nothing beyond the standard sources was used — an ordinary edition always
+     has at least the boxscore entry.
+6. Write it to `editions/YYYY/MM/DD.json` (today's date).
+7. Render (from the repo root): `python3 render.py editions/YYYY/MM/DD.json`. On a validation error, fix the JSON and re-run until it exits 0.
+8. (Optional) open `index.html` to eyeball it.
+9. Commit the JSON + regenerated `index.html`, `archive.html`, and the edition page — `git commit -m "edition: YYYY-MM-DD"` — then `git push`. Pages redeploys in ~a minute.
 
 ## Fail-safe
 
@@ -49,3 +57,5 @@ A failed or incomplete run must produce **no commit** — the previous edition s
 | Advancing to a future/next-empty date because today's edition exists | Publishes a date whose games aren't out yet (off-by-one, reprise) | One run = today's date. If today already exists, it's published — stop |
 | Reusing yesterday's epithets/opening gambit | Editions feel like a template | Do the Variety pass: read yesterday, vary handles (see `nicknames.md`), find a fresh way in |
 | Guessing when play resumes / what's on tomorrow's card, or hedging with "resumes anon" / "within days" | Wrong forward-looking claims (e.g., implying games during the All-Star break); soft hedges dodge the check while still asserting a schedule | Fetch b-ref's homepage "Upcoming Schedule" (curl + browser UA) **every** run before writing; name the verified date/matchup or cut the forward reference |
+| Citing `boxscore.email/mlb` (undated) in `sources` | Link shows a different edition tomorrow — dishonest citation | Cite the dated permalink for the edition actually used; verify it resolves |
+| Inventing/guessing a byline for a source | Credits a person who didn't write it | Include `author` only when the page displays a byline; otherwise omit it |
