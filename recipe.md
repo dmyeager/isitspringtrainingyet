@@ -185,7 +185,7 @@ due:
   undated current edition (that rule is unchanged), but the undated URL shows
   a different edition tomorrow. Cite the dated permalink for the edition you
   used, after verifying it resolves (a `curl -s -o /dev/null -w "%{http_code}"`
-  check with a browser User-Agent). If no working permalink exists, cite
+  check with a browser User-Agent). The permalink follows the edition's dateline: `https://boxscore.email/mlb/YYYY-MM-DD` with the **publication** date — the same date as the Herald edition itself. If no working permalink exists, cite
   `https://boxscore.email/mlb` and put the edition's dateline in the title
   ("Morning digest for the games of <date>").
 - Typical publications: "Boxscore", "MLB.com", "ESPN", "Baseball-Reference".

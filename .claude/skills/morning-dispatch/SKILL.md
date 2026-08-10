@@ -23,8 +23,7 @@ The edition is **dated by its publication morning (today)** and reports **yester
    (read-only). Per `recipe.md`'s Variety section, don't reuse its team epithets
    or its Game-of-the-Day opening gambit; consult `nicknames.md` for alternative
    handles. (The desk-note's fixed signature sign-off is exempt — keep it.)
-4. **Credits.** Per `recipe.md`'s "The credits desk": compile the `sources`
-   array — every page that contributed a printed fact, with `url`, `title`,
+4. **Credits.** Per `recipe.md`'s "The credits desk": start a running credits list now and finalize the `sources` array once the prose is composed — every page that contributed a printed fact, with `url`, `title`,
    `publication`, and `author` only where a byline is shown. Cite
    boxscore.email by its **dated permalink** (verify it resolves with `curl`);
    never cite the undated current-edition URL.
