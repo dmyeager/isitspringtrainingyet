@@ -267,6 +267,62 @@ REPO_SCHEMA = json.loads(
 )
 
 
+class TestSourcesSection(unittest.TestCase):
+    def _edition_with(self, sources):
+        data = _load("in_season.json")
+        data["sources"] = sources
+        return data
+
+    def test_sources_section_renders_after_signoff(self):
+        body = render.render_edition_body(self._edition_with([
+            {"url": "https://www.mlb.com/news/some-story", "title": "Some Story",
+             "publication": "MLB.com", "author": "Jane Writer"},
+        ]))
+        self.assertIn("The Herald Acknowledges Its Debts", body)
+        self.assertLess(body.index("~ THE HERALD ~"), body.index('class="sources"'))
+
+    def test_entry_with_author_has_author_prefix(self):
+        body = render.render_edition_body(self._edition_with([
+            {"url": "https://www.mlb.com/news/some-story", "title": "Some Story",
+             "publication": "MLB.com", "author": "Jane Writer"},
+        ]))
+        self.assertIn(
+            '<li class="sources__item">Jane Writer, '
+            '<a href="https://www.mlb.com/news/some-story" rel="noopener">Some Story</a>'
+            ' &mdash; MLB.com</li>',
+            body,
+        )
+
+    def test_entry_without_author_has_no_prefix(self):
+        body = render.render_edition_body(self._edition_with([
+            {"url": "https://boxscore.email/mlb/2026-08-09",
+             "title": "Morning digest", "publication": "Boxscore"},
+        ]))
+        self.assertIn(
+            '<li class="sources__item">'
+            '<a href="https://boxscore.email/mlb/2026-08-09" rel="noopener">Morning digest</a>'
+            ' &mdash; Boxscore</li>',
+            body,
+        )
+
+    def test_url_is_attribute_escaped_and_text_is_escaped(self):
+        body = render.render_edition_body(self._edition_with([
+            {"url": 'https://example.com/?a=1&b="x"', "title": "Trades & Rumors",
+             "publication": "P<Q>"},
+        ]))
+        self.assertIn('href="https://example.com/?a=1&amp;b=&quot;x&quot;"', body)
+        self.assertIn(">Trades &amp; Rumors</a>", body)
+        self.assertIn("P&lt;Q&gt;", body)
+
+    def test_absent_null_and_empty_sources_render_no_section(self):
+        for data in (_load("in_season.json"),
+                     self._edition_with(None),
+                     self._edition_with([])):
+            body = render.render_edition_body(data)
+            self.assertNotIn('class="sources"', body)
+            self.assertNotIn("Acknowledges Its Debts", body)
+
+
 class TestSourcesSchema(unittest.TestCase):
     def test_edition_with_sources_validates(self):
         data = _load("in_season.json")
