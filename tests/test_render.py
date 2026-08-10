@@ -205,6 +205,9 @@ class TestPipeline(unittest.TestCase):
         self.assertIn("hot stove burns bright", index)  # latest edition is the Dec one
         archive = (self.root / "archive.html").read_text(encoding="utf-8")
         self.assertIn('href="/editions/2026/07/09.html"', archive)
+        july = (self.root / "editions" / "2026" / "07" / "09.html").read_text(encoding="utf-8")
+        self.assertIn("The Herald Acknowledges Its Debts", july)
+        self.assertIn('href="https://www.mlb.com/news/mudville-rally"', july)
 
     def test_render_one_validates_before_writing(self):
         bad = self.root / "editions" / "2026" / "07" / "10.json"
@@ -244,6 +247,7 @@ class TestPreview(unittest.TestCase):
         self.assertNotIn('<link rel="stylesheet"', page)          # no external stylesheet link
         self.assertNotIn('href="/"', page)                        # absolute nav links neutralized
         self.assertNotIn('href="/archive.html"', page)
+        self.assertIn("The Herald Acknowledges Its Debts", page)  # sources render in previews
 
     def test_preview_writes_nothing_but_the_output(self):
         out = self.root / "preview" / "index.html"
@@ -259,6 +263,103 @@ class TestPreview(unittest.TestCase):
         with self.assertRaises(ValueError):
             render.render_preview(self.root, bad, out)
         self.assertFalse(out.exists())                            # nothing written on failure
+
+
+REPO_SCHEMA = json.loads(
+    (pathlib.Path(__file__).resolve().parent.parent / "schema" / "edition.schema.json")
+    .read_text(encoding="utf-8")
+)
+
+
+class TestSourcesSection(unittest.TestCase):
+    def _edition_with(self, sources):
+        data = _load("in_season.json")
+        data["sources"] = sources
+        return data
+
+    def test_sources_section_renders_after_signoff(self):
+        body = render.render_edition_body(self._edition_with([
+            {"url": "https://www.mlb.com/news/some-story", "title": "Some Story",
+             "publication": "MLB.com", "author": "Jane Writer"},
+        ]))
+        self.assertIn("The Herald Acknowledges Its Debts", body)
+        self.assertLess(body.index("~ THE HERALD ~"), body.index('class="sources"'))
+
+    def test_entry_with_author_has_author_prefix(self):
+        body = render.render_edition_body(self._edition_with([
+            {"url": "https://www.mlb.com/news/some-story", "title": "Some Story",
+             "publication": "MLB.com", "author": "Jane Writer"},
+        ]))
+        self.assertIn(
+            '<li class="sources__item">Jane Writer, '
+            '<a href="https://www.mlb.com/news/some-story" rel="noopener">Some Story</a>'
+            ' &mdash; MLB.com</li>',
+            body,
+        )
+
+    def test_entry_without_author_has_no_prefix(self):
+        body = render.render_edition_body(self._edition_with([
+            {"url": "https://boxscore.email/mlb/2026-08-09",
+             "title": "Morning digest", "publication": "Boxscore"},
+        ]))
+        self.assertIn(
+            '<li class="sources__item">'
+            '<a href="https://boxscore.email/mlb/2026-08-09" rel="noopener">Morning digest</a>'
+            ' &mdash; Boxscore</li>',
+            body,
+        )
+
+    def test_url_is_attribute_escaped_and_text_is_escaped(self):
+        body = render.render_edition_body(self._edition_with([
+            {"url": 'https://example.com/?a=1&b="x"', "title": "Trades & Rumors",
+             "publication": "P<Q>"},
+        ]))
+        self.assertIn('href="https://example.com/?a=1&amp;b=&quot;x&quot;"', body)
+        self.assertIn(">Trades &amp; Rumors</a>", body)
+        self.assertIn("P&lt;Q&gt;", body)
+
+    def test_absent_null_and_empty_sources_render_no_section(self):
+        absent = _load("in_season.json")
+        absent.pop("sources", None)  # the fixture gains sources in Task 3
+        for data in (absent,
+                     self._edition_with(None),
+                     self._edition_with([])):
+            body = render.render_edition_body(data)
+            self.assertNotIn('class="sources"', body)
+            self.assertNotIn("Acknowledges Its Debts", body)
+
+
+class TestSourcesSchema(unittest.TestCase):
+    def test_edition_with_sources_validates(self):
+        data = _load("in_season.json")
+        data["sources"] = [
+            {"url": "https://www.mlb.com/news/some-story", "title": "Some Story",
+             "publication": "MLB.com", "author": "Jane Writer"},
+            {"url": "https://boxscore.email/mlb/2026-08-09",
+             "title": "Morning digest for the games of August 9", "publication": "Boxscore"},
+        ]
+        render.validate(data, REPO_SCHEMA)  # no raise
+
+    def test_null_sources_validates(self):
+        data = _load("in_season.json")
+        data["sources"] = None
+        render.validate(data, REPO_SCHEMA)  # no raise
+
+    def test_source_entry_missing_url_fails(self):
+        data = _load("in_season.json")
+        data["sources"] = [{"title": "t", "publication": "p"}]
+        with self.assertRaises(ValueError):
+            render.validate(data, REPO_SCHEMA)
+
+    def test_source_entry_missing_publication_fails(self):
+        data = _load("in_season.json")
+        data["sources"] = [{"url": "https://x", "title": "t"}]
+        with self.assertRaises(ValueError):
+            render.validate(data, REPO_SCHEMA)
+
+    def test_editions_without_sources_still_validate(self):
+        render.validate(_load("in_season.json"), REPO_SCHEMA)
+        render.validate(_load("hot_stove.json"), REPO_SCHEMA)
 
 
 if __name__ == "__main__":

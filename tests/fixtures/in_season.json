@@ -25,5 +25,14 @@
       "body": "A crisp affair decided by timely leather and a lone errant throw."
     }
   ],
-  "desk_note": "And so the presses rest until the morrow, when fresh deeds await their chronicler."
+  "desk_note": "And so the presses rest until the morrow, when fresh deeds await their chronicler.",
+  "sources": [
+    {"url": "https://boxscore.email/mlb/2026-07-08",
+     "title": "Morning digest for the games of July 8",
+     "publication": "Boxscore"},
+    {"url": "https://www.mlb.com/news/mudville-rally",
+     "title": "Mudville rallies in the eleventh",
+     "publication": "MLB.com",
+     "author": "Jane Writer"}
+  ]
 }

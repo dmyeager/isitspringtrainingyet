@@ -102,6 +102,23 @@ def render_masthead(meta):
     )
 
 
+def render_sources(sources):
+    items = []
+    for s in sources:
+        prefix = render_inline(s["author"]) + ", " if s.get("author") else ""
+        items.append(
+            '<li class="sources__item">' + prefix
+            + '<a href="' + html.escape(s["url"], quote=True) + '" rel="noopener">'
+            + render_inline(s["title"]) + '</a> &mdash; '
+            + render_inline(s["publication"]) + '</li>'
+        )
+    return (
+        '<section class="sources">'
+        '<h2 class="section__label">The Herald Acknowledges Its Debts</h2>'
+        '<ul class="sources__list">' + "".join(items) + '</ul></section>'
+    )
+
+
 def render_edition_body(data):
     meta = data["meta"]
     parts = [render_masthead(meta)]
@@ -156,6 +173,11 @@ def render_edition_body(data):
         + render_body(data["desk_note"])
         + '<p class="signoff">~ THE HERALD ~</p></section>'
     )
+
+    sources = data.get("sources") or []
+    if sources:
+        parts.append(render_sources(sources))
+
     return "".join(parts)
 
 
