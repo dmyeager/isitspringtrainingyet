@@ -261,5 +261,44 @@ class TestPreview(unittest.TestCase):
         self.assertFalse(out.exists())                            # nothing written on failure
 
 
+REPO_SCHEMA = json.loads(
+    (pathlib.Path(__file__).resolve().parent.parent / "schema" / "edition.schema.json")
+    .read_text(encoding="utf-8")
+)
+
+
+class TestSourcesSchema(unittest.TestCase):
+    def test_edition_with_sources_validates(self):
+        data = _load("in_season.json")
+        data["sources"] = [
+            {"url": "https://www.mlb.com/news/some-story", "title": "Some Story",
+             "publication": "MLB.com", "author": "Jane Writer"},
+            {"url": "https://boxscore.email/mlb/2026-08-09",
+             "title": "Morning digest for the games of August 9", "publication": "Boxscore"},
+        ]
+        render.validate(data, REPO_SCHEMA)  # no raise
+
+    def test_null_sources_validates(self):
+        data = _load("in_season.json")
+        data["sources"] = None
+        render.validate(data, REPO_SCHEMA)  # no raise
+
+    def test_source_entry_missing_url_fails(self):
+        data = _load("in_season.json")
+        data["sources"] = [{"title": "t", "publication": "p"}]
+        with self.assertRaises(ValueError):
+            render.validate(data, REPO_SCHEMA)
+
+    def test_source_entry_missing_publication_fails(self):
+        data = _load("in_season.json")
+        data["sources"] = [{"url": "https://x", "title": "t"}]
+        with self.assertRaises(ValueError):
+            render.validate(data, REPO_SCHEMA)
+
+    def test_editions_without_sources_still_validate(self):
+        render.validate(_load("in_season.json"), REPO_SCHEMA)
+        render.validate(_load("hot_stove.json"), REPO_SCHEMA)
+
+
 if __name__ == "__main__":
     unittest.main()

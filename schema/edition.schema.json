@@ -55,6 +55,19 @@
         "days_remaining": { "type": "integer" }
       }
     },
-    "desk_note": { "type": "string" }
+    "desk_note": { "type": "string" },
+    "sources": {
+      "type": ["array", "null"],
+      "items": {
+        "type": "object",
+        "required": ["url", "title", "publication"],
+        "properties": {
+          "url": { "type": "string" },
+          "title": { "type": "string" },
+          "publication": { "type": "string" },
+          "author": { "type": "string" }
+        }
+      }
+    }
   }
 }
