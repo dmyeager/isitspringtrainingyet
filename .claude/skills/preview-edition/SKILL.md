@@ -63,10 +63,13 @@ scratchpad — never commit the raw HTML. Never fabricate; omit the unverifiable
 3. **Determine the mode from what the sources show** (not from assumption): prior
    day had completed games → `in_season`; no games → `hot_stove` with a countdown
    to the next milestone, its date taken from the b-ref Upcoming Schedule.
-4. **Variety pass (voice only):** read the most recent existing edition under
-   `editions/` (read-only) to avoid repeating its team epithets and its
-   Game-of-the-Day opening gambit. This step informs *phrasing*, never the slate —
-   the games always come from step 2's live sources.
+4. **Variety pass (voice only):** read the **three** most recent existing
+   editions under `editions/` (read-only), per `recipe.md`'s Variety section —
+   hard rule against the most recent one's team epithets and Game-of-the-Day
+   opening gambit, soft check against distinctive coinages and structural
+   openers in the two before it, plus the continuity read for running
+   storylines. This step informs *phrasing*, never the slate — the games always
+   come from step 2's live sources.
 5. Compose the edition as JSON conforming to `schema/edition.schema.json`, exactly
    as `recipe.md` directs. Set `meta.date` to **today** (the preview stands in for
    a publication morning). Write it **only** to `preview/edition.json` — NOT under

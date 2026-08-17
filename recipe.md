@@ -149,10 +149,25 @@ feels like a template.
   same deadball spirit grounded in the day's real story (a trait, a streak, a
   ballpark, a feat). It is a floor for variety, not a lookup table — never feel
   boxed into it, and never fabricate a fact to justify a nickname.
-- **Don't repeat yesterday.** Before writing, glance at the most recent existing
-  edition under `editions/`. For clubs that appear in both, avoid reusing **its
-  team epithets** and avoid reusing **its Game-of-the-Day opening gambit** (the
-  first-sentence flourish). Reach for a different handle or a different way in.
+- **Read the last three editions.** Before writing, read the three most recent
+  existing editions under `editions/` (read-only). The strictness is graded:
+  - **Yesterday (hard rule).** For clubs that appear in both, avoid reusing
+    **its team epithets** and avoid reusing **its Game-of-the-Day opening
+    gambit** (the first-sentence flourish). Reach for a different handle or a
+    different way in.
+  - **The two editions before that (soft check).** A plain workhorse handle
+    ("the Houston nine") reappearing after a two-day gap is fine; it's the
+    **distinctive coinages** that read as a tell when they cycle — prefer a
+    fresh one if a memorable epithet ran within the window. Likewise vary the
+    Game-of-the-Day's rhetorical *shape*: if the same structural opener (say,
+    a "Begin with the arithmetic…"-style direct address) ran within the last
+    three days, find a different way in.
+- **Continuity.** The three-day read is also the Herald's memory. When today's
+  story continues one the paper already covered — a streak extended or snapped,
+  a saga's next chapter — write it as a continuation, with period-appropriate
+  self-reference ("as this paper noted Tuesday"), not as if it were news; and
+  don't contradict the Herald's own prior framing. Only reference prior coverage
+  that actually appears in the editions read — never invent a back-issue.
 - **A light touch.** Variety is a seasoning, not a mandate to be maximally
   different. Don't contort the prose or strain for novelty — just don't lean on
   the same well two mornings running. The fixed sign-off (see the desk-note item
