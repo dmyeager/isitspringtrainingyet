@@ -62,7 +62,7 @@
         "type": "object",
         "required": ["url", "title", "publication"],
         "properties": {
-          "url": { "type": "string" },
+          "url": { "type": "string", "pattern": "^https?://.+" },
           "title": { "type": "string" },
           "publication": { "type": "string" },
           "author": { "type": "string" }

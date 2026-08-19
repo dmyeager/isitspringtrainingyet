@@ -309,6 +309,21 @@ class TestSourcesSection(unittest.TestCase):
             body,
         )
 
+    def test_schema_rejects_non_http_source_url(self):
+        data = self._edition_with([
+            {"url": "javascript:alert(1)", "title": "Some Story", "publication": "MLB.com"},
+        ])
+        with self.assertRaises(ValueError):
+            render.validate(data, REPO_SCHEMA)
+
+    def test_schema_accepts_http_and_https_source_urls(self):
+        data = self._edition_with([
+            {"url": "https://www.mlb.com/news/some-story", "title": "A",
+             "publication": "MLB.com"},
+            {"url": "http://boxscore.email/mlb", "title": "B", "publication": "Boxscore"},
+        ])
+        render.validate(data, REPO_SCHEMA)  # no raise
+
     def test_url_is_attribute_escaped_and_text_is_escaped(self):
         body = render.render_edition_body(self._edition_with([
             {"url": 'https://example.com/?a=1&b="x"', "title": "Trades & Rumors",
