@@ -142,7 +142,7 @@ def render_sources(sources):
 
 def render_edition_body(data):
     meta = data["meta"]
-    parts = [render_masthead(meta), render_answer(data)]
+    parts = [render_answer(data), render_masthead(meta)]
 
     gotd = data.get("game_of_the_day")
     if gotd:

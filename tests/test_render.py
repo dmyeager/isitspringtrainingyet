@@ -384,10 +384,10 @@ class TestAnswerLine(unittest.TestCase):
         self.assertIn("Is it spring training yet?", body)
         self.assertIn("No &mdash; but the championship season is upon us", body)
 
-    def test_answer_sits_directly_after_masthead(self):
+    def test_answer_sits_above_the_nameplate(self):
         body = render.render_edition_body(_load("in_season.json"))
-        self.assertLess(body.index("</header>"), body.index('class="answer__line"'))
-        self.assertLess(body.index('class="answer__line"'), body.index("The Game of the Day"))
+        self.assertLess(body.index('class="answer__line"'),
+                        body.index('<header class="masthead"'))
 
     def test_hot_stove_answers_not_yet_with_countdown(self):
         body = render.render_edition_body(_load("hot_stove.json"))

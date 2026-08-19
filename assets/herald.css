@@ -72,18 +72,17 @@ body {
 .masthead--mini { border-bottom-width: 3px; }
 .masthead--mini .masthead__title { font-size: clamp(1.6rem, 6vw, 2.6rem); }
 
-/* ---- The standing question ---- */
+/* ---- The standing question: a small ear above the nameplate ---- */
 .answer {
   text-align: center;
-  margin: 1.1rem auto 0;
+  margin: 0 auto 0.4rem;
   max-width: 34rem;
 }
 .answer__line {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
   color: var(--ink-soft);
-  border-bottom: 1px solid var(--rule);
-  padding-bottom: 0.9rem;
 }
 .answer__line em { color: var(--red); }
 
