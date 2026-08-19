@@ -12,8 +12,7 @@
         "volume": { "type": "string" },
         "edition_number": { "type": "integer" },
         "mode": { "type": "string", "enum": ["in_season", "hot_stove"] },
-        "contests_reported": { "type": "integer" },
-        "spring_training": { "type": "boolean" }
+        "contests_reported": { "type": "integer" }
       }
     },
     "game_of_the_day": {

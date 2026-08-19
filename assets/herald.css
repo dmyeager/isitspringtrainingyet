@@ -72,21 +72,6 @@ body {
 .masthead--mini { border-bottom-width: 3px; }
 .masthead--mini .masthead__title { font-size: clamp(1.6rem, 6vw, 2.6rem); }
 
-/* ---- The standing question ---- */
-.answer {
-  text-align: center;
-  margin: 1.1rem auto 0;
-  max-width: 34rem;
-}
-.answer__line {
-  margin: 0;
-  font-size: 0.95rem;
-  color: var(--ink-soft);
-  border-bottom: 1px solid var(--rule);
-  padding-bottom: 0.9rem;
-}
-.answer__line em { color: var(--red); }
-
 /* ---- Section heads: centered small-caps flanked by rules ---- */
 .section__label {
   display: flex;
@@ -211,22 +196,6 @@ body {
 .archive__item a:hover { color: var(--red); }
 
 .placeholder { text-align: center; font-style: italic; color: var(--ink-soft); margin-top: 3rem; }
-
-/* ---- Prev/next edition navigation ---- */
-.edition-nav {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 2.5rem;
-  padding-top: 0.8rem;
-  border-top: 1px solid var(--rule);
-  font-variant: small-caps;
-  letter-spacing: 0.05em;
-  font-size: 0.9rem;
-}
-.edition-nav__next { margin-left: auto; }
-.edition-nav a { color: var(--ink); text-decoration: none; }
-.edition-nav a:hover { color: var(--red); }
 
 /* ---- Colophon ---- */
 .colophon {
