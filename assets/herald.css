@@ -72,6 +72,20 @@ body {
 .masthead--mini { border-bottom-width: 3px; }
 .masthead--mini .masthead__title { font-size: clamp(1.6rem, 6vw, 2.6rem); }
 
+/* ---- The standing question: a small ear above the nameplate ---- */
+.answer {
+  text-align: center;
+  margin: 0 auto 0.4rem;
+  max-width: 34rem;
+}
+.answer__line {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+.answer__line em { color: var(--red); }
+
 /* ---- Section heads: centered small-caps flanked by rules ---- */
 .section__label {
   display: flex;
@@ -185,6 +199,17 @@ body {
 .sources__item a:hover { color: var(--red); }
 
 /* ---- Archive ---- */
+.archive__month { margin-bottom: 1.6rem; }
+.archive__month-label {
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--red);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.25rem;
+  margin: 1.8rem 0 0.4rem;
+}
 .archive__list { list-style: none; padding: 0; margin: 0; }
 .archive__item { padding: 0.5rem 0; border-bottom: 1px dotted var(--rule); }
 .archive__item a {
@@ -196,6 +221,22 @@ body {
 .archive__item a:hover { color: var(--red); }
 
 .placeholder { text-align: center; font-style: italic; color: var(--ink-soft); margin-top: 3rem; }
+
+/* ---- Prev/next edition navigation ---- */
+.edition-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--rule);
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+  font-size: 0.9rem;
+}
+.edition-nav__next { margin-left: auto; }
+.edition-nav a { color: var(--ink); text-decoration: none; }
+.edition-nav a:hover { color: var(--red); }
 
 /* ---- Colophon ---- */
 .colophon {

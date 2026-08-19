@@ -87,6 +87,14 @@ Check whether the prior day had **completed games**:
   of play — take its date from baseball-reference's Upcoming Schedule (see
   Sources of truth), never from assumption.
 
+Separately from the mode: during the spring exhibition season — from the first
+spring-training game through the eve of Opening Day — set
+`meta.spring_training: true` (omit it the rest of the year). It drives the
+site's standing answer to its own question ("Is it spring training yet?" —
+Yes/No/Not yet); the renderer composes the line, so no prose is needed. When in
+doubt whether spring games have begun, verify against baseball-reference's
+Upcoming Schedule rather than assume.
+
 ## Masthead (flies on every edition)
 
 > THE MORNING HORSEHIDE HERALD
