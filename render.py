@@ -300,17 +300,37 @@ def build_archive_entries(editions):
     return entries
 
 
+_MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"]
+
+
+def _month_label(date):
+    year, month, _ = date.split("-")
+    return _MONTH_NAMES[int(month) - 1] + " " + year
+
+
 def render_archive(entries, base_template):
-    items = "".join(
-        '<li class="archive__item"><a href="' + html.escape(e["url"], quote=True) + '">'
-        + render_inline(e["date_display"]) + '</a> &mdash; '
-        + render_inline(e["label"]) + '</li>'
-        for e in entries
+    months = []                          # [(label, [entry, ...])], newest first
+    for e in entries:
+        label = _month_label(e["date"])
+        if not months or months[-1][0] != label:
+            months.append((label, []))
+        months[-1][1].append(e)
+    sections = "".join(
+        '<div class="archive__month">'
+        '<h3 class="archive__month-label">' + label + '</h3>'
+        '<ul class="archive__list">' + "".join(
+            '<li class="archive__item"><a href="' + html.escape(e["url"], quote=True) + '">'
+            + render_inline(e["date_display"]) + '</a> &mdash; '
+            + render_inline(e["label"]) + '</li>'
+            for e in items
+        ) + '</ul></div>'
+        for label, items in months
     )
     body = (
         '<header class="masthead masthead--mini">' + _MASTHEAD_HEAD + '</header>'
         '<section class="archive"><h2 class="section__label">The Archive</h2>'
-        '<ul class="archive__list">' + items + '</ul></section>'
+        + sections + '</section>'
     )
     return render_page("The Archive — The Morning Horsehide Herald", body, base_template)
 

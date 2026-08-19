@@ -178,6 +178,29 @@ class TestHomeAndArchive(unittest.TestCase):
         self.assertIn('href="/editions/2026/07/09.html"', out)
         self.assertIn("The Archive", out)
 
+    def test_archive_groups_editions_under_month_headings(self):
+        entries = render.build_archive_entries([_load("in_season.json"), _load("hot_stove.json")])
+        out = render.render_archive(entries, "<t>$title</t><b>$body</b>")
+        self.assertEqual(out.count('class="archive__month-label"'), 2)
+        self.assertIn("December 2026", out)
+        self.assertIn("July 2026", out)
+
+    def test_archive_months_newest_first_with_editions_under_their_month(self):
+        entries = render.build_archive_entries([_load("in_season.json"), _load("hot_stove.json")])
+        out = render.render_archive(entries, "<t>$title</t><b>$body</b>")
+        self.assertLess(out.index("December 2026"), out.index("/editions/2026/12/20.html"))
+        self.assertLess(out.index("/editions/2026/12/20.html"), out.index("July 2026"))
+        self.assertLess(out.index("July 2026"), out.index("/editions/2026/07/09.html"))
+
+    def test_archive_same_month_editions_share_one_heading(self):
+        july_a = _load("in_season.json")
+        july_b = _load("in_season.json")
+        july_b["meta"]["date"] = "2026-07-10"
+        entries = render.build_archive_entries([july_a, july_b])
+        out = render.render_archive(entries, "<t>$title</t><b>$body</b>")
+        self.assertEqual(out.count('class="archive__month-label"'), 1)
+        self.assertEqual(out.count("July 2026"), 1)
+
 
 class TestPipeline(unittest.TestCase):
     def setUp(self):
