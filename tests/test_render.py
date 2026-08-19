@@ -377,5 +377,155 @@ class TestSourcesSchema(unittest.TestCase):
         render.validate(_load("hot_stove.json"), REPO_SCHEMA)
 
 
+class TestAnswerLine(unittest.TestCase):
+    def test_in_season_answers_no(self):
+        body = render.render_edition_body(_load("in_season.json"))
+        self.assertIn('class="answer__line"', body)
+        self.assertIn("Is it spring training yet?", body)
+        self.assertIn("No &mdash; but the championship season is upon us", body)
+
+    def test_answer_sits_directly_after_masthead(self):
+        body = render.render_edition_body(_load("in_season.json"))
+        self.assertLess(body.index("</header>"), body.index('class="answer__line"'))
+        self.assertLess(body.index('class="answer__line"'), body.index("The Game of the Day"))
+
+    def test_hot_stove_answers_not_yet_with_countdown(self):
+        body = render.render_edition_body(_load("hot_stove.json"))
+        self.assertIn("Is it spring training yet?", body)
+        self.assertIn("Not yet &mdash; 60 days until Pitchers and Catchers report", body)
+
+    def test_hot_stove_without_countdown_still_answers(self):
+        data = _load("hot_stove.json")
+        data["countdown"] = None
+        body = render.render_edition_body(data)
+        self.assertIn("Not yet &mdash; but the stove burns bright", body)
+
+    def test_spring_training_flag_answers_yes(self):
+        data = _load("in_season.json")
+        data["meta"]["spring_training"] = True
+        body = render.render_edition_body(data)
+        self.assertIn("Yes &mdash; spring training is upon us at last", body)
+
+    def test_schema_accepts_boolean_spring_training(self):
+        data = _load("in_season.json")
+        data["meta"]["spring_training"] = True
+        render.validate(data, REPO_SCHEMA)  # no raise
+
+    def test_schema_rejects_non_boolean_spring_training(self):
+        data = _load("in_season.json")
+        data["meta"]["spring_training"] = "yes"
+        with self.assertRaises(ValueError):
+            render.validate(data, REPO_SCHEMA)
+
+
+class TestEditionNav(unittest.TestCase):
+    TEMPLATE = "<t>$title</t><b>$body</b>"
+
+    def test_edition_with_both_neighbors_links_both_ways(self):
+        out = render.render_edition(
+            _load("in_season.json"), self.TEMPLATE,
+            prev=_load("hot_stove.json"), nxt=_load("hot_stove.json"),
+        )
+        self.assertIn('class="edition-nav"', out)
+        self.assertIn('href="/editions/2026/12/20.html"', out)
+        self.assertIn("the Twentieth of December", out)
+
+    def test_edition_without_neighbors_has_no_nav(self):
+        out = render.render_edition(_load("in_season.json"), self.TEMPLATE)
+        self.assertNotIn("edition-nav", out)
+
+    def test_nav_labels_trim_date_display_at_comma(self):
+        # "the Ninth of July, Two Thousand..." should shorten to the first segment.
+        prev = _load("in_season.json")
+        prev["meta"]["date_display"] = "the Ninth of July, Two Thousand and Twenty-Six"
+        out = render.render_edition(_load("hot_stove.json"), self.TEMPLATE, prev=prev)
+        self.assertIn("the Ninth of July", out)
+        self.assertNotIn("the Ninth of July, Two Thousand", out)
+
+    def test_prev_only_renders_prev_and_no_next(self):
+        out = render.render_edition(
+            _load("hot_stove.json"), self.TEMPLATE, prev=_load("in_season.json"))
+        self.assertIn('class="edition-nav__prev"', out)
+        self.assertNotIn('class="edition-nav__next"', out)
+
+    def test_homepage_links_back_to_previous_edition(self):
+        out = render.render_homepage(
+            _load("hot_stove.json"), self.TEMPLATE, prev=_load("in_season.json"))
+        self.assertIn('href="/editions/2026/07/09.html"', out)
+
+
+class TestFeed(unittest.TestCase):
+    def test_feed_has_channel_metadata(self):
+        xml = render.render_feed([_load("in_season.json")])
+        self.assertIn("<?xml", xml)
+        self.assertIn("<title>The Morning Horsehide Herald</title>", xml)
+        self.assertIn('href="https://isitspringtrainingyet.com/feed.xml" rel="self"', xml)
+
+    def test_entries_newest_first_with_absolute_links(self):
+        xml = render.render_feed([_load("in_season.json"), _load("hot_stove.json")])
+        dec = xml.index("https://isitspringtrainingyet.com/editions/2026/12/20.html")
+        jul = xml.index("https://isitspringtrainingyet.com/editions/2026/07/09.html")
+        self.assertLess(dec, jul)
+
+    def test_entry_title_is_gotd_headline(self):
+        xml = render.render_feed([_load("in_season.json")])
+        self.assertIn("MUDVILLE THUNDERS PAST THE ROBINS IN THE ELEVENTH", xml)
+
+    def test_hot_stove_entry_title_names_the_edition(self):
+        xml = render.render_feed([_load("hot_stove.json")])
+        self.assertIn("Hot Stove Edition — the Twentieth of December", xml)
+
+    def test_entry_content_is_escaped_edition_html(self):
+        xml = render.render_feed([_load("in_season.json")])
+        self.assertIn('&lt;section class="game-of-the-day"&gt;', xml)
+        self.assertNotIn('<section class="game-of-the-day">', xml)
+
+    def test_entry_updated_uses_edition_date(self):
+        xml = render.render_feed([_load("in_season.json")])
+        self.assertIn("<updated>2026-07-09T11:00:00Z</updated>", xml)
+
+    def test_feed_caps_at_fifteen_entries(self):
+        editions = []
+        for day in range(1, 21):
+            data = _load("in_season.json")
+            data["meta"]["date"] = "2026-07-{:02d}".format(day)
+            editions.append(data)
+        xml = render.render_feed(editions)
+        self.assertEqual(xml.count("<entry>"), 15)
+        self.assertNotIn("/editions/2026/07/05.html", xml)  # oldest five dropped
+        self.assertIn("/editions/2026/07/20.html", xml)
+
+
+class TestFeedPipeline(unittest.TestCase):
+    def setUp(self):
+        self.root = pathlib.Path(tempfile.mkdtemp())
+        (self.root / "templates").mkdir()
+        (self.root / "schema").mkdir()
+        repo = pathlib.Path(__file__).resolve().parent.parent
+        shutil.copy(repo / "templates" / "base.html", self.root / "templates" / "base.html")
+        shutil.copy(repo / "schema" / "edition.schema.json", self.root / "schema" / "edition.schema.json")
+        for name, date in [("in_season.json", "2026-07-09"), ("hot_stove.json", "2026-12-20")]:
+            y, m, d = date.split("-")
+            dst = self.root / "editions" / y / m
+            dst.mkdir(parents=True, exist_ok=True)
+            shutil.copy(FIXTURES / name, dst / (d + ".json"))
+
+    def tearDown(self):
+        shutil.rmtree(self.root)
+
+    def test_render_all_writes_feed_and_wires_navigation(self):
+        render.render_all(self.root)
+        feed = (self.root / "feed.xml").read_text(encoding="utf-8")
+        self.assertIn("MUDVILLE THUNDERS", feed)
+        july = (self.root / "editions" / "2026" / "07" / "09.html").read_text(encoding="utf-8")
+        self.assertIn('href="/editions/2026/12/20.html"', july)   # next
+        dec = (self.root / "editions" / "2026" / "12" / "20.html").read_text(encoding="utf-8")
+        self.assertIn('href="/editions/2026/07/09.html"', dec)    # prev
+        index = (self.root / "index.html").read_text(encoding="utf-8")
+        self.assertIn('href="/editions/2026/07/09.html"', index)  # homepage prev
+        self.assertIn('type="application/atom+xml"', index)       # feed advertised
+        self.assertIn('href="/feed.xml"', index)
+
+
 if __name__ == "__main__":
     unittest.main()
