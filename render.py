@@ -68,6 +68,8 @@ def _validate_node(value, schema, path):
                 _validate_node(item, item_schema, "{}[{}]".format(path, i))
 
 
+SITE = "https://isitspringtrainingyet.com"
+
 _MASTHEAD_HEAD = (
     '<h1 class="masthead__title">THE MORNING HORSEHIDE HERALD</h1>'
     '<p class="masthead__motto">"Every Score Set Down, No Deed Unsung"</p>'
@@ -102,6 +104,25 @@ def render_masthead(meta):
     )
 
 
+def render_answer(data):
+    """The line that answers the domain's question, from data already verified."""
+    meta = data["meta"]
+    countdown = data.get("countdown")
+    if meta.get("spring_training"):
+        answer = "Yes &mdash; spring training is upon us at last."
+    elif meta["mode"] == "in_season":
+        answer = "No &mdash; but the championship season is upon us, a finer thing still."
+    elif countdown:
+        answer = "Not yet &mdash; {} days until {}.".format(
+            countdown["days_remaining"], render_inline(countdown["milestone"]))
+    else:
+        answer = "Not yet &mdash; but the stove burns bright."
+    return (
+        '<section class="answer"><p class="answer__line">'
+        '<em>Is it spring training yet?</em> ' + answer + '</p></section>'
+    )
+
+
 def render_sources(sources):
     items = []
     for s in sources:
@@ -121,7 +142,7 @@ def render_sources(sources):
 
 def render_edition_body(data):
     meta = data["meta"]
-    parts = [render_masthead(meta)]
+    parts = [render_masthead(meta), render_answer(data)]
 
     gotd = data.get("game_of_the_day")
     if gotd:
@@ -181,9 +202,32 @@ def render_edition_body(data):
     return "".join(parts)
 
 
-def render_edition(data, base_template):
+def _nav_label(data):
+    # Long-form dates ("the Ninth of July, Two Thousand...") shorten to the day.
+    return data["meta"]["date_display"].split(",")[0]
+
+
+def render_edition_nav(prev, nxt):
+    if not prev and not nxt:
+        return ""
+    links = []
+    if prev:
+        links.append(
+            '<a class="edition-nav__prev" href="' + edition_url(prev["meta"]["date"]) + '">'
+            '&larr; ' + render_inline(_nav_label(prev)) + '</a>'
+        )
+    if nxt:
+        links.append(
+            '<a class="edition-nav__next" href="' + edition_url(nxt["meta"]["date"]) + '">'
+            + render_inline(_nav_label(nxt)) + ' &rarr;</a>'
+        )
+    return '<nav class="edition-nav">' + "".join(links) + '</nav>'
+
+
+def render_edition(data, base_template, prev=None, nxt=None):
     title = "The Morning Horsehide Herald — " + data["meta"]["date_display"]
-    return render_page(title, render_edition_body(data), base_template)
+    body = render_edition_body(data) + render_edition_nav(prev, nxt)
+    return render_page(title, body, base_template)
 
 
 def edition_url(date):
@@ -191,7 +235,7 @@ def edition_url(date):
     return "/editions/{}/{}/{}.html".format(year, month, day)
 
 
-def render_homepage(latest, base_template):
+def render_homepage(latest, base_template, prev=None):
     if latest is None:
         body = (
             '<header class="masthead">' + _MASTHEAD_HEAD + '</header>'
@@ -199,7 +243,46 @@ def render_homepage(latest, base_template):
             'The first edition goes to press at dawn.</p></section>'
         )
         return render_page("The Morning Horsehide Herald", body, base_template)
-    return render_edition(latest, base_template)
+    return render_edition(latest, base_template, prev=prev)
+
+
+def _feed_title(data):
+    gotd = data.get("game_of_the_day")
+    if gotd:
+        return gotd["headline"]
+    return "Hot Stove Edition — " + data["meta"]["date_display"]
+
+
+def render_feed(editions, limit=15):
+    """Atom feed of the latest editions, full text, newest first."""
+    editions = sorted(editions, key=lambda d: d["meta"]["date"], reverse=True)[:limit]
+    entries = []
+    for data in editions:
+        date = data["meta"]["date"]
+        url = SITE + edition_url(date)
+        entries.append(
+            "<entry>"
+            "<title>" + html.escape(_feed_title(data), quote=False) + "</title>"
+            '<link href="' + html.escape(url, quote=True) + '" rel="alternate"/>'
+            "<id>" + url + "</id>"
+            "<updated>" + date + "T11:00:00Z</updated>"
+            '<content type="html">' + html.escape(render_edition_body(data), quote=False)
+            + "</content>"
+            "</entry>"
+        )
+    updated = (editions[0]["meta"]["date"] if editions else "1876-04-22") + "T11:00:00Z"
+    return (
+        '<?xml version="1.0" encoding="utf-8"?>\n'
+        '<feed xmlns="http://www.w3.org/2005/Atom">\n'
+        "<title>The Morning Horsehide Herald</title>\n"
+        "<subtitle>Every Score Set Down, No Deed Unsung</subtitle>\n"
+        '<link href="' + SITE + '/" rel="alternate"/>\n'
+        '<link href="' + SITE + '/feed.xml" rel="self"/>\n'
+        "<id>" + SITE + "/</id>\n"
+        "<updated>" + updated + "</updated>\n"
+        "<author><name>The Morning Horsehide Herald</name></author>\n"
+        + "\n".join(entries) + "\n</feed>\n"
+    )
 
 
 def build_archive_entries(editions):
@@ -252,14 +335,20 @@ def render_all(root):
     editions = discover_editions(root)
     for data in editions:               # validate everything before writing anything
         validate(data, schema)
-    for data in editions:
+    editions.sort(key=lambda d: d["meta"]["date"])
+    for i, data in enumerate(editions):
+        prev = editions[i - 1] if i > 0 else None
+        nxt = editions[i + 1] if i + 1 < len(editions) else None
         out = root / edition_url(data["meta"]["date"]).lstrip("/")
         out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(render_edition(data, template), encoding="utf-8")
-    latest = max(editions, key=lambda d: d["meta"]["date"]) if editions else None
-    (root / "index.html").write_text(render_homepage(latest, template), encoding="utf-8")
+        out.write_text(render_edition(data, template, prev, nxt), encoding="utf-8")
+    latest = editions[-1] if editions else None
+    penultimate = editions[-2] if len(editions) > 1 else None
+    (root / "index.html").write_text(
+        render_homepage(latest, template, prev=penultimate), encoding="utf-8")
     entries = build_archive_entries(editions)
     (root / "archive.html").write_text(render_archive(entries, template), encoding="utf-8")
+    (root / "feed.xml").write_text(render_feed(editions), encoding="utf-8")
 
 
 def render_one(root, json_path):
@@ -278,6 +367,7 @@ def inline_preview_assets(page_html, root):
         "<style>\n" + css + "\n</style>",
     )
     page_html = page_html.replace('href="/archive.html"', 'href="#"')
+    page_html = page_html.replace('href="/feed.xml"', 'href="#"')
     page_html = page_html.replace('href="/"', 'href="#"')
     return page_html
 
