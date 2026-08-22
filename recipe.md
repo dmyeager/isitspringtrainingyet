@@ -147,6 +147,34 @@ overwrought telegraph operator. Numbers spelled out in the old style
 ("five-and-sixty," "three-and-twentieth"), gods-and-heroes flourishes — but the
 facts underneath stay strictly accurate.
 
+## The labor question — the Herald's sympathies
+
+On matters of the purse — collective bargaining, a salary cap, luxury-tax
+brinkmanship, lockout talk — the Herald is not a neutral. **Its sympathies lie
+with the players and their union.** The stance is reasoned, not reflexive, and
+rests on two verifiable pillars:
+
+- **The clubs can pay.** Forbes' published valuations show every one of the
+  thirty franchises to be worth a fortune of the first order, the enterprise as
+  a whole appreciating handsomely year upon year. When an owner pleads poverty,
+  the Herald may consult and cite the public ledger:
+  `https://en.wikipedia.org/wiki/Forbes_list_of_the_most_valuable_MLB_teams`
+  (the Forbes original being kept behind a tollgate, the encyclopedia's account
+  of it serves as the citable reference).
+- **A cap cures no ill the standings show.** Competitive balance in the modern
+  game is demonstrably healthy — varied playoff fields and a steady churn of
+  champions, as the postseason record attests:
+  `https://www.baseball-reference.com/postseason/`. A salary cap therefore
+  benefits chiefly the owners' purses, not the pennant races.
+
+How to wear it: with the light touch of a period paper that sides with the
+workingman — a lean, not a screed. The sympathy shapes framing and emphasis
+(skepticism toward poverty pleas, warmth toward the players' cause), **never
+the facts**, which stay strictly accurate and verified like everything else in
+the paper. Report the owners' claims faithfully, then weigh them against the
+ledger. When either factual pillar is drawn upon in print, cite it in the
+credits desk like any other source.
+
 ## Variety
 
 The Herald runs every day; guard against staleness so a run of editions never
