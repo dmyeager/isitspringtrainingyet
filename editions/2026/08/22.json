@@ -31,8 +31,8 @@
       "body": "The gravest entry issues from Los Angeles, where the All-Star center fielder *Andy Pages* took a pitch off the left hand in Friday's victory and the examination found a fracture: the wires report an absence of no fewer than four weeks, though the manager *Roberts* holds to the expectation that his man returns before the season's books are closed. In Phoenix the Reds' *Michael Toglia* departed in the first inning after a diving catch dislocated his right shoulder, a frightening scene the card below notes. But the ward also has discharges to announce, both promised for this very day: *Vladimir Guerrero Jr.*, whose thunderous rehearsal at Dunedin this paper saluted yesterday, has passed his final concussion examinations and is expected to rejoin the Blue Jays in the Bronx this afternoon, the first day the seven-day list allows; and the Yankees' *Max Fried* is scheduled to throw from a mound for the first time since the bone bruise in his left elbow returned him to the shelf — a rehearsal, not a return, but the direction is the right one."
     },
     {
-      "subhead": "THE COUNTING-HOUSE DESK: KASTEN PRONOUNCES THE CHAMPIONS NOT FOR SALE, AND THE LABOR CLOCK TICKS TOWARD DECEMBER",
-      "body": "The president of the champion Dodgers, *Stan Kasten*, spent part of Friday extinguishing a rumor: amid speculation abroad on the wires concerning the club's future under the owner *Mark Walter*, Kasten assured the faithful that the franchise is not for sale, and there the matter rests. The desk pairs the item with a sober almanac note from the same wires: the collective bargaining agreement between the owners and the players expires on the first of December, the parties having opened their negotiations in May, and the question of competitive balance — how a game may be arranged so that the counting-house and the standings do not read as the same document — is expected to sit at the very center of the table. The Herald, whose sympathies lie with whoever keeps the games being played, will follow the ledger so its readers need not."
+      "subhead": "THE COUNTING-HOUSE DESK: KASTEN PRONOUNCES THE CHAMPIONS NOT FOR SALE, AND THE HERALD CONSULTS THE LEDGER BEFORE JOINING ANY CHOIR",
+      "body": "The president of the champion Dodgers, *Stan Kasten*, spent part of Friday extinguishing a rumor: amid speculation abroad on the wires concerning the club's future under the owner *Mark Walter*, Kasten assured the faithful that the franchise is not for sale, and there the matter rests.\n\nThe desk pairs the item with the ticking of the labor clock, which grows daily harder to ignore: the collective bargaining agreement between the owners and the players expires on the first of December, the parties having opened their negotiations in May, and the owners' men have already begun rehearsing the old hymn of *competitive balance* — by which is generally meant, once the verses are parsed, a ceiling upon what a ballplayer may be paid. The Herald has taken the precaution of consulting the ledger before joining the choir, and the ledger declines to weep. By Forbes' own published accounting, not one of the thirty franchises is valued below a thousand millions of dollars — the humblest of them, the Miami club, is prized at a billion and better, and the grandest, the Yankees of New York, at eight billions and two hundred millions — figures that have grown handsomer nearly every year the accountants have kept them. And as for the pennant races the proposed ceiling is advertised to rescue, the postseason record wants no rescuing: seven different champions have carried off the flag in the last ten autumns, the 2023 Series was contested by two wild-card nines — one of them with but four-and-eighty wins to its name — and the best record in all of last season's baseball was posted at Milwaukee, among the smallest of the game's markets. The Herald's sympathies in matters of the purse lie, and will lie, with the men who play the games; it will follow the ledger so its readers need not, and it commends the same arithmetic to the owners' negotiators, who can well afford the subscription."
     }
   ],
   "rest_of_the_card": [
@@ -244,6 +244,16 @@
     {
       "url": "https://www.baseball-reference.com/",
       "title": "Baseball-Reference.com — Upcoming Schedule and Upcoming Dates",
+      "publication": "Baseball-Reference"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Forbes_list_of_the_most_valuable_MLB_teams",
+      "title": "Forbes list of the most valuable MLB teams",
+      "publication": "Wikipedia"
+    },
+    {
+      "url": "https://www.baseball-reference.com/postseason/",
+      "title": "World Series and MLB Playoffs",
       "publication": "Baseball-Reference"
     }
   ]
