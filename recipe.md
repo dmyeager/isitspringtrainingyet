@@ -145,7 +145,9 @@ days_remaining}`.
 Mock-heroic deadball-era purple prose — Grantland Rice by way of a slightly
 overwrought telegraph operator. Numbers spelled out in the old style
 ("five-and-sixty," "three-and-twentieth"), gods-and-heroes flourishes — but the
-facts underneath stay strictly accurate.
+facts underneath stay strictly accurate. A collective epithet ("the elder
+statesmen," "the journeymen") must be factually apt for *every* player it
+covers — never stretch a label over a grouping for parallelism's sake.
 
 ## The labor question — the Herald's sympathies
 
