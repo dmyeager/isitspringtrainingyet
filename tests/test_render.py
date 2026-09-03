@@ -552,3 +552,118 @@ class TestFeedPipeline(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestCardClubHints(unittest.TestCase):
+    """Rest-of-the-Card headlines: a nickname carries the official club as a hint."""
+
+    def test_epithet_wrapped_with_official_club(self):
+        out = render.render_card_headline(
+            "NORTH STARS 5, WHITE SOX 1",
+            [{"epithet": "North Stars", "club": "Minnesota Twins"}],
+        )
+        self.assertEqual(
+            out,
+            '<span class="club" data-club="Minnesota Twins" tabindex="0">NORTH STARS</span>'
+            " 5, WHITE SOX 1",
+        )
+
+    def test_no_clubs_leaves_headline_as_plain_inline(self):
+        self.assertEqual(
+            render.render_card_headline("TWINS 5, WHITE SOX 1", None),
+            "TWINS 5, WHITE SOX 1",
+        )
+
+    def test_match_respects_word_boundaries(self):
+        # "Birds" (Orioles) must not light up inside "REDBIRDS" (Cardinals).
+        out = render.render_card_headline(
+            "REDBIRDS 4, BIRDS 3",
+            [{"epithet": "Birds", "club": "Baltimore Orioles"}],
+        )
+        self.assertEqual(
+            out,
+            'REDBIRDS 4, <span class="club" data-club="Baltimore Orioles" tabindex="0">BIRDS</span> 3',
+        )
+
+    def test_every_occurrence_is_wrapped(self):
+        out = render.render_card_headline(
+            "THE JINTS RALLY: JINTS 6, FRIARS 2",
+            [{"epithet": "Jints", "club": "San Francisco Giants"}],
+        )
+        self.assertEqual(out.count('data-club="San Francisco Giants"'), 2)
+
+    def test_headline_text_still_escaped(self):
+        out = render.render_card_headline(
+            "A&B: JINTS 6, FRIARS 2",
+            [{"epithet": "Jints", "club": "San Francisco Giants"}],
+        )
+        self.assertTrue(out.startswith("A&amp;B: "))
+
+    def test_club_attribute_is_quote_escaped(self):
+        out = render.render_card_headline(
+            "JINTS 6, FRIARS 2", [{"epithet": "Jints", "club": 'x" onmouseover="y'}])
+        self.assertNotIn('data-club="x" onmouseover', out)
+        self.assertIn('data-club="x&quot; onmouseover=&quot;y"', out)
+
+    def test_epithet_absent_from_headline_raises(self):
+        with self.assertRaises(ValueError):
+            render.render_card_headline(
+                "TWINS 5, WHITE SOX 1", [{"epithet": "North Stars", "club": "Minnesota Twins"}])
+
+    def test_edition_body_uses_hints_for_card_headlines(self):
+        data = _load("in_season.json")
+        data["rest_of_the_card"][0]["clubs"] = [
+            {"epithet": "Colts", "club": "Chicago Cubs"},
+        ]
+        body = render.render_edition_body(data)
+        self.assertIn(
+            '<span class="club" data-club="Chicago Cubs" tabindex="0">COLTS</span>', body)
+
+
+class TestCardClubSchema(unittest.TestCase):
+    def test_clubs_entries_validate(self):
+        data = _load("in_season.json")
+        data["rest_of_the_card"][0]["clubs"] = [
+            {"epithet": "Colts", "club": "Chicago Cubs"},
+            {"epithet": "Cincinnati Nine", "club": "Cincinnati Reds"},
+        ]
+        render.validate(data, REPO_SCHEMA)  # no raise
+
+    def test_clubs_entry_missing_club_fails(self):
+        data = _load("in_season.json")
+        data["rest_of_the_card"][0]["clubs"] = [{"epithet": "Colts"}]
+        with self.assertRaises(ValueError):
+            render.validate(data, REPO_SCHEMA)
+
+    def test_clubs_entry_missing_epithet_fails(self):
+        data = _load("in_season.json")
+        data["rest_of_the_card"][0]["clubs"] = [{"club": "Chicago Cubs"}]
+        with self.assertRaises(ValueError):
+            render.validate(data, REPO_SCHEMA)
+
+    def test_check_edition_rejects_epithet_not_in_headline(self):
+        data = _load("in_season.json")
+        data["rest_of_the_card"][0]["clubs"] = [{"epithet": "Bruins", "club": "Chicago Cubs"}]
+        with self.assertRaises(ValueError):
+            render.check_edition(data, REPO_SCHEMA)
+
+    def test_check_edition_accepts_epithet_in_headline(self):
+        data = _load("in_season.json")
+        data["rest_of_the_card"][0]["clubs"] = [{"epithet": "Colts", "club": "Chicago Cubs"}]
+        render.check_edition(data, REPO_SCHEMA)  # no raise
+
+
+class TestCardClubPipeline(unittest.TestCase):
+    def test_preview_writes_nothing_when_epithet_missing(self):
+        tmp = pathlib.Path(tempfile.mkdtemp())
+        try:
+            data = _load("in_season.json")
+            data["rest_of_the_card"][0]["clubs"] = [{"epithet": "Bruins", "club": "Chicago Cubs"}]
+            src = tmp / "ed.json"
+            src.write_text(json.dumps(data), encoding="utf-8")
+            out = tmp / "out.html"
+            with self.assertRaises(ValueError):
+                render.render_preview(pathlib.Path(__file__).resolve().parent.parent, src, out)
+            self.assertFalse(out.exists())
+        finally:
+            shutil.rmtree(tmp)
