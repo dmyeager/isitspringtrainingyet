@@ -43,7 +43,18 @@
         "required": ["headline", "body"],
         "properties": {
           "headline": { "type": "string" },
-          "body": { "type": "string" }
+          "body": { "type": "string" },
+          "clubs": {
+            "type": ["array", "null"],
+            "items": {
+              "type": "object",
+              "required": ["epithet", "club"],
+              "properties": {
+                "epithet": { "type": "string" },
+                "club": { "type": "string" }
+              }
+            }
+          }
         }
       }
     },

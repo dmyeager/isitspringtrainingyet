@@ -38,6 +38,7 @@ The edition is **dated by its publication morning (today)** and reports **yester
    - `meta.edition_number` = one greater than the highest existing `edition_number` under `editions/`.
    - Mode: games played → `in_season` (Game of the Day + News + **every** remaining game, no score unreported); none → `hot_stove` + a `countdown`.
    - Prose fields: plain text, `*italic*` / `**bold**` (markers hug the word), blank line between paragraphs, **no HTML**.
+   - Each `rest_of_the_card` game: `clubs` = one `{epithet, club}` per non-official handle in its headline (per `recipe.md`), so the site can show "Minnesota Twins" on hover over "North Stars". Official nicknames need no entry.
    - `sources` = the credits-desk list (see step 4). Omit only if genuinely
      nothing beyond the standard sources was used — an ordinary edition always
      has at least the boxscore entry.

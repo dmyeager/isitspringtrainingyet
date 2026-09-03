@@ -68,6 +68,44 @@ def _validate_node(value, schema, path):
                 _validate_node(item, item_schema, "{}[{}]".format(path, i))
 
 
+def _epithet_pattern(epithet):
+    return re.compile(r"(?<!\w)" + re.escape(epithet) + r"(?!\w)", re.IGNORECASE)
+
+
+def render_card_headline(headline, clubs):
+    """A Rest-of-the-Card headline, with each listed epithet wrapped so the
+    official club name can surface as a hint. Matching is case-insensitive and
+    whole-word; an epithet the headline never uses is an error."""
+    if not clubs:
+        return render_inline(headline)
+    spans = []                          # (start, end, club) — non-overlapping
+    for entry in clubs:
+        hits = list(_epithet_pattern(entry["epithet"]).finditer(headline))
+        if not hits:
+            raise ValueError("card headline never uses epithet {!r}: {!r}".format(
+                entry["epithet"], headline))
+        spans.extend((m.start(), m.end(), entry["club"]) for m in hits)
+    spans.sort()
+    out, pos = [], 0
+    for start, end, club in spans:
+        if start < pos:
+            continue                    # overlapped by an earlier, longer match
+        out.append(render_inline(headline[pos:start]))
+        out.append('<span class="club" data-club="' + html.escape(club, quote=True)
+                   + '" tabindex="0">' + render_inline(headline[start:end]) + '</span>')
+        pos = end
+    out.append(render_inline(headline[pos:]))
+    return "".join(out)
+
+
+def check_edition(data, schema):
+    """Everything that must hold before an edition is written: the schema, plus
+    the cross-field rule that every card epithet appears in its headline."""
+    validate(data, schema)
+    for g in data.get("rest_of_the_card") or []:
+        render_card_headline(g["headline"], g.get("clubs"))
+
+
 SITE = "https://isitspringtrainingyet.com"
 
 _MASTHEAD_HEAD = (
@@ -181,7 +219,8 @@ def render_edition_body(data):
     if card:
         items = "".join(
             '<div class="card__game"><h3 class="card__headline">'
-            + render_inline(g["headline"]) + '</h3>' + render_body(g["body"]) + '</div>'
+            + render_card_headline(g["headline"], g.get("clubs")) + '</h3>'
+            + render_body(g["body"]) + '</div>'
             for g in card
         )
         parts.append(
@@ -354,7 +393,7 @@ def render_all(root):
     schema = _load_schema(root)
     editions = discover_editions(root)
     for data in editions:               # validate everything before writing anything
-        validate(data, schema)
+        check_edition(data, schema)
     editions.sort(key=lambda d: d["meta"]["date"])
     for i, data in enumerate(editions):
         prev = editions[i - 1] if i > 0 else None
@@ -374,7 +413,7 @@ def render_all(root):
 def render_one(root, json_path):
     root = Path(root)
     data = json.loads(Path(json_path).read_text(encoding="utf-8"))
-    validate(data, _load_schema(root))  # fail loudly on the new edition first
+    check_edition(data, _load_schema(root))  # fail loudly on the new edition first
     render_all(root)                     # regenerate everything from disk
 
 
@@ -397,7 +436,7 @@ def render_preview(root, json_path, out_path):
     Validates first; writes nothing but out_path; never regenerates the site."""
     root = Path(root)
     data = json.loads(Path(json_path).read_text(encoding="utf-8"))
-    validate(data, _load_schema(root))            # fail loudly before writing anything
+    check_edition(data, _load_schema(root))       # fail loudly before writing anything
     page = render_edition(data, _load_template(root))
     page = inline_preview_assets(page, root)
     out = Path(out_path)

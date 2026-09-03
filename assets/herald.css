@@ -156,6 +156,44 @@ body {
   letter-spacing: 0.01em;
   margin: 0 0 0.2rem;
 }
+/* A club epithet in a card headline carries its official name as a hint:
+   a faint dotted rule marks it; hover (or a tap, via tabindex) shows a small
+   printer's marginal note. No script. */
+.club {
+  position: relative;
+  cursor: help;
+  text-decoration: underline dotted var(--rule);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+.club:focus { outline: none; }
+.club:focus-visible { text-decoration-color: var(--red); }
+.club::after {
+  content: attr(data-club);
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 0.4em);
+  z-index: 1;
+  white-space: nowrap;
+  padding: 0.1em 0.6em 0.15em;
+  background: var(--paper);
+  color: var(--ink-soft);
+  border: 1px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--rule);
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 0.72rem;
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  text-transform: none;
+  line-height: 1.5;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease-in;
+}
+.club:hover::after,
+.club:focus::after { opacity: 1; }
+
 @media (min-width: 42rem) {
   .rest-of-the-card {
     column-count: 2;
@@ -256,4 +294,8 @@ body {
 
 p { margin: 0 0 0.85rem; }
 
-@media print { body { background: #fff; } }
+@media print {
+  body { background: #fff; }
+  .club { text-decoration: none; }
+  .club::after { display: none; }
+}

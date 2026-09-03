@@ -125,10 +125,18 @@ The date-line and contest note are assembled by the renderer.
    verification rule — omit what cannot be confirmed. Deaths in the baseball
    family get their own item under the standing rubric **"The Herald Lowers
    Its Colors"**, closing with a line of genuine tribute.
-3. 📋 **The Rest of the Card** → `rest_of_the_card: [{headline, body}]`. Every
-   remaining game, each with its own headline and a couple of sentences. **No
-   score goes unreported.** Sprinkle standings/leaders where they fit. (Empty in
-   hot-stove mode.)
+3. 📋 **The Rest of the Card** → `rest_of_the_card: [{headline, body, clubs}]`.
+   Every remaining game, each with its own headline and a couple of sentences.
+   **No score goes unreported.** Sprinkle standings/leaders where they fit.
+   (Empty in hot-stove mode.) **Name the clubs behind the epithets.** Card
+   headlines are short, so a newcomer meeting "North Stars" gets no help from
+   context; `clubs` supplies it as a hover hint. For each handle in the headline
+   that is *not* the club's official nickname, add
+   `{"epithet": "North Stars", "club": "Minnesota Twins"}` — the epithet spelled
+   exactly as the headline has it (case aside), the club as its full official
+   name. Plain official nicknames ("Twins," "White Sox," "Athletics") get no
+   entry. The renderer refuses an epithet the headline never uses. This is a
+   hint for the reader, not a leash on the prose — keep coining.
 4. Closing **word from the desk** → `desk_note` (a string). The renderer adds the
    ~ THE HERALD ~ sign-off after it. The desk-note's body varies each day, but it
    **always closes with the Herald's fixed signature sentence** — a lead-in of
