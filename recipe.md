@@ -95,6 +95,50 @@ Yes/No/Not yet); the renderer composes the line, so no prose is needed. When in
 doubt whether spring games have begun, verify against baseball-reference's
 Upcoming Schedule rather than assume.
 
+## The postseason — every game is the Game of the Day
+
+Also separately from the mode: from the **morning after the regular season's
+final day** through the **morning after the World Series ends**, set
+`meta.postseason: true` (omit it the rest of the year). The flag is
+**date-driven, never inferred from the prose**: baseball-reference's homepage
+"Upcoming Dates" lists the final day of the regular season, the start of each
+round, and the potential final game — read it and set the flag accordingly.
+The first postseason edition is the one that reports the Wild Card openers;
+the last is the one that reports the clinching game of the World Series (the
+edition after that is ordinary hot stove).
+
+Every October contest decides something, so the paper's economy of the summer
+— one starred game, the rest in a couple of sentences — is suspended:
+
+- **Game days (`in_season`).** The ⭐ Game of the Day still crowns the single
+  most consequential contest. **Every other game gets the same treatment**,
+  under `rest_of_the_card`, which the renderer prints as **"The Postseason
+  Card"** in one broad column: a thundering `headline`, a mock-heroic
+  `subtitle` (the field is optional in summer; supply it in October), and a
+  `body` of Game-of-the-Day length — several paragraphs, roughly three to four
+  hundred words — that covers the game itself, the state of the series (which
+  game it was, the series ledger, what is now needed to advance), and the next
+  game's date and matchup, verified against baseball-reference's Upcoming
+  Schedule and mlb.com/probable-pitchers per the forward-claim rule. **No
+  playoff game is ever a two-sentence note.** With only one game played, the
+  Game of the Day carries it and the card is empty. The renderer also moves
+  the card **ahead of News Around the League** in October: the games are the
+  paper, and the wire desk follows them.
+- **Off days (`hot_stove`).** October has many idle days — between rounds and
+  for travel. Keep the hot-stove mechanics (`game_of_the_day: null`, empty
+  card, a `countdown` to the next scheduled game, taken from baseball-reference)
+  but **not the hot-stove matter**: News Around the League is series previews,
+  the state of every live series, probable pitchers, and injuries bearing on
+  the rounds ahead — never "offseason news." The renderer re-words the answer
+  line and the masthead note on its own; nothing in the prose need mention the
+  stove.
+- **If the box score falls silent.** boxscore.email's coverage of October is
+  unproven. If its current edition does not carry yesterday's postseason games,
+  do **not** declare an off day: fall back to baseball-reference's box scores
+  for that date (`https://www.baseball-reference.com/boxes/?date=YYYY-MM-DD`)
+  as the source of truth for scores and lines, cite it in the credits desk, and
+  proceed as a game day.
+
 ## Masthead (flies on every edition)
 
 > THE MORNING HORSEHIDE HERALD
@@ -137,6 +181,8 @@ The date-line and contest note are assembled by the renderer.
    name. Plain official nicknames ("Twins," "White Sox," "Athletics") get no
    entry. The renderer refuses an epithet the headline never uses. This is a
    hint for the reader, not a leash on the prose — keep coining.
+   In the postseason the section becomes "The Postseason Card" and each entry
+   is a full story with a `subtitle` — see "The postseason" above.
 4. Closing **word from the desk** → `desk_note` (a string). The renderer adds the
    ~ THE HERALD ~ sign-off after it. The desk-note's body varies each day, but it
    **always closes with the Herald's fixed signature sentence** — a lead-in of

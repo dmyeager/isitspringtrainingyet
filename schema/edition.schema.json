@@ -13,7 +13,8 @@
         "edition_number": { "type": "integer" },
         "mode": { "type": "string", "enum": ["in_season", "hot_stove"] },
         "contests_reported": { "type": "integer" },
-        "spring_training": { "type": "boolean" }
+        "spring_training": { "type": "boolean" },
+        "postseason": { "type": "boolean" }
       }
     },
     "game_of_the_day": {
@@ -43,6 +44,7 @@
         "required": ["headline", "body"],
         "properties": {
           "headline": { "type": "string" },
+          "subtitle": { "type": "string" },
           "body": { "type": "string" },
           "clubs": {
             "type": ["array", "null"],

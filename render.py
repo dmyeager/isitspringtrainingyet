@@ -125,6 +125,8 @@ def render_masthead(meta):
     if meta["mode"] == "in_season":
         n = meta["contests_reported"]
         note = "Reporting {} contest{} from the day prior.".format(n, "" if n == 1 else "s")
+    elif meta.get("postseason"):
+        note = "No contests this day; the pennant races rest."
     else:
         note = "No contests this day; the hot stove burns bright."
     line = "{} &middot; No. {} &middot; {}, {}".format(
@@ -148,6 +150,8 @@ def render_answer(data):
     countdown = data.get("countdown")
     if meta.get("spring_training"):
         answer = "Yes &mdash; spring training is upon us at last."
+    elif meta.get("postseason"):
+        answer = "No &mdash; the pennants are being decided, and spring must wait its turn."
     elif meta["mode"] == "in_season":
         answer = "No &mdash; but the championship season is upon us, a finer thing still."
     elif countdown:
@@ -203,6 +207,7 @@ def render_edition_body(data):
             + '</p></section>'
         )
 
+    news_html = ""
     news = data.get("news") or []
     if news:
         items = "".join(
@@ -210,23 +215,39 @@ def render_edition_body(data):
             + render_inline(n["subhead"]) + '</h3>' + render_body(n["body"]) + '</div>'
             for n in news
         )
-        parts.append(
+        news_html = (
             '<section class="news"><h2 class="section__label">'
             'News Around the League</h2>' + items + '</section>'
         )
 
+    card_html = ""
     card = data.get("rest_of_the_card") or []
     if card:
         items = "".join(
             '<div class="card__game"><h3 class="card__headline">'
             + render_card_headline(g["headline"], g.get("clubs")) + '</h3>'
+            + ('<p class="card__subtitle">' + render_inline(g["subtitle"]) + '</p>'
+               if g.get("subtitle") else '')
             + render_body(g["body"]) + '</div>'
             for g in card
         )
-        parts.append(
-            '<section class="rest-of-the-card"><h2 class="section__label">'
-            'The Rest of the Card</h2>' + items + '</section>'
+        # In October every game is a full story, so the section is renamed and
+        # the CSS drops the two-column sidebar layout for it.
+        if meta.get("postseason"):
+            section_class, label = "rest-of-the-card postseason-card", "The Postseason Card"
+        else:
+            section_class, label = "rest-of-the-card", "The Rest of the Card"
+        card_html = (
+            '<section class="' + section_class + '"><h2 class="section__label">'
+            + label + '</h2>' + items + '</section>'
         )
+
+    # Summer: news before the card of short notes. October: the games are the
+    # paper, so every contest runs ahead of the news desk.
+    if meta.get("postseason"):
+        parts.extend([card_html, news_html])
+    else:
+        parts.extend([news_html, card_html])
 
     parts.append(
         '<section class="desk-note">'
@@ -289,6 +310,8 @@ def _feed_title(data):
     gotd = data.get("game_of_the_day")
     if gotd:
         return gotd["headline"]
+    if data["meta"].get("postseason"):
+        return "Postseason Off-Day Edition — " + data["meta"]["date_display"]
     return "Hot Stove Edition — " + data["meta"]["date_display"]
 
 
