@@ -201,6 +201,31 @@ body {
     column-rule: 1px solid var(--rule);
   }
   .rest-of-the-card .section__label { column-span: all; }
+  /* In October every game is a full story: one broad column, no sidebar. */
+  .rest-of-the-card.postseason-card { column-count: auto; column-rule: none; }
+}
+
+/* ---- The Postseason Card: each game set like a Game of the Day ---- */
+.postseason-card .card__game {
+  margin-bottom: 2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--rule);
+}
+.postseason-card .card__game:last-child { border-bottom: none; }
+.rest-of-the-card.postseason-card .card__headline {
+  font-family: var(--nameplate);
+  font-size: clamp(1.25rem, 3.5vw, 1.7rem);
+  line-height: 1.1;
+  text-align: center;
+  text-wrap: balance;
+  margin-bottom: 0.35rem;
+}
+.card__subtitle {
+  font-style: italic;
+  color: var(--ink-soft);
+  text-align: center;
+  text-wrap: balance;
+  margin: 0 0 0.9rem;
 }
 
 /* ---- Countdown (hot-stove editions) ---- */

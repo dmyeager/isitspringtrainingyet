@@ -667,3 +667,80 @@ class TestCardClubPipeline(unittest.TestCase):
             self.assertFalse(out.exists())
         finally:
             shutil.rmtree(tmp)
+
+
+class TestPostseason(unittest.TestCase):
+    def _postseason(self, fixture="in_season.json"):
+        data = _load(fixture)
+        data["meta"]["postseason"] = True
+        return data
+
+    def test_schema_accepts_boolean_postseason(self):
+        render.validate(self._postseason(), REPO_SCHEMA)  # no raise
+
+    def test_schema_rejects_non_boolean_postseason(self):
+        data = _load("in_season.json")
+        data["meta"]["postseason"] = "yes"
+        with self.assertRaises(ValueError):
+            render.validate(data, REPO_SCHEMA)
+
+    def test_flag_relabels_the_card_as_the_postseason_card(self):
+        body = render.render_edition_body(self._postseason())
+        self.assertIn("The Postseason Card", body)
+        self.assertNotIn("The Rest of the Card", body)
+        self.assertIn('<section class="rest-of-the-card postseason-card">', body)
+
+    def test_without_flag_the_card_keeps_its_name_and_class(self):
+        body = render.render_edition_body(_load("in_season.json"))
+        self.assertIn("The Rest of the Card", body)
+        self.assertNotIn("postseason-card", body)
+
+    def test_card_subtitle_renders_beneath_the_headline(self):
+        data = self._postseason()
+        data["rest_of_the_card"][0]["subtitle"] = "Wherein a *lone* arm holds"
+        body = render.render_edition_body(data)
+        self.assertIn(
+            '</h3><p class="card__subtitle">Wherein a <em>lone</em> arm holds</p>', body)
+
+    def test_card_without_subtitle_renders_no_subtitle_element(self):
+        body = render.render_edition_body(self._postseason())
+        self.assertNotIn("card__subtitle", body)
+
+    def test_schema_accepts_card_subtitle(self):
+        data = self._postseason()
+        data["rest_of_the_card"][0]["subtitle"] = "A subtitle"
+        render.validate(data, REPO_SCHEMA)  # no raise
+
+    def test_schema_rejects_non_string_card_subtitle(self):
+        data = self._postseason()
+        data["rest_of_the_card"][0]["subtitle"] = 7
+        with self.assertRaises(ValueError):
+            render.validate(data, REPO_SCHEMA)
+
+    def test_answer_line_on_a_postseason_game_day(self):
+        body = render.render_edition_body(self._postseason())
+        self.assertIn(
+            "No &mdash; the pennants are being decided, and spring must wait its turn.",
+            body)
+
+    def test_answer_line_on_a_postseason_off_day_keeps_the_countdown(self):
+        body = render.render_edition_body(self._postseason("hot_stove.json"))
+        self.assertIn(
+            "No &mdash; the pennants are being decided, and spring must wait its turn.",
+            body)
+        self.assertNotIn("Not yet", body)
+        self.assertIn("countdown__line", body)
+
+    def test_masthead_note_on_a_postseason_off_day(self):
+        meta = self._postseason("hot_stove.json")["meta"]
+        note = render.render_masthead(meta)
+        self.assertIn("No contests this day; the pennant races rest.", note)
+        self.assertNotIn("hot stove", note)
+
+    def test_masthead_note_on_a_postseason_game_day_counts_contests(self):
+        meta = self._postseason()["meta"]
+        self.assertIn("Reporting 2 contests from the day prior.", render.render_masthead(meta))
+
+    def test_feed_title_on_a_postseason_off_day(self):
+        data = self._postseason("hot_stove.json")
+        self.assertTrue(render._feed_title(data).startswith("Postseason Off-Day Edition"))
