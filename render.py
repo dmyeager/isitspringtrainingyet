@@ -207,6 +207,7 @@ def render_edition_body(data):
             + '</p></section>'
         )
 
+    news_html = ""
     news = data.get("news") or []
     if news:
         items = "".join(
@@ -214,11 +215,12 @@ def render_edition_body(data):
             + render_inline(n["subhead"]) + '</h3>' + render_body(n["body"]) + '</div>'
             for n in news
         )
-        parts.append(
+        news_html = (
             '<section class="news"><h2 class="section__label">'
             'News Around the League</h2>' + items + '</section>'
         )
 
+    card_html = ""
     card = data.get("rest_of_the_card") or []
     if card:
         items = "".join(
@@ -235,10 +237,17 @@ def render_edition_body(data):
             section_class, label = "rest-of-the-card postseason-card", "The Postseason Card"
         else:
             section_class, label = "rest-of-the-card", "The Rest of the Card"
-        parts.append(
+        card_html = (
             '<section class="' + section_class + '"><h2 class="section__label">'
             + label + '</h2>' + items + '</section>'
         )
+
+    # Summer: news before the card of short notes. October: the games are the
+    # paper, so every contest runs ahead of the news desk.
+    if meta.get("postseason"):
+        parts.extend([card_html, news_html])
+    else:
+        parts.extend([news_html, card_html])
 
     parts.append(
         '<section class="desk-note">'

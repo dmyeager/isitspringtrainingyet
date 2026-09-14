@@ -121,7 +121,9 @@ Every October contest decides something, so the paper's economy of the summer
   game's date and matchup, verified against baseball-reference's Upcoming
   Schedule and mlb.com/probable-pitchers per the forward-claim rule. **No
   playoff game is ever a two-sentence note.** With only one game played, the
-  Game of the Day carries it and the card is empty.
+  Game of the Day carries it and the card is empty. The renderer also moves
+  the card **ahead of News Around the League** in October: the games are the
+  paper, and the wire desk follows them.
 - **Off days (`hot_stove`).** October has many idle days — between rounds and
   for travel. Keep the hot-stove mechanics (`game_of_the_day: null`, empty
   card, a `countdown` to the next scheduled game, taken from baseball-reference)

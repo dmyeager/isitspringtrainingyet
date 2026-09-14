@@ -744,3 +744,12 @@ class TestPostseason(unittest.TestCase):
     def test_feed_title_on_a_postseason_off_day(self):
         data = self._postseason("hot_stove.json")
         self.assertTrue(render._feed_title(data).startswith("Postseason Off-Day Edition"))
+
+    def test_postseason_card_precedes_the_news_desk(self):
+        body = render.render_edition_body(self._postseason())
+        self.assertLess(body.index("The Game of the Day"), body.index("The Postseason Card"))
+        self.assertLess(body.index("The Postseason Card"), body.index("News Around the League"))
+
+    def test_summer_card_still_follows_the_news_desk(self):
+        body = render.render_edition_body(_load("in_season.json"))
+        self.assertLess(body.index("News Around the League"), body.index("The Rest of the Card"))
