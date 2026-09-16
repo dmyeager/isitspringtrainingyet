@@ -5,6 +5,7 @@ import json
 import re
 import string
 import sys
+import unicodedata
 from pathlib import Path
 
 _STRONG = re.compile(r"\*\*(?!\s)(.+?)(?<!\s)\*\*")
@@ -23,6 +24,51 @@ def render_body(text):
     """Render prose as one or more <p> blocks split on blank lines."""
     blocks = [b.strip() for b in text.split("\n\n") if b.strip()]
     return "".join("<p>{}</p>".format(render_inline(b)) for b in blocks)
+
+
+_SLUG_MAX = 60
+
+
+def slugify(text):
+    """A URL fragment for a headline: lowercase ASCII words joined by hyphens.
+    Accents fold to their base letters (Acuña -> acuna), possessives keep their
+    word (Schwarber's -> schwarbers), emphasis and other punctuation drop out,
+    and the result is cut at a word boundary past _SLUG_MAX."""
+    text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
+    text = re.sub(r"[\u2019']", "", text)
+    words = re.findall(r"[A-Za-z0-9]+", text)
+    slug = "-".join(w.lower() for w in words)
+    if len(slug) > _SLUG_MAX:
+        slug = slug[:_SLUG_MAX].rsplit("-", 1)[0]
+    return slug or "item"
+
+
+class _Anchors:
+    """Hands out unique ids within one edition and wraps a heading's inner
+    HTML in a permalink to itself, so a reader can click a header and copy a
+    link to just that part of the paper. The link is the edition's permanent
+    URL plus the fragment, so a copy taken from the homepage still points at
+    this edition tomorrow."""
+
+    def __init__(self, date):
+        self.base = edition_url(date) + "#"
+        self.seen = set()
+
+    def unique(self, slug):
+        candidate, n = slug, 1
+        while candidate in self.seen:
+            n += 1
+            candidate = "{}-{}".format(slug, n)
+        self.seen.add(candidate)
+        return candidate
+
+    def heading(self, tag, css_class, anchor, inner_html):
+        anchor = self.unique(anchor)
+        return (
+            '<' + tag + ' class="' + css_class + '" id="' + anchor + '">'
+            '<a class="anchor" href="' + self.base + anchor + '">' + inner_html + '</a>'
+            '</' + tag + '>'
+        )
 
 
 _TYPE_CHECKS = {
@@ -165,7 +211,7 @@ def render_answer(data):
     )
 
 
-def render_sources(sources):
+def render_sources(sources, anchors):
     items = []
     for s in sources:
         prefix = render_inline(s["author"]) + ", " if s.get("author") else ""
@@ -177,21 +223,22 @@ def render_sources(sources):
         )
     return (
         '<section class="sources">'
-        '<h2 class="section__label">The Herald Acknowledges Its Debts</h2>'
-        '<ul class="sources__list">' + "".join(items) + '</ul></section>'
+        + anchors.heading("h2", "section__label", "sources", "The Herald Acknowledges Its Debts")
+        + '<ul class="sources__list">' + "".join(items) + '</ul></section>'
     )
 
 
 def render_edition_body(data):
     meta = data["meta"]
+    anchors = _Anchors(meta["date"])
     parts = [render_answer(data), render_masthead(meta)]
 
     gotd = data.get("game_of_the_day")
     if gotd:
         parts.append(
             '<section class="game-of-the-day">'
-            '<h2 class="section__label">The Game of the Day</h2>'
-            '<h3 class="gotd__headline">' + render_inline(gotd["headline"]) + '</h3>'
+            + anchors.heading("h2", "section__label", "game-of-the-day", "The Game of the Day")
+            + '<h3 class="gotd__headline">' + render_inline(gotd["headline"]) + '</h3>'
             '<p class="gotd__subtitle">' + render_inline(gotd["subtitle"]) + '</p>'
             + render_body(gotd["body"])
             + '</section>'
@@ -211,21 +258,25 @@ def render_edition_body(data):
     news = data.get("news") or []
     if news:
         items = "".join(
-            '<div class="news__item"><h3 class="news__subhead">'
-            + render_inline(n["subhead"]) + '</h3>' + render_body(n["body"]) + '</div>'
+            '<div class="news__item">'
+            + anchors.heading("h3", "news__subhead", "news-" + slugify(n["subhead"]),
+                              render_inline(n["subhead"]))
+            + render_body(n["body"]) + '</div>'
             for n in news
         )
         news_html = (
-            '<section class="news"><h2 class="section__label">'
-            'News Around the League</h2>' + items + '</section>'
+            '<section class="news">'
+            + anchors.heading("h2", "section__label", "news", "News Around the League")
+            + items + '</section>'
         )
 
     card_html = ""
     card = data.get("rest_of_the_card") or []
     if card:
         items = "".join(
-            '<div class="card__game"><h3 class="card__headline">'
-            + render_card_headline(g["headline"], g.get("clubs")) + '</h3>'
+            '<div class="card__game">'
+            + anchors.heading("h3", "card__headline", "card-" + slugify(g["headline"]),
+                              render_card_headline(g["headline"], g.get("clubs")))
             + ('<p class="card__subtitle">' + render_inline(g["subtitle"]) + '</p>'
                if g.get("subtitle") else '')
             + render_body(g["body"]) + '</div>'
@@ -234,12 +285,15 @@ def render_edition_body(data):
         # In October every game is a full story, so the section is renamed and
         # the CSS drops the two-column sidebar layout for it.
         if meta.get("postseason"):
-            section_class, label = "rest-of-the-card postseason-card", "The Postseason Card"
+            section_class, anchor, label = (
+                "rest-of-the-card postseason-card", "postseason-card", "The Postseason Card")
         else:
-            section_class, label = "rest-of-the-card", "The Rest of the Card"
+            section_class, anchor, label = (
+                "rest-of-the-card", "rest-of-the-card", "The Rest of the Card")
         card_html = (
-            '<section class="' + section_class + '"><h2 class="section__label">'
-            + label + '</h2>' + items + '</section>'
+            '<section class="' + section_class + '">'
+            + anchors.heading("h2", "section__label", anchor, label)
+            + items + '</section>'
         )
 
     # Summer: news before the card of short notes. October: the games are the
@@ -257,7 +311,7 @@ def render_edition_body(data):
 
     sources = data.get("sources") or []
     if sources:
-        parts.append(render_sources(sources))
+        parts.append(render_sources(sources, anchors))
 
     return "".join(parts)
 
@@ -451,6 +505,7 @@ def inline_preview_assets(page_html, root):
     page_html = page_html.replace('href="/archive.html"', 'href="#"')
     page_html = page_html.replace('href="/feed.xml"', 'href="#"')
     page_html = page_html.replace('href="/"', 'href="#"')
+    page_html = re.sub(r'href="/editions/\d{4}/\d{2}/\d{2}\.html#', 'href="#', page_html)
     return page_html
 
 
