@@ -43,6 +43,21 @@ it reports were played the day before.
   previews and the like), supplement with **mlb.com/probable-pitchers**.
 - Cross-reference player names against **baseball-reference.com** to confirm
   exact club affiliation before attributing anyone to a team.
+- **Awards are decided by the ballot, not the poll.** No honor — Cy Young,
+  Most Valuable, Rookie of the Year, Gold Glove, Silver Slugger, Hall of Fame
+  election — is reported as *won*, *decided*, or *certified* unless
+  **baseball-reference.com's awards pages** show it:
+  `https://www.baseball-reference.com/awards/` (index), with per-award history
+  at `awards/cya.shtml`, `awards/mvp.shtml`, `awards/roy.shtml`, and the
+  season's roll at `awards/awards_YYYY.shtml`. Until b-ref lists the winner, a
+  straw vote, prediction, or poll — a writers' poll, a players' poll, MLB.com's
+  season-ending ballot — is reported as exactly that: a poll, with its sponsor
+  named, and "unanimous" attaches to the poll, never to the award. A man is
+  "the runaway choice of the MLB.com poll," not "the unanimous Cy Young." The
+  BBWAA awards are voted after the regular season and announced in November;
+  before then no in-season claim of an award is verifiable. When today's item
+  continues yesterday's poll coverage, carry the framing forward faithfully —
+  a poll reported Monday does not ripen into a trophy by Tuesday.
 - Internal consistency: when a name or stat appears in both the news section and
   a game summary, the two must agree, with boxscore.email as the tiebreaker.
 - Never fabricate. If a fact cannot be verified, omit it rather than invent it.
