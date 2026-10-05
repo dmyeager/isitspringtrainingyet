@@ -254,6 +254,49 @@ body {
 .sources { margin-top: 2rem; font-size: 0.85rem; color: var(--ink-soft); }
 .sources .section__label { font-size: 0.9rem; margin: 1.5rem 0 0.75rem; }
 .sources__list { list-style: none; padding: 0; margin: 0; }
+/* Editions rendered since inline citations arrived emit an <ol>; the numerals
+   in the prose point at these numbers. Older editions' <ul> stays unnumbered. */
+ol.sources__list { list-style: decimal inside; }
+ol.sources__list li::marker { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.sources__item:target { background: rgba(110, 36, 28, 0.08); }
+
+/* ---- Inline citations: a small numeral after the claim it supports; hover
+   (or focus) shows the source as a printer's marginal note, same device as the
+   club epithets. Click jumps to the numbered entry in the colophon. ---- */
+.cite { font-size: 0.68em; line-height: 0; vertical-align: super; margin-left: 0.08em; }
+.cite a {
+  position: relative;
+  color: var(--red);
+  text-decoration: none;
+  cursor: help;
+  padding: 0 0.1em;
+}
+.cite a:focus { outline: none; }
+.cite a::after {
+  content: attr(data-cite);
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 0.5em);
+  z-index: 1;
+  white-space: nowrap;
+  max-width: 70vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0.1em 0.6em 0.15em;
+  background: var(--paper);
+  color: var(--ink-soft);
+  border: 1px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--rule);
+  font-family: var(--body);
+  font-size: 1.15rem;
+  font-style: italic;
+  line-height: 1.3;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease-in;
+}
+.cite a:hover::after,
+.cite a:focus::after { opacity: 1; }
 .sources__item { padding: 0.2rem 0; }
 .sources__item a {
   color: var(--ink);
@@ -323,4 +366,6 @@ p { margin: 0 0 0.85rem; }
   body { background: #fff; }
   .club { text-decoration: none; }
   .club::after { display: none; }
+  .cite a { color: inherit; }
+  .cite a::after { display: none; }
 }
