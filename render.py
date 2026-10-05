@@ -9,20 +9,52 @@ from pathlib import Path
 
 _STRONG = re.compile(r"\*\*(?!\s)(.+?)(?<!\s)\*\*")
 _EM = re.compile(r"\*(?!\s)(.+?)(?<!\s)\*")
+_CITE = re.compile(r"\s*\[\^([A-Za-z0-9][A-Za-z0-9_-]*)\]")
+_SOURCE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]*$")
 
 
-def render_inline(text):
-    """Escape HTML, then apply the *em* / **strong** convention. No block tags."""
+def cite_table(sources):
+    """Map each source's `id` to (number, title, publication) for the inline
+    markers. Numbers are 1-based positions in the sources array, matching the
+    numbered colophon."""
+    table = {}
+    for n, s in enumerate(sources or [], start=1):
+        sid = s.get("id")
+        if sid is None:
+            continue
+        if not _SOURCE_ID.match(sid):
+            raise ValueError("source id must be a slug: {!r}".format(sid))
+        if sid in table:
+            raise ValueError("duplicate source id: {!r}".format(sid))
+        prefix = s["author"] + ", " if s.get("author") else ""
+        table[sid] = (n, prefix + s["title"], s["publication"])
+    return table
+
+
+def render_inline(text, cite=None):
+    """Escape HTML, then apply the *em* / **strong** convention and the [^id]
+    citation markers. No block tags. A marker whose id is not in `cite` is an
+    error, as is any marker when no table is given."""
     escaped = html.escape(text, quote=False)
     escaped = _STRONG.sub(r"<strong>\1</strong>", escaped)
     escaped = _EM.sub(r"<em>\1</em>", escaped)
-    return escaped
+
+    def marker(m):
+        sid = m.group(1)
+        if not cite or sid not in cite:
+            raise ValueError("citation marker [^{}] has no matching source".format(sid))
+        n, title, publication = cite[sid]
+        hover = html.escape(title, quote=True) + " &mdash; " + html.escape(publication, quote=True)
+        return ('<sup class="cite"><a href="#src-' + sid + '" data-cite="' + hover
+                + '">' + str(n) + '</a></sup>')
+
+    return _CITE.sub(marker, escaped)
 
 
-def render_body(text):
+def render_body(text, cite=None):
     """Render prose as one or more <p> blocks split on blank lines."""
     blocks = [b.strip() for b in text.split("\n\n") if b.strip()]
-    return "".join("<p>{}</p>".format(render_inline(b)) for b in blocks)
+    return "".join("<p>{}</p>".format(render_inline(b, cite=cite)) for b in blocks)
 
 
 _TYPE_CHECKS = {
@@ -100,10 +132,10 @@ def render_card_headline(headline, clubs):
 
 def check_edition(data, schema):
     """Everything that must hold before an edition is written: the schema, plus
-    the cross-field rule that every card epithet appears in its headline."""
+    the cross-field rules — every card epithet appears in its headline, every
+    citation marker names a listed source — which a full render enforces."""
     validate(data, schema)
-    for g in data.get("rest_of_the_card") or []:
-        render_card_headline(g["headline"], g.get("clubs"))
+    render_edition_body(data)
 
 
 SITE = "https://isitspringtrainingyet.com"
@@ -169,8 +201,9 @@ def render_sources(sources):
     items = []
     for s in sources:
         prefix = render_inline(s["author"]) + ", " if s.get("author") else ""
+        anchor = ' id="src-' + s["id"] + '"' if s.get("id") else ""
         items.append(
-            '<li class="sources__item">' + prefix
+            '<li class="sources__item"' + anchor + '>' + prefix
             + '<a href="' + html.escape(s["url"], quote=True) + '" rel="noopener">'
             + render_inline(s["title"]) + '</a> &mdash; '
             + render_inline(s["publication"]) + '</li>'
@@ -178,12 +211,13 @@ def render_sources(sources):
     return (
         '<section class="sources">'
         '<h2 class="section__label">The Herald Acknowledges Its Debts</h2>'
-        '<ul class="sources__list">' + "".join(items) + '</ul></section>'
+        '<ol class="sources__list">' + "".join(items) + '</ol></section>'
     )
 
 
 def render_edition_body(data):
     meta = data["meta"]
+    cite = cite_table(data.get("sources"))
     parts = [render_answer(data), render_masthead(meta)]
 
     gotd = data.get("game_of_the_day")
@@ -192,8 +226,8 @@ def render_edition_body(data):
             '<section class="game-of-the-day">'
             '<h2 class="section__label">The Game of the Day</h2>'
             '<h3 class="gotd__headline">' + render_inline(gotd["headline"]) + '</h3>'
-            '<p class="gotd__subtitle">' + render_inline(gotd["subtitle"]) + '</p>'
-            + render_body(gotd["body"])
+            '<p class="gotd__subtitle">' + render_inline(gotd["subtitle"], cite=cite) + '</p>'
+            + render_body(gotd["body"], cite=cite)
             + '</section>'
         )
 
@@ -212,7 +246,7 @@ def render_edition_body(data):
     if news:
         items = "".join(
             '<div class="news__item"><h3 class="news__subhead">'
-            + render_inline(n["subhead"]) + '</h3>' + render_body(n["body"]) + '</div>'
+            + render_inline(n["subhead"]) + '</h3>' + render_body(n["body"], cite=cite) + '</div>'
             for n in news
         )
         news_html = (
@@ -226,9 +260,9 @@ def render_edition_body(data):
         items = "".join(
             '<div class="card__game"><h3 class="card__headline">'
             + render_card_headline(g["headline"], g.get("clubs")) + '</h3>'
-            + ('<p class="card__subtitle">' + render_inline(g["subtitle"]) + '</p>'
+            + ('<p class="card__subtitle">' + render_inline(g["subtitle"], cite=cite) + '</p>'
                if g.get("subtitle") else '')
-            + render_body(g["body"]) + '</div>'
+            + render_body(g["body"], cite=cite) + '</div>'
             for g in card
         )
         # In October every game is a full story, so the section is renamed and
@@ -251,7 +285,7 @@ def render_edition_body(data):
 
     parts.append(
         '<section class="desk-note">'
-        + render_body(data["desk_note"])
+        + render_body(data["desk_note"], cite=cite)
         + '<p class="signoff">~ THE HERALD ~</p></section>'
     )
 

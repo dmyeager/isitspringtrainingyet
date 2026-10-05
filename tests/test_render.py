@@ -753,3 +753,83 @@ class TestPostseason(unittest.TestCase):
     def test_summer_card_still_follows_the_news_desk(self):
         body = render.render_edition_body(_load("in_season.json"))
         self.assertLess(body.index("News Around the League"), body.index("The Rest of the Card"))
+
+
+class TestInlineCitations(unittest.TestCase):
+    CITE = {"bref": (2, "2026 Chicago Cubs Statistics", "Baseball-Reference")}
+
+    def test_marker_renders_numbered_superscript_link(self):
+        self.assertEqual(
+            render.render_inline("are free agents.[^bref]", cite=self.CITE),
+            'are free agents.<sup class="cite"><a href="#src-bref" '
+            'data-cite="2026 Chicago Cubs Statistics &mdash; Baseball-Reference">2</a></sup>',
+        )
+
+    def test_marker_swallows_preceding_whitespace(self):
+        out = render.render_inline("agents. [^bref] Next", cite=self.CITE)
+        self.assertTrue(out.startswith('agents.<sup class="cite">'))
+        self.assertTrue(out.endswith('</sup> Next'))
+
+    def test_marker_with_unknown_id_raises(self):
+        with self.assertRaises(ValueError):
+            render.render_inline("claim.[^nope]", cite=self.CITE)
+
+    def test_marker_without_cite_table_raises(self):
+        with self.assertRaises(ValueError):
+            render.render_inline("claim.[^bref]")
+
+    def test_marker_hover_text_escapes_quotes(self):
+        cite = {"q": (1, 'He said "no"', "ESPN")}
+        out = render.render_inline("x[^q]", cite=cite)
+        self.assertIn('data-cite="He said &quot;no&quot; &mdash; ESPN"', out)
+
+    def test_body_passes_cite_table_through(self):
+        out = render.render_body("One.[^bref]\n\nTwo.", cite=self.CITE)
+        self.assertIn('>2</a></sup></p><p>Two.</p>', out)
+
+
+class TestCitationsInEdition(unittest.TestCase):
+    SOURCES = [
+        {"url": "https://boxscore.email/mlb/2026-10-05", "title": "Box", "publication": "Boxscore"},
+        {"id": "bref", "url": "https://www.baseball-reference.com/teams/CHC/2026.shtml",
+         "title": "2026 Chicago Cubs Statistics", "publication": "Baseball-Reference"},
+    ]
+
+    def _edition(self, text):
+        data = _load("in_season.json")
+        data["sources"] = json.loads(json.dumps(self.SOURCES))
+        data["news"] = [{"subhead": "A SUBHEAD", "body": text}]
+        return data
+
+    def test_sources_list_is_numbered_and_anchored(self):
+        body = render.render_edition_body(self._edition("plain"))
+        self.assertIn('<ol class="sources__list">', body)
+        self.assertIn('<li class="sources__item" id="src-bref">', body)
+        self.assertIn('<li class="sources__item">'
+                      '<a href="https://boxscore.email/mlb/2026-10-05"', body)
+
+    def test_marker_in_news_body_links_to_second_source(self):
+        body = render.render_edition_body(self._edition("Cubs this season.[^bref]"))
+        self.assertIn('Cubs this season.<sup class="cite"><a href="#src-bref" '
+                      'data-cite="2026 Chicago Cubs Statistics &mdash; Baseball-Reference">2</a></sup>',
+                      body)
+
+    def test_marker_in_subtitle_and_desk_note_render(self):
+        data = self._edition("plain")
+        data["game_of_the_day"]["subtitle"] = "A deck.[^bref]"
+        data["desk_note"] = "Good night.[^bref] Until the next dispatch."
+        body = render.render_edition_body(data)
+        self.assertEqual(body.count('href="#src-bref"'), 2)
+
+    def test_check_edition_rejects_dangling_marker(self):
+        with self.assertRaises(ValueError):
+            render.check_edition(self._edition("Claim.[^nope]"), REPO_SCHEMA)
+
+    def test_check_edition_accepts_source_with_id(self):
+        render.check_edition(self._edition("Claim.[^bref]"), REPO_SCHEMA)  # no raise
+
+    def test_source_id_must_be_slug(self):
+        data = self._edition("plain")
+        data["sources"][1]["id"] = "has space"
+        with self.assertRaises(ValueError):
+            render.check_edition(data, REPO_SCHEMA)
