@@ -167,6 +167,26 @@ the publication day (today) — not the day the games were played.** The rendere
 "Reporting N contests from the day prior" note frames those games as yesterday's.
 The date-line and contest note are assembled by the renderer.
 
+### Volumes — one per season
+
+Each edition normally carries the previous edition's `volume` and the next
+`edition_number` (yesterday's plus one). The exception is the turn of the
+volume, which comes **with the first regular-season game** of each season:
+
+- The **first edition that reports a regular-season game** opens a new volume:
+  advance `volume` by one in Roman numerals ("Volume I" → "Volume II") and
+  restart `edition_number` at **1**. Because the Herald reports yesterday's
+  games, that edition is dated the morning **after** the first game.
+- The first regular-season game counts wherever it is played, including an
+  overseas opening series ahead of the domestic Opening Night. Spring-training
+  and other exhibition games never turn the volume.
+- Take the date from baseball-reference's homepage "Upcoming Dates" (Opening
+  Night) and confirm against boxscore.email that the edition's slate really
+  contains a regular-season game before turning the volume.
+- For the record: Volume I ran from the first edition (9 July 2026). Opening
+  Night 2027 is listed for 24 March 2027, so Volume II, No. 1 is the edition
+  dated 25 March 2027.
+
 ## Structure → schema mapping
 
 1. ⭐ **The Game of the Day** → `game_of_the_day: {headline, subtitle, body}`.
