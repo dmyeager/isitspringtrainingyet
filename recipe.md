@@ -380,6 +380,30 @@ due:
   ("Morning digest for the games of <date>").
 - Typical publications: "Boxscore", "MLB.com", "ESPN", "Baseball-Reference".
 
+## The proofreading desk — reread before render
+
+Once the JSON is composed and before it is rendered, reread every prose field
+top to bottom as a reader would meet it. The pre-flight gate checks facts
+against sources; this pass checks the prose against **itself**. Any sentence
+that points at something else in the edition must be checked against the text
+actually printed, never against your memory of what you meant:
+
+- **Positions in a list** — "the last two," "the first three," "the former,"
+  "the latter." Prefer naming the items outright; if you keep the pointer,
+  count to it.
+- **Counts and quantifiers** — "the twelve," "all four," "both," "neither."
+  Count the items printed.
+- **Back-references** — "the same club," "as noted above," "Monday's starter."
+  Find the thing referred to and confirm it says what you say it says.
+- **Dates reckoned from today** — "27 days from this morning," "one week ago."
+  Do the arithmetic from `meta.date`.
+
+*A cautionary specimen (4 November 2026):* twelve clubs were listed ending
+"…Athletics, Reds and Brewers," and the next clause invited the reader "to pause
+at the last two names: the clubs that contested the World's Series." The World
+Series was the Rays and the Brewers; the Rays sat fourth. The writer knew the
+fact and pointed at the wrong place. Name it, don't point at it.
+
 ## Producing and publishing an edition
 
 1. Set `meta.date` to **today's date** — the publication morning — as
@@ -389,6 +413,7 @@ due:
    credits desk" above) and include it in the edition JSON.
 3. Write the edition JSON to `editions/YYYY/MM/DD.json` (matching `meta.date`,
    the publication date).
+3a. Run the proofreading desk (above) over the written JSON; fix before rendering.
 4. Run `python3 render.py editions/YYYY/MM/DD.json`. This validates the JSON
    against the schema and regenerates the edition page, the homepage, and the
    archive.

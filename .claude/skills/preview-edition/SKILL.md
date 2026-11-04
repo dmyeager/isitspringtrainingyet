@@ -74,6 +74,10 @@ scratchpad — never commit the raw HTML. Never fabricate; omit the unverifiable
    as `recipe.md` directs. Set `meta.date` to **today** (the preview stands in for
    a publication morning). Write it **only** to `preview/edition.json` — NOT under
    `editions/`.
+5a. **Proofread pass**, per `recipe.md`'s "The proofreading desk" — same as a
+   real edition: check every list position, count, back-reference, and
+   date-from-today against the printed text. Note in your report anything the
+   pass caught and fixed (that is the evidence the step is earning its keep).
 6. Render it: `python3 render.py --preview preview/edition.json preview/index.html`.
    On a validation error, fix the JSON and re-run until it exits 0 — the same
    schema gate a real edition faces.

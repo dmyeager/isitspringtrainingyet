@@ -45,6 +45,7 @@ The edition is **dated by its publication morning (today)** and reports **yester
      nothing beyond the standard sources was used — an ordinary edition always
      has at least the boxscore entry.
 6. Write it to `editions/YYYY/MM/DD.json` (today's date).
+6a. **Proofread pass (required).** Per `recipe.md`'s "The proofreading desk": reread every prose field and check each list position, count, back-reference, and date-from-today against the printed text, not your memory. Name items outright rather than by position. Fix the JSON before rendering.
 7. Render (from the repo root): `python3 render.py editions/YYYY/MM/DD.json`. On a validation error, fix the JSON and re-run until it exits 0.
 8. (Optional) open `index.html` to eyeball it.
 9. Commit the JSON + regenerated `index.html`, `archive.html`, and the edition page — `git commit -m "edition: YYYY-MM-DD"` — then `git push`. Pages redeploys in ~a minute.
@@ -66,4 +67,5 @@ A failed or incomplete run must produce **no commit** — the previous edition s
 | Guessing when play resumes / what's on tomorrow's card, or hedging with "resumes anon" / "within days" | Wrong forward-looking claims (e.g., implying games during the All-Star break); soft hedges dodge the check while still asserting a schedule | Fetch b-ref's homepage "Upcoming Schedule" (curl + browser UA) **every** run before writing; name the verified date/matchup or cut the forward reference |
 | Citing `boxscore.email/mlb` (undated) in `sources` | Link shows a different edition tomorrow — dishonest citation | Cite the dated permalink for the edition actually used; verify it resolves |
 | Inventing/guessing a byline for a source | Credits a person who didn't write it | Include `author` only when the page displays a byline; otherwise omit it |
+| Pointing at a list by position ("pause at the last two names") without checking what's actually last | 2026-11-04: twelve clubs listed ending "Reds and Brewers"; the sentence said the last two contested the World Series — it was the Rays and Brewers | Do the step 6a proofread pass (`recipe.md` → "The proofreading desk"); name the items outright rather than by position, and verify every count/back-reference/date-from-today against the printed text |
 | Writing a playoff game as a two-sentence card note, or forgetting `meta.postseason` | October games read like a Tuesday in June; the site keeps its summer layout and "hot stove" wording on off days | Set the flag by b-ref's dates; give every postseason game a headline, subtitle, and a full-length body |
