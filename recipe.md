@@ -96,11 +96,33 @@ Check whether the prior day had **completed games**:
 - **No games** (winter offseason, or an in-season gap such as the All-Star
   break) **→** `meta.mode = "hot_stove"`. Produce the hot-stove edition:
   offseason/roster news in the same voice, plus a countdown to the next
-  milestone (pitchers & catchers report → spring training → Opening Day). Look
-  up the next milestone's date; compute `days_remaining` from today (the
-  publication date). During an in-season gap, the milestone is the resumption
+  milestone. During an in-season gap, the milestone is the resumption
   of play — take its date from baseball-reference's Upcoming Schedule (see
   Sources of truth), never from assumption.
+
+### The winter countdown ladder
+
+From the end of the World Series until Opening Night, the countdown always
+names the **nearest milestone not yet reached**, climbing these three rungs in
+order. Never skip ahead to a later rung while an earlier one is still to come:
+
+1. **Pitchers and catchers report.** Use the earliest report date of any club
+   (the first camp to open). Milestone text: `Pitchers and Catchers report`.
+2. **The first spring-training game.** Use the first Cactus or Grapefruit League
+   game, not exhibitions played abroad. Milestone text: `the first
+   spring-training game`.
+3. **Opening Night.** Use the first regular-season game, including an overseas
+   opening series. Milestone text: `Opening Night`.
+
+The day a milestone arrives, move up to the next rung. Keep the `milestone`
+string to the short name above, because the renderer folds it into the answer
+line at the top of the page. Embroidery belongs in `target_date`, the news,
+or the desk note. Look up each rung's date every morning from MLB.com or the
+clubs' announced report dates. Dates may slip during a labor dispute, so never
+carry a date forward from memory. Compute `days_remaining` from today (the
+publication date). If a rung's date has not been announced yet, count down to
+the nearest rung that has one, and say in the desk note that the earlier date
+is still to be posted.
 
 Separately from the mode: during the spring exhibition season — from the first
 spring-training game through the eve of Opening Day — set
@@ -227,7 +249,9 @@ volume, which comes **with the first regular-season game** of each season:
    is **exempt** from the Variety rule below — never reword it.
 
 In hot-stove mode, also supply `countdown: {milestone, target_date,
-days_remaining}`.
+days_remaining}`, chosen by the winter countdown ladder above. During spring
+training (`meta.spring_training: true`), always supply the countdown to
+Opening Night, whatever the mode.
 
 ## Voice
 

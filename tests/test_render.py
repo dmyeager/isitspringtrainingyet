@@ -429,6 +429,22 @@ class TestAnswerLine(unittest.TestCase):
         body = render.render_edition_body(data)
         self.assertIn("Yes &mdash; spring training is upon us at last", body)
 
+    def test_spring_training_answer_counts_down_to_opening_night(self):
+        data = _load("in_season.json")
+        data["meta"]["spring_training"] = True
+        data["countdown"] = {"milestone": "Opening Night",
+                             "target_date": "the Twenty-Fourth of March",
+                             "days_remaining": 30}
+        body = render.render_edition_body(data)
+        self.assertIn("Yes &mdash; spring training is upon us at last, "
+                      "and 30 days until Opening Night.", body)
+
+    def test_countdown_of_one_day_is_singular(self):
+        data = _load("hot_stove.json")
+        data["countdown"]["days_remaining"] = 1
+        body = render.render_edition_body(data)
+        self.assertIn("Not yet &mdash; 1 day until Pitchers and Catchers report", body)
+
     def test_schema_accepts_boolean_spring_training(self):
         data = _load("in_season.json")
         data["meta"]["spring_training"] = True

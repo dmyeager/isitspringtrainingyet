@@ -176,19 +176,26 @@ def render_masthead(meta):
     )
 
 
+def _days(n):
+    return "1 day" if n == 1 else "{} days".format(n)
+
+
 def render_answer(data):
     """The line that answers the domain's question, from data already verified."""
     meta = data["meta"]
     countdown = data.get("countdown")
-    if meta.get("spring_training"):
+    if meta.get("spring_training") and countdown:
+        answer = "Yes &mdash; spring training is upon us at last, and {} until {}.".format(
+            _days(countdown["days_remaining"]), render_inline(countdown["milestone"]))
+    elif meta.get("spring_training"):
         answer = "Yes &mdash; spring training is upon us at last."
     elif meta.get("postseason"):
         answer = "No &mdash; the pennants are being decided, and spring must wait its turn."
     elif meta["mode"] == "in_season":
         answer = "No &mdash; but the championship season is upon us, a finer thing still."
     elif countdown:
-        answer = "Not yet &mdash; {} days until {}.".format(
-            countdown["days_remaining"], render_inline(countdown["milestone"]))
+        answer = "Not yet &mdash; {} until {}.".format(
+            _days(countdown["days_remaining"]), render_inline(countdown["milestone"]))
     else:
         answer = "Not yet &mdash; but the stove burns bright."
     return (
@@ -235,7 +242,7 @@ def render_edition_body(data):
     if countdown:
         parts.append(
             '<section class="countdown"><p class="countdown__line">'
-            + "{} days until ".format(countdown["days_remaining"])
+            + "{} until ".format(_days(countdown["days_remaining"]))
             + render_inline(countdown["milestone"])
             + " (" + render_inline(countdown["target_date"]) + ")."
             + '</p></section>'
